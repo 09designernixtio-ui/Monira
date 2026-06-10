@@ -119,6 +119,13 @@ const I = {
   AlertCircle:(p) => <Icon {...p} d={<><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></>}/>,
   MoreHoriz:  (p) => <Icon {...p} d={<><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></>}/>,
   LogOut:     (p) => <Icon {...p} d={<><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></>}/>,
+  Settings:   (p) => <Icon {...p} d={<><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></>}/>,
+  Shield:     (p) => <Icon {...p} d={<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>}/>,
+  LinkIcon:   (p) => <Icon {...p} d={<><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></>}/>,
+  Unlink:     (p) => <Icon {...p} d={<><path d="m18.84 12.25 1.72-1.71h-.02a5.004 5.004 0 0 0-.12-7.07 5.006 5.006 0 0 0-6.95 0l-1.72 1.71"/><path d="m5.17 11.75-1.71 1.71a5.004 5.004 0 0 0 .12 7.07 5.006 5.006 0 0 0 6.95 0l1.71-1.71"/><line x1="8" y1="2" x2="8" y2="5"/><line x1="2" y1="8" x2="5" y2="8"/><line x1="16" y1="19" x2="16" y2="22"/><line x1="19" y1="16" x2="22" y2="16"/></>}/>,
+  RefreshCw:  (p) => <Icon {...p} d={<><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></>}/>,
+  Eye:        (p) => <Icon {...p} d={<><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></>}/>,
+  Bank:       (p) => <Icon {...p} d={<><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></>}/>,
   Plug:       (p) => <Icon {...p} d={<><path d="M9 2v6"/><path d="M15 2v6"/><path d="M12 17v5"/><path d="M5 8h14"/><path d="M6 11V8h12v3a6 6 0 0 1-12 0Z"/></>}/>,
   Pencil:     (p) => <Icon {...p} d={<><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"/></>}/>,
   CircleDot:  (p) => <Icon {...p} d={<><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3" fill="currentColor"/></>}/>,
@@ -209,10 +216,16 @@ const UPCOMING_RENEWALS = [
 const RECEIVABLES = [
   { id: 1, client: 'Community Builders Lab', invoice: 'INV-CBL-009', amount: 4000,  daysOverdue: 12, status: 'overdue',  issueDate: 'May 19' },
   { id: 2, client: 'Northpath',              invoice: 'INV-NTH-018', amount: 4400,  daysOverdue: 3,  status: 'overdue',  issueDate: 'Jun 3'  },
+  { id: 7, client: 'Loomside',               invoice: 'INV-LMS-024', amount: 3100,  daysOverdue: 7,  status: 'overdue',  issueDate: 'May 26' },
+  { id: 8, client: 'Test Client',            invoice: 'INV-TST-003', amount: 1600,  daysOverdue: 21, status: 'overdue',  issueDate: 'May 10' },
+  { id: 9, client: 'Helix Studio',           invoice: 'INV-HLX-052', amount: 2200,  daysOverdue: 5,  status: 'overdue',  issueDate: 'May 28' },
   { id: 3, client: 'Loomside',               invoice: 'INV-LMS-023', amount: 1800,  daysOverdue: 0,  status: 'pending',  issueDate: 'Jun 5'  },
   { id: 4, client: 'Test Client',            invoice: 'INV-TST-002', amount: 2200,  daysOverdue: 0,  status: 'pending',  issueDate: 'Jun 7'  },
-  { id: 5, client: 'Pondid Inc.',            invoice: 'INV-PDD-014', amount: 24000, daysOverdue: 0,  status: 'received', issueDate: 'Jun 1'  },
-  { id: 6, client: 'Helix Studio',           invoice: 'INV-HLX-051', amount: 4500,  daysOverdue: 0,  status: 'received', issueDate: 'Jun 1'  },
+  { id: 5, client: 'Pondid Inc.',            invoice: 'INV-PDD-014', amount: 24000, daysOverdue: 0,  status: 'received', issueDate: 'Jun 6'  },
+  { id: 6, client: 'Helix Studio',           invoice: 'INV-HLX-051', amount: 4500,  daysOverdue: 0,  status: 'received', issueDate: 'Jun 4'  },
+  { id:10, client: 'Loomside',               invoice: 'INV-LMS-022', amount: 2470,  daysOverdue: 0,  status: 'received', issueDate: 'May 30' },
+  { id:11, client: 'Northpath',              invoice: 'INV-NTH-017', amount: 3200,  daysOverdue: 0,  status: 'received', issueDate: 'May 22' },
+  { id:12, client: 'Community Builders Lab', invoice: 'INV-CBL-008', amount: 5500,  daysOverdue: 0,  status: 'received', issueDate: 'May 15' },
 ];
 
 // Cash balance across accounts
@@ -301,7 +314,7 @@ const NAV = [
   { id: 'team',      label: 'Team',      icon: I.Users },
   { id: 'cashflow',  label: 'Cashflow',  icon: I.Wallet },
 ];
-const Sidebar = ({ view, setView }) => (
+const Sidebar = ({ view, setView, showSettingsBadge }) => (
   <aside className="w-[230px] shrink-0 flex flex-col border-r" style={{ borderColor: 'var(--line)', background: 'var(--surface)', position:'relative', zIndex:1 }}>
     <div className="px-5 py-5 flex items-center gap-2.5 border-b" style={{ borderColor: 'var(--line)' }}>
       <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'var(--accent)', color: '#fff' }}><I.Logo size={18}/></div>
@@ -320,7 +333,19 @@ const Sidebar = ({ view, setView }) => (
         );
       })}
     </nav>
-    <div className="px-3 pb-3">
+    <div className="px-3 pb-3 space-y-0.5">
+      {/* Settings link */}
+      <button onClick={() => setView('settings')}
+        className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13.5px] font-medium relative ${view==='settings' ? 'ft-tab-active' : 'hover:bg-black/[0.03]'}`}
+        style={{ color: view==='settings' ? 'var(--accent-2)' : 'var(--ink-2)' }}>
+        {view==='settings' && <span className="ft-tab-bar absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-full" />}
+        <I.Settings size={17}/>
+        Settings
+        {showSettingsBadge && (
+          <span className="ml-auto text-[10px] font-semibold px-1.5 py-0.5 rounded-full" style={{background:'var(--accent)',color:'#fff'}}>1</span>
+        )}
+      </button>
+      {/* User row */}
       <div className="flex items-center gap-2 px-2 py-2">
         <Avatar name="Admin" size={26}/>
         <div className="flex-1 min-w-0">
@@ -787,19 +812,79 @@ const MiniProjectRow = ({ project }) => {
   );
 };
 
-const Dashboard = ({ onAddEntry, onDrill, onGoProjects, onViewReceivables }) => {
+// ── Link Payment to Client modal ──────────────────────────────────────────────
+const LinkPaymentModal = ({ transaction, onClose, onLink }) => {
+  const [client, setClient] = React.useState(transaction.linkedClient || '');
+  // Auto-match project by client name
+  const autoProject = PROJECTS.find(p => p.client === transaction.from || p.name === transaction.from);
+  const [project, setProject] = React.useState(autoProject ? autoProject.name : '');
+  const canSave = client !== '';
+  return (
+    <div className="ft-overlay" onClick={onClose} style={{zIndex:150}}>
+      <div className="ft-modal-panel ft-card-2 w-full max-w-[460px] p-7" onClick={e=>e.stopPropagation()} style={{borderRadius:20}}>
+        <div className="flex items-start justify-between mb-5">
+          <div>
+            <div className="text-[11px] uppercase tracking-[0.12em] font-medium mb-1" style={{color:'var(--ink-3)'}}>Link payment</div>
+            <div className="ft-serif text-[20px] font-medium" style={{color:'var(--ink)'}}>Who sent this?</div>
+          </div>
+          <button onClick={onClose} className="p-1.5 rounded-md hover:bg-black/5" style={{color:'var(--ink-3)'}}><I.X size={16}/></button>
+        </div>
+
+        {/* Transaction info */}
+        <div className="rounded-xl px-4 py-3 mb-5 flex items-center gap-3" style={{background:'var(--bg)',border:'1px solid var(--line)'}}>
+          <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style={{background:'var(--positive-soft)'}}><I.Bank size={16} style={{color:'var(--positive)'}}/></div>
+          <div className="flex-1 min-w-0">
+            <div className="text-[13px] font-medium" style={{color:'var(--ink)'}}>{transaction.from}</div>
+            <div className="ft-mono text-[11px]" style={{color:'var(--ink-3)'}}>Bank of America · {transaction.date}</div>
+          </div>
+          <div className="ft-mono text-[16px] font-medium shrink-0" style={{color:'var(--positive)'}}>+{fmtUSD(transaction.amount)}</div>
+        </div>
+
+        <div className="space-y-4">
+          {/* Client */}
+          <Field label="Client">
+            <select className="ft-select w-full" value={client} onChange={e=>setClient(e.target.value)}>
+              <option value="">Select client…</option>
+              {CLIENTS.map(c=><option key={c.id} value={c.name}>{c.name}</option>)}
+            </select>
+          </Field>
+
+          {/* Project — auto-filled if matched */}
+          <Field label="Project">
+            <select className="ft-select w-full" value={project} onChange={e=>setProject(e.target.value)}>
+              <option value="">None / General</option>
+              {PROJECTS.map(p=><option key={p.id} value={p.name}>{p.name}</option>)}
+            </select>
+            {autoProject && (
+              <div className="text-[11px] mt-1 flex items-center gap-1" style={{color:'var(--positive)'}}><I.Check2 size={11}/> Auto-matched from client name</div>
+            )}
+          </Field>
+        </div>
+
+        <div className="flex justify-end gap-2 mt-6">
+          <button className="ft-btn-ghost" onClick={onClose}>Cancel</button>
+          <button className="ft-btn-primary"
+            style={{opacity:canSave?1:0.45,cursor:canSave?'pointer':'default'}}
+            onClick={()=>{ if(canSave){ onLink({...transaction,client,project}); onClose(); }}}>
+            <I.Check2 size={14}/> Confirm payment
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Dashboard = ({ onAddEntry, onDrill, onGoProjects, onViewReceivables, banks, onConnectBank }) => {
   const [trendMode, setTrendMode] = useState('months'); // months | years
   const [year, setYear] = useState('2026');
   const trendData = trendMode === 'years' ? YEARLY_TREND : MONTHLY_TREND;
 
-  const revenue = 3087, expenses = 15078, net = revenue - expenses;
-  const marginPct = ((net / revenue) * 100).toFixed(0);
-
-  // Accounts receivable totals
+  const revenue=3087, expenses=15078, net=revenue-expenses;
+  const marginPct=((net/revenue)*100).toFixed(0);
   const [receivables] = React.useState(RECEIVABLES.map(r=>({...r})));
-  const totalExpected = receivables.filter(r => r.status !== 'received').reduce((s,r) => s + r.amount, 0);
-  const totalOverdue  = receivables.filter(r => r.daysOverdue > 0 || r.status === 'overdue').reduce((s,r) => s + r.amount, 0);
-  const totalCash     = CASH_ACCOUNTS.reduce((s,a) => s + a.amount, 0);
+  const totalExpected=receivables.filter(r=>r.status!=='received').reduce((s,r)=>s+r.amount,0);
+  const totalOverdue=receivables.filter(r=>r.daysOverdue>0||r.status==='overdue').reduce((s,r)=>s+r.amount,0);
+  const [linkPayment, setLinkPayment] = React.useState(null); // transaction to link
 
   // Combo chart: split each metric into "actual" vs "inProgress" so the
   // current ongoing month renders with a distinct (lighter / dashed) style.
@@ -841,55 +926,79 @@ const Dashboard = ({ onAddEntry, onDrill, onGoProjects, onViewReceivables }) => 
         <StatCard label="Net margin"     value={fmtUSD(net)}      sub={`${marginPct}% this month`}   mom={-8.0}  momInverse accent/>
       </div>
 
-      {/* Middle row: Received invoices (left) + Overdue (right) — no Cash Balance */}
+      {/* Link Payment modal */}
+      {linkPayment && <LinkPaymentModal transaction={linkPayment} onClose={()=>setLinkPayment(null)} onLink={()=>{}}/>}
+
+      {/* Middle row: Received invoices (left) + Overdue (right) */}
       <div className="grid grid-cols-2 gap-4 mb-4">
         {/* Received invoices — LEFT */}
         <div className="ft-card p-5">
-          <div className="flex items-center gap-2 mb-4">
-            <span style={{color:'var(--positive)'}}><I.Check2 size={14}/></span>
-            <div className="text-[11px] uppercase tracking-[0.12em] font-medium" style={{color:'var(--ink-3)'}}>Received invoices</div>
-          </div>
-          <div className="ft-mono text-[24px] font-medium mb-4" style={{color:'var(--positive)'}}>
-            {fmtUSD(receivables.filter(r=>r.status==='received').reduce((s,r)=>s+r.amount,0))}
-          </div>
-          <div>
-            {receivables.filter(r=>r.status==='received').sort((a,b)=>a.issueDate>b.issueDate?-1:1).map(r=>(
-              <div key={r.id} className="flex items-center gap-3 py-2.5 border-b last:border-0" style={{borderColor:'var(--line)'}}>
-                <Avatar name={r.client} size={28}/>
-                <div className="flex-1 min-w-0">
-                  <div className="text-[13px] font-medium truncate" style={{color:'var(--ink)'}}>{r.client}</div>
-                  <div className="text-[10.5px] ft-mono" style={{color:'var(--ink-3)'}}>Bank of America · {r.issueDate}</div>
-                </div>
-                <Badge tone="positive"><I.Check2 size={10}/> Received</Badge>
-                <div className="ft-mono text-[13px] font-medium shrink-0" style={{color:'var(--positive)'}}>{fmtUSD(r.amount)}</div>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <span style={{color:'var(--positive)'}}><I.Check2 size={14}/></span>
+              <div className="text-[11px] uppercase tracking-[0.12em] font-medium" style={{color:'var(--ink-3)'}}>Received invoices</div>
+            </div>
+            {(banks.boa || banks.mono) && (
+              <div className="flex items-center gap-1.5 text-[11px] ft-mono px-2 py-1 rounded-md" style={{color:'var(--positive)',background:'var(--positive-soft)'}}>
+                <I.RefreshCw size={10}/> Synced 2 min ago
               </div>
-            ))}
+            )}
           </div>
+
+          {!banks.boa && !banks.mono ? (
+            <div className="flex flex-col items-center justify-center py-8 text-center">
+              <div className="text-[36px] mb-3">🏦</div>
+              <div className="ft-serif text-[16px] font-medium mb-2" style={{color:'var(--ink)'}}>No bank connected</div>
+              <p className="text-[12.5px] mb-5" style={{color:'var(--ink-3)',lineHeight:1.5}}>Connect your bank to see incoming payments synced automatically.</p>
+              <button className="ft-btn-primary" style={{fontSize:12,padding:'8px 14px'}} onClick={onConnectBank}>
+                <I.LinkIcon size={13}/> Connect bank
+              </button>
+            </div>
+          ) : (
+            <div className="ft-fade">
+              {/* No total number — per request */}
+              {receivables.filter(r=>r.status==='received').sort((a,b)=>a.issueDate>b.issueDate?-1:1).slice(0,5).map(r=>(
+                <div key={r.id} className="flex items-center gap-3 py-2.5 border-b last:border-0" style={{borderColor:'var(--line)'}}>
+                  <Avatar name={r.client} size={28}/>
+                  <div className="flex-1 min-w-0">
+                    {/* Click company name → Link Payment modal */}
+                    <button className="text-[13px] font-medium truncate hover:underline text-left" style={{color:'var(--ink)'}}
+                      onClick={()=>setLinkPayment({id:r.id,from:r.client,amount:r.amount,date:r.issueDate,note:r.invoice})}>
+                      {r.client}
+                    </button>
+                    <div className="text-[10.5px] ft-mono" style={{color:'var(--ink-3)'}}>Bank of America · {r.issueDate}</div>
+                  </div>
+                  <div className="ft-mono text-[13px] font-medium shrink-0" style={{color:'var(--positive)'}}>{fmtUSD(r.amount)}</div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Overdue — RIGHT */}
         <div className="ft-card p-5">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-3">
               <span style={{color:'var(--negative)'}}><I.AlertCircle size={14}/></span>
               <div className="text-[11px] uppercase tracking-[0.12em] font-medium" style={{color:'var(--ink-3)'}}>Overdue</div>
+              {/* Small overdue total next to title — per request */}
+              <div className="ft-mono text-[14px] font-medium" style={{color:'var(--negative)'}}>
+                {fmtUSD(receivables.filter(r=>r.status==='overdue'||r.daysOverdue>0).reduce((s,r)=>s+r.amount,0))}
+              </div>
             </div>
             <button className="ft-btn-ghost" style={{padding:'5px 10px',fontSize:12}} onClick={onViewReceivables}>
               View all <I.ArrowUpRight size={11}/>
             </button>
           </div>
-          <div className="ft-mono text-[24px] font-medium mb-4" style={{color:'var(--negative)'}}>
-            {fmtUSD(receivables.filter(r=>r.status==='overdue'||r.daysOverdue>0).reduce((s,r)=>s+r.amount,0))}
-          </div>
           <div>
-            {receivables.filter(r=>r.status==='overdue'||r.daysOverdue>0).sort((a,b)=>b.daysOverdue-a.daysOverdue).map(r=>(
+            {receivables.filter(r=>r.status==='overdue'||r.daysOverdue>0).sort((a,b)=>b.daysOverdue-a.daysOverdue).slice(0,5).map(r=>(
               <div key={r.id} className="flex items-center gap-3 py-2.5 border-b last:border-0" style={{borderColor:'var(--line)'}}>
                 <Avatar name={r.client} size={28}/>
                 <div className="flex-1 min-w-0">
                   <div className="text-[13px] font-medium truncate" style={{color:'var(--ink)'}}>{r.client}</div>
                   <div className="text-[10.5px] ft-mono" style={{color:'var(--ink-3)'}}>Bank of America · {r.issueDate}</div>
                 </div>
-                <Badge tone="negative"><I.Clock size={10}/> {r.daysOverdue}d overdue</Badge>
+                <Badge tone="negative"><I.Clock size={10}/> {r.daysOverdue}d</Badge>
                 <div className="ft-mono text-[13px] font-medium shrink-0" style={{color:'var(--negative)'}}>{fmtUSD(r.amount)}</div>
               </div>
             ))}
@@ -897,69 +1006,64 @@ const Dashboard = ({ onAddEntry, onDrill, onGoProjects, onViewReceivables }) => 
         </div>
       </div>
 
-      {/* Dynamics chart — at the bottom */}
+      {/* Dynamics — static SVG visual only */}
       <div className="ft-card p-6">
         <div className="flex items-end justify-between mb-4">
           <div>
             <div className="text-[11px] uppercase tracking-[0.12em] mb-1" style={{color:'var(--ink-3)'}}>Dynamics</div>
             <div className="ft-serif text-[22px] font-medium" style={{color:'var(--ink)'}}>Revenue · Expenses · Margin</div>
           </div>
-          <div className="flex items-center gap-2">
-            {trendMode === 'months' && (
-              <select className="ft-select" value={year} onChange={e => setYear(e.target.value)}>
-                <option>2026</option><option>2025</option><option>2024</option>
-              </select>
-            )}
-            <div className="ft-card flex items-center p-1 gap-0.5">
-              {[['months','By period'],['years','By years']].map(([v,l]) => (
-                <button key={v} onClick={() => setTrendMode(v)}
-                  className="px-3 py-1.5 rounded-md text-[12px] font-medium"
-                  style={{ background: trendMode===v ? 'var(--accent-soft)' : 'transparent', color: trendMode===v ? 'var(--accent-2)' : 'var(--ink-2)' }}>
-                  {l}
-                </button>
-              ))}
-            </div>
+          <div className="flex items-center gap-3 text-[12px]" style={{color:'var(--ink-3)'}}>
+            <span className="flex items-center gap-1.5"><span className="inline-block w-2 h-2 rounded-full" style={{background:'var(--ink)'}}/>Revenue</span>
+            <span className="flex items-center gap-1.5"><span className="inline-block w-2 h-2 rounded-full" style={{background:'var(--accent)'}}/>Expenses</span>
+            <span className="flex items-center gap-1.5"><span className="inline-block w-2 h-2 rounded-full" style={{background:'var(--positive)'}}/>Margin %</span>
           </div>
         </div>
-        <div className="flex items-center gap-5 text-[12px] mb-3" style={{color:'var(--ink-2)'}}>
-          <span className="flex items-center gap-1.5"><LegendDot color="var(--ink)"/> Revenue</span>
-          <span className="flex items-center gap-1.5"><LegendDot color="var(--accent)"/> Expenses</span>
-          <span className="flex items-center gap-1.5"><LegendDot color="var(--positive)"/> Margin %</span>
-          <span className="flex items-center gap-1.5" style={{color:'var(--ink-3)'}}>
-            <span className="inline-block w-2.5 h-2.5 rounded-sm" style={{ border:'1.5px dashed var(--ink-3)' }}/> In progress
-          </span>
-        </div>
-        <div style={{ height: 260 }}>
-          <ResponsiveContainer width="100%" height="100%">
-            <ComposedChart data={chartData} margin={{ top: 8, right: 8, left: -16, bottom: 0 }} barGap={3} barCategoryGap="22%">
-              <defs>
-                <pattern id="stripe-rev" patternUnits="userSpaceOnUse" width="5" height="5" patternTransform="rotate(45)">
-                  <rect width="5" height="5" fill="var(--ink)" fillOpacity="0.12"/>
-                  <line x1="0" y1="0" x2="0" y2="5" stroke="var(--ink)" strokeWidth="1.4" strokeOpacity="0.5"/>
-                </pattern>
-                <pattern id="stripe-exp" patternUnits="userSpaceOnUse" width="5" height="5" patternTransform="rotate(45)">
-                  <rect width="5" height="5" fill="var(--accent)" fillOpacity="0.12"/>
-                  <line x1="0" y1="0" x2="0" y2="5" stroke="var(--accent)" strokeWidth="1.4" strokeOpacity="0.6"/>
-                </pattern>
-              </defs>
-              <CartesianGrid stroke="var(--line)" strokeDasharray="2 4" vertical={false}/>
-              <XAxis dataKey="m" tickLine={false} axisLine={false} tick={{ fill: 'var(--ink-3)', fontSize: 11, fontFamily: 'JetBrains Mono' }}/>
-              <YAxis yAxisId="money" tickLine={false} axisLine={false} tick={{ fill: 'var(--ink-3)', fontSize: 10, fontFamily: 'JetBrains Mono' }} tickFormatter={(v)=>`$${v/1000}k`} width={52}/>
-              <YAxis yAxisId="pct" orientation="right" tickLine={false} axisLine={false} tick={{ fill: 'var(--positive)', fontSize: 10, fontFamily: 'JetBrains Mono' }} tickFormatter={(v)=>`${v}%`} width={40} domain={[-20,100]}/>
-              <Tooltip content={<ChartTooltip/>} cursor={{ fill: 'rgba(0,0,0,0.03)' }}/>
-              <Bar yAxisId="money" dataKey="revActual" name="Revenue" fill="var(--ink)" radius={[3,3,0,0]} maxBarSize={trendMode==='years'?34:18}/>
-              <Bar yAxisId="money" dataKey="revLive" name="Revenue (in progress)" fill="url(#stripe-rev)" stroke="var(--ink)" strokeOpacity={0.45} strokeDasharray="3 2" radius={[3,3,0,0]} maxBarSize={trendMode==='years'?34:18}/>
-              <Bar yAxisId="money" dataKey="expActual" name="Expenses" fill="var(--accent)" radius={[3,3,0,0]} maxBarSize={trendMode==='years'?34:18}/>
-              <Bar yAxisId="money" dataKey="expLive" name="Expenses (in progress)" fill="url(#stripe-exp)" stroke="var(--accent)" strokeOpacity={0.5} strokeDasharray="3 2" radius={[3,3,0,0]} maxBarSize={trendMode==='years'?34:18}/>
-              <Line yAxisId="pct" type="monotone" dataKey="marginPlot" name="Margin %" stroke="var(--positive)" strokeWidth={1.8}
-                dot={(props) => {
-                  const { cx, cy, payload } = props;
-                  if (cx == null || cy == null) return null;
-                  return <circle cx={cx} cy={cy} r={3} fill={payload.inProgress ? 'var(--surface)' : 'var(--positive)'} stroke="var(--positive)" strokeWidth={1.6}/>;
-                }}/>
-            </ComposedChart>
-          </ResponsiveContainer>
-        </div>
+        {/* Static SVG chart — visual only, no interactivity */}
+        <svg width="100%" height="240" viewBox="0 0 900 240" preserveAspectRatio="none" style={{display:'block',opacity:0.85}}>
+          {/* Grid lines */}
+          {[0,60,120,180].map(y=><line key={y} x1="40" y1={y+20} x2="900" y2={y+20} stroke="var(--line)" strokeWidth="1" strokeDasharray="3 5"/>)}
+          {/* Y labels */}
+          {[['$100k',20],['$75k',80],['$50k',140],['$25k',200]].map(([l,y])=>(
+            <text key={l} x="35" y={y+4} fontSize="10" fill="var(--ink-3)" textAnchor="end" fontFamily="JetBrains Mono">{l}</text>
+          ))}
+          {/* X labels */}
+          {['Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun'].map((m,i)=>(
+            <text key={m} x={60+i*72} y={235} fontSize="10" fill="var(--ink-3)" textAnchor="middle" fontFamily="JetBrains Mono">{m}</text>
+          ))}
+          {/* Revenue bars (dark) */}
+          {[71,79,83,88,91,86,78,82,95,101,67,3].map((v,i)=>{
+            const h=Math.round(v/101*180); const x=48+i*72; const isCur=i===11;
+            return <rect key={i} x={x} y={220-h} width={18} height={h} rx={2}
+              fill={isCur?'none':'var(--ink)'} stroke={isCur?'var(--ink)':undefined}
+              strokeWidth={isCur?1.5:0} strokeDasharray={isCur?'4 2':undefined}
+              fillOpacity={isCur?0:1}/>;
+          })}
+          {/* Expense bars (accent) */}
+          {[14.4,14.25,14.6,14.9,14.7,15.1,14.2,14.5,14.8,15.1,14.6,15.1].map((v,i)=>{
+            const h=Math.round(v/101*180); const x=67+i*72; const isCur=i===11;
+            return <rect key={i} x={x} y={220-h} width={18} height={h} rx={2}
+              fill={isCur?'none':'var(--accent)'} stroke={isCur?'var(--accent)':undefined}
+              strokeWidth={isCur?1.5:0} strokeDasharray={isCur?'4 2':undefined}
+              fillOpacity={isCur?0:0.85}/>;
+          })}
+          {/* Margin line */}
+          <polyline
+            points={[71,79,83,88,91,86,78,82,95,101,67,3].map((v,i)=>{
+              const margin=((v-14.5)/v*100);
+              const y=20+180-(margin/85*180);
+              return `${60+i*72},${Math.max(22,Math.min(218,y))}`;
+            }).join(' ')}
+            fill="none" stroke="var(--positive)" strokeWidth={2} strokeLinejoin="round"/>
+          {/* Margin dots */}
+          {[71,79,83,88,91,86,78,82,95,101,67,3].map((v,i)=>{
+            const margin=((v-14.5)/v*100);
+            const y=20+180-(margin/85*180);
+            const isCur=i===11;
+            return <circle key={i} cx={60+i*72} cy={Math.max(22,Math.min(218,y))} r={3}
+              fill={isCur?'var(--surface)':'var(--positive)'} stroke="var(--positive)" strokeWidth={1.6}/>;
+          })}
+        </svg>
       </div>
     </div>
   );
@@ -2133,28 +2237,326 @@ const Cashflow = () => {
 // ============================================================================
 // ROOT
 // ============================================================================
+// ============================================================================
+// BANK CONNECTION — Modals + Settings view
+// ============================================================================
+
+const MOCK_BOA_TRANSACTIONS = [
+  { id:1, from:'Pondid Inc.',   amount:24000, date:'Jun 6',  note:'INV-PDD-014' },
+  { id:2, from:'Helix Studio',  amount:4500,  date:'Jun 4',  note:'INV-HLX-051' },
+  { id:3, from:'Loomside',      amount:2470,  date:'May 30', note:'INV-LMS-022' },
+];
+
+const BankSteps = ({ steps, current }) => (
+  <div className="flex items-center gap-0 mb-6">
+    {steps.map((s,i)=>{
+      const done=i<current, active=i===current;
+      return (
+        <React.Fragment key={i}>
+          <div className="flex flex-col items-center gap-1">
+            <div className="flex items-center justify-center rounded-full text-[11px] font-semibold transition-all"
+              style={{width:24,height:24,background:done?'var(--positive)':active?'var(--ink)':'var(--line)',color:done||active?'#fff':'var(--ink-3)'}}>
+              {done?<I.Check2 size={11}/>:i+1}
+            </div>
+            <span className="text-[10px] font-medium whitespace-nowrap" style={{color:active?'var(--ink)':'var(--ink-3)'}}>{s}</span>
+          </div>
+          {i<steps.length-1&&<div className="flex-1 h-px mb-4 mx-1 transition-all" style={{background:done?'var(--positive)':'var(--line)'}}/>}
+        </React.Fragment>
+      );
+    })}
+  </div>
+);
+
+const BankCard = ({ name, sub, logo, accentColor, onClick }) => (
+  <button onClick={onClick}
+    className="flex-1 p-5 rounded-[14px] text-left transition-all ft-card ft-clickable"
+    style={{fontFamily:'inherit'}}
+    onMouseEnter={e=>{e.currentTarget.style.borderColor=accentColor;}}
+    onMouseLeave={e=>{e.currentTarget.style.borderColor='var(--line)';}}>
+    <div className="text-[28px] mb-2">{logo}</div>
+    <div className="text-[14px] font-semibold mb-1" style={{color:'var(--ink)'}}>{name}</div>
+    <div className="text-[11.5px] mb-3" style={{color:'var(--ink-3)'}}>{sub}</div>
+    <div className="flex items-center gap-1 text-[12px] font-medium" style={{color:accentColor}}>
+      Select <I.ChevronRight size={12}/>
+    </div>
+  </button>
+);
+
+const ModalChooseBank = ({ onSelect, onClose }) => (
+  <div className="ft-overlay" onClick={onClose}>
+    <div className="ft-modal-panel ft-card-2 w-full max-w-[480px] p-7" onClick={e=>e.stopPropagation()} style={{borderRadius:20}}>
+      <div className="flex items-start justify-between mb-5">
+        <div>
+          <div className="text-[11px] uppercase tracking-[0.12em] font-medium mb-1" style={{color:'var(--ink-3)'}}>Bank connection</div>
+          <div className="ft-serif text-[22px] font-medium" style={{color:'var(--ink)'}}>Connect your bank</div>
+        </div>
+        <button onClick={onClose} className="p-1.5 rounded-md hover:bg-black/5" style={{color:'var(--ink-3)'}}><I.X size={16}/></button>
+      </div>
+      <p className="text-[13px] mb-5" style={{color:'var(--ink-2)',lineHeight:1.6}}>Choose your bank to start syncing transactions automatically.</p>
+      <div className="flex gap-3 mb-4">
+        <BankCard name="Bank of America" sub="Via Plaid — secure redirect" logo="🏦" accentColor="var(--accent-2)" onClick={()=>onSelect('boa')}/>
+        <BankCard name="Monobank" sub="Via API token" logo="🐱" accentColor="var(--positive)" onClick={()=>onSelect('mono')}/>
+      </div>
+      <div className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-[12px]" style={{background:'var(--bg)',color:'var(--ink-3)'}}>
+        <I.Shield size={13} style={{flexShrink:0}}/> Your credentials are never stored. Read-only access only.
+      </div>
+    </div>
+  </div>
+);
+
+const ModalBoA = ({ onBack, onSuccess, onClose }) => {
+  const [step, setStep] = React.useState(0);
+  const go = () => { setStep(1); setTimeout(()=>setStep(2), 1800); };
+  return (
+    <div className="ft-overlay" onClick={onClose}>
+      <div className="ft-modal-panel ft-card-2 w-full max-w-[460px] p-7" onClick={e=>e.stopPropagation()} style={{borderRadius:20}}>
+        <BankSteps steps={['Choose bank','Authorize','Done']} current={step===2?2:step===1?1:0}/>
+        {step===0&&(
+          <div className="ft-fade">
+            <div className="text-[32px] mb-3">🏦</div>
+            <div className="ft-serif text-[20px] font-medium mb-3" style={{color:'var(--ink)'}}>Bank of America</div>
+            <p className="text-[13px] mb-5" style={{color:'var(--ink-2)',lineHeight:1.6}}>
+              You'll be redirected to <strong>Plaid</strong> — a trusted service used by thousands of fintech apps. It connects your bank without sharing credentials with us.
+            </p>
+            <div className="space-y-2.5 mb-6">
+              {['Read-only access to transactions','Your login stays with Plaid — we never see it','Disconnect anytime from Settings'].map((t,i)=>(
+                <div key={i} className="flex items-center gap-3 text-[13px]" style={{color:'var(--ink-2)'}}>
+                  <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0" style={{background:'var(--positive-soft)'}}><I.Check2 size={11} style={{color:'var(--positive)'}}/></div>
+                  {t}
+                </div>
+              ))}
+            </div>
+            <div className="flex justify-between items-center">
+              <button className="ft-btn-ghost" onClick={onBack}>← Back</button>
+              <button className="ft-btn-primary" onClick={go}>Continue to Plaid →</button>
+            </div>
+          </div>
+        )}
+        {step===1&&(
+          <div className="ft-fade text-center py-8">
+            <div className="text-[40px] mb-4">⏳</div>
+            <div className="ft-serif text-[18px] font-medium mb-2" style={{color:'var(--ink)'}}>Connecting to Plaid…</div>
+            <p className="text-[13px]" style={{color:'var(--ink-3)'}}>In a real flow you'd complete authorization in the Plaid window.<br/>Simulating return…</p>
+          </div>
+        )}
+        {step===2&&(
+          <div className="ft-fade text-center py-2">
+            <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{background:'var(--positive-soft)'}}><I.Check2 size={30} style={{color:'var(--positive)'}}/></div>
+            <div className="ft-serif text-[20px] font-medium mb-2" style={{color:'var(--ink)'}}>Bank of America connected</div>
+            <p className="text-[13px] mb-5" style={{color:'var(--ink-3)'}}>Transactions are syncing. Here's a preview:</p>
+            <div className="ft-card overflow-hidden mb-5 text-left">
+              {MOCK_BOA_TRANSACTIONS.map(t=>(
+                <div key={t.id} className="flex items-center justify-between px-4 py-3 border-b last:border-0" style={{borderColor:'var(--line)'}}>
+                  <div>
+                    <div className="text-[13px] font-medium" style={{color:'var(--ink)'}}>{t.from}</div>
+                    <div className="ft-mono text-[10.5px]" style={{color:'var(--ink-3)'}}>{t.date} · {t.note}</div>
+                  </div>
+                  <div className="ft-mono text-[13px] font-medium" style={{color:'var(--positive)'}}>+{fmtUSD(t.amount)}</div>
+                </div>
+              ))}
+            </div>
+            <button className="ft-btn-primary w-full justify-center" style={{width:'100%'}} onClick={()=>onSuccess('boa')}>Done</button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const ModalMono = ({ onBack, onSuccess, onClose }) => {
+  const [token, setToken] = React.useState('');
+  const [show, setShow] = React.useState(false);
+  const [step, setStep] = React.useState(0);
+  const go = () => { if(!token.trim()) return; setStep(1); setTimeout(()=>setStep(2), 1600); };
+  return (
+    <div className="ft-overlay" onClick={onClose}>
+      <div className="ft-modal-panel ft-card-2 w-full max-w-[460px] p-7" onClick={e=>e.stopPropagation()} style={{borderRadius:20}}>
+        <BankSteps steps={['Choose bank','Enter token','Done']} current={step===2?2:0}/>
+        {(step===0||step===1)&&(
+          <div className="ft-fade">
+            <div className="text-[32px] mb-3">🐱</div>
+            <div className="ft-serif text-[20px] font-medium mb-4" style={{color:'var(--ink)'}}>Connect Monobank</div>
+            <div className="rounded-xl p-4 mb-5 space-y-2.5" style={{background:'var(--bg)',border:'1px solid var(--line)'}}>
+              {[['1','Open Monobank app on your phone'],['2','Go to Settings → Other → API'],['3','Tap "Get token" and copy it'],['4','Paste it in the field below']].map(([n,t])=>(
+                <div key={n} className="flex gap-3 items-start">
+                  <div className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5" style={{background:'var(--ink)',color:'#fff'}}>{n}</div>
+                  <span className="text-[13px]" style={{color:'var(--ink-2)',lineHeight:1.4}}>{t}</span>
+                </div>
+              ))}
+            </div>
+            <div className="mb-5">
+              <label className="block text-[11px] uppercase tracking-[0.1em] font-medium mb-1.5" style={{color:'var(--ink-3)'}}>API Token</label>
+              <div className="relative">
+                <input className="ft-input ft-mono" type={show?'text':'password'}
+                  placeholder="Paste your Monobank token…"
+                  value={token} onChange={e=>setToken(e.target.value)}
+                  style={{paddingRight:44}}/>
+                <button onClick={()=>setShow(p=>!p)} className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5" style={{color:'var(--ink-3)',background:'none',border:'none',cursor:'pointer'}}>
+                  <I.Eye size={14}/>
+                </button>
+              </div>
+            </div>
+            <div className="flex justify-between items-center">
+              <button className="ft-btn-ghost" onClick={onBack}>← Back</button>
+              <button className="ft-btn-primary" onClick={go}
+                style={{opacity:token.trim()&&step===0?1:0.5,cursor:token.trim()&&step===0?'pointer':'default'}}>
+                {step===1?'Verifying…':'Connect →'}
+              </button>
+            </div>
+          </div>
+        )}
+        {step===2&&(
+          <div className="ft-fade text-center py-2">
+            <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{background:'var(--positive-soft)'}}><I.Check2 size={30} style={{color:'var(--positive)'}}/></div>
+            <div className="ft-serif text-[20px] font-medium mb-2" style={{color:'var(--ink)'}}>Monobank connected</div>
+            <p className="text-[13px] mb-5" style={{color:'var(--ink-3)'}}>Token verified. Your account is syncing.</p>
+            <div className="ft-card p-4 mb-5 text-left">
+              <div className="text-[10.5px] uppercase tracking-[0.1em] mb-1.5 font-medium" style={{color:'var(--ink-3)'}}>Balance preview</div>
+              <div className="ft-mono text-[26px] font-medium" style={{color:'var(--ink)'}}>₴ 342,800</div>
+              <div className="text-[12px] mt-1" style={{color:'var(--ink-3)'}}>Monobank UAH account</div>
+            </div>
+            <button className="ft-btn-primary" style={{width:'100%',justifyContent:'center'}} onClick={()=>onSuccess('mono')}>Done</button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const ModalDisconnect = ({ bankName, onConfirm, onClose }) => (
+  <div className="ft-overlay" onClick={onClose}>
+    <div className="ft-modal-panel ft-card-2 w-full max-w-[400px] p-7" onClick={e=>e.stopPropagation()} style={{borderRadius:20}}>
+      <div className="w-12 h-12 rounded-full flex items-center justify-center mb-4" style={{background:'var(--negative-soft)'}}><I.Unlink size={20} style={{color:'var(--negative)'}}/></div>
+      <div className="ft-serif text-[20px] font-medium mb-3" style={{color:'var(--ink)'}}>Disconnect {bankName}?</div>
+      <p className="text-[13px] mb-6" style={{color:'var(--ink-2)',lineHeight:1.6}}>
+        This will stop syncing transactions from {bankName}. Existing data will remain. You can reconnect at any time.
+      </p>
+      <div className="flex justify-end gap-2">
+        <button className="ft-btn-ghost" onClick={onClose}>Cancel</button>
+        <button className="ft-btn-primary" style={{background:'var(--negative)'}} onClick={onConfirm}>Disconnect</button>
+      </div>
+    </div>
+  </div>
+);
+
+// ─── Settings page ─────────────────────────────────────────────────────────────
+const SettingsView = ({ banks, onConnect, onDisconnectStart }) => {
+  const defs = [
+    { id:'boa',  name:'Bank of America', logo:'🏦', tag:'Plaid',     sync:'2 min ago' },
+    { id:'mono', name:'Monobank',         logo:'🐱', tag:'API token', sync:'5 min ago' },
+  ];
+  const anyConnected = Object.values(banks).some(Boolean);
+  return (
+    <div className="ft-fade">
+      <TopBar title="Settings" subtitle="Settings." period={null}/>
+      <div className="ft-card overflow-hidden mb-5">
+        <div className="flex items-center justify-between px-5 py-4 border-b" style={{borderColor:'var(--line)'}}>
+          <div>
+            <div className="text-[14px] font-semibold" style={{color:'var(--ink)'}}>Connected accounts</div>
+            <div className="text-[12px] mt-0.5" style={{color:'var(--ink-3)'}}>Manage your bank integrations</div>
+          </div>
+          {anyConnected&&<button className="ft-btn-ghost" style={{fontSize:12,padding:'6px 12px'}} onClick={onConnect}><I.Plus size={13}/> Add bank</button>}
+        </div>
+        {defs.map((bank,idx)=>{
+          const connected=banks[bank.id];
+          return (
+            <div key={bank.id} className="flex items-center gap-4 px-5 py-4 border-b last:border-0" style={{borderColor:'var(--line)'}}>
+              <div className="text-[28px] shrink-0">{bank.logo}</div>
+              <div className="flex-1 min-w-0">
+                <div className="text-[14px] font-semibold" style={{color:'var(--ink)'}}>{bank.name}</div>
+                {connected?(
+                  <div className="flex items-center gap-2 mt-0.5">
+                    <div className="w-1.5 h-1.5 rounded-full" style={{background:'var(--positive)'}}/>
+                    <span className="text-[12px]" style={{color:'var(--ink-3)'}}>Connected via {bank.tag} · Last sync: {bank.sync}</span>
+                  </div>
+                ):(
+                  <div className="flex items-center gap-2 mt-0.5">
+                    <div className="w-1.5 h-1.5 rounded-full" style={{background:'var(--line-2)'}}/>
+                    <span className="text-[12px]" style={{color:'var(--ink-3)'}}>Not connected</span>
+                  </div>
+                )}
+              </div>
+              {connected?(
+                <button className="ft-btn-ghost" style={{fontSize:12,padding:'6px 12px',color:'var(--negative)',borderColor:'var(--negative)'}} onClick={()=>onDisconnectStart(bank.id,bank.name)}>
+                  <I.Unlink size={13}/> Disconnect
+                </button>
+              ):(
+                <button className="ft-btn-primary" style={{fontSize:12,padding:'7px 13px'}} onClick={onConnect}>
+                  <I.LinkIcon size={13}/> Connect
+                </button>
+              )}
+            </div>
+          );
+        })}
+        {!anyConnected&&(
+          <div className="py-10 text-center">
+            <div className="text-[13px] mb-4" style={{color:'var(--ink-3)'}}>No banks connected yet</div>
+            <button className="ft-btn-primary" onClick={onConnect}><I.LinkIcon size={14}/> Connect your first bank</button>
+          </div>
+        )}
+      </div>
+
+      {/* Other settings — placeholder */}
+      <div className="ft-card overflow-hidden" style={{opacity:0.45}}>
+        {[['General','Company name, timezone, currency'],['Team & permissions','Roles, invitations, access levels'],['Billing','Plan, invoices, payment method']].map(([t,s],i,arr)=>(
+          <div key={t} className="px-5 py-4" style={{borderBottom:i<arr.length-1?'1px solid var(--line)':'none'}}>
+            <div className="text-[14px] font-semibold mb-0.5" style={{color:'var(--ink)'}}>{t}</div>
+            <div className="text-[12px]" style={{color:'var(--ink-3)'}}>{s}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// ============================================================================
+// ROOT
+// ============================================================================
 function App() {
   const [view, setView] = useState('dashboard');
   const [modal, setModal] = useState(false);
   const [drill, setDrill] = useState(null);
   const [receivablesView, setReceivablesView] = useState(false);
   const [toast, setToast] = useState(null);
+  // Bank state
+  const [banks, setBanks] = useState({ boa: false, mono: false });
+  const [bankModal, setBankModal] = useState(null); // null|'choose'|'boa'|'mono'
+  const [disconnecting, setDisconnecting] = useState(null); // {id,name}
+
+  const openBankConnect = () => setBankModal('choose');
+  const selectBank = (b) => setBankModal(b);
+  const onBankSuccess = (b) => { setBanks(p=>({...p,[b]:true})); setBankModal(null); setToast('Bank connected successfully'); };
+  const startDisconnect = (id, name) => setDisconnecting({id, name});
+  const confirmDisconnect = () => { setBanks(p=>({...p,[disconnecting.id]:false})); setDisconnecting(null); };
+
+  const anyBankConnected = Object.values(banks).some(Boolean);
 
   return (
     <div className="ft-root ft-grain min-h-screen flex">
-      <Sidebar view={view} setView={(v)=>{ setView(v); setDrill(null); setReceivablesView(false); }}/>
+      <Sidebar
+        view={view}
+        setView={(v)=>{ setView(v); setDrill(null); setReceivablesView(false); }}
+        showSettingsBadge={!anyBankConnected}
+      />
       <main className="flex-1 px-10 py-8 relative" style={{zIndex:1}}>
         <div className="max-w-[1400px] mx-auto">
           {modal && <AddEntryModal onClose={()=>setModal(false)} onSuccess={(msg)=>{ setModal(false); setToast(msg); }}/>}
           {toast && <Toast msg={toast} onDone={()=>setToast(null)}/>}
+          {/* Bank modals */}
+          {bankModal==='choose' && <ModalChooseBank onSelect={selectBank} onClose={()=>setBankModal(null)}/>}
+          {bankModal==='boa'    && <ModalBoA onBack={()=>setBankModal('choose')} onSuccess={onBankSuccess} onClose={()=>setBankModal(null)}/>}
+          {bankModal==='mono'   && <ModalMono onBack={()=>setBankModal('choose')} onSuccess={onBankSuccess} onClose={()=>setBankModal(null)}/>}
+          {disconnecting && <ModalDisconnect bankName={disconnecting.name} onConfirm={confirmDisconnect} onClose={()=>setDisconnecting(null)}/>}
+
           {view==='dashboard' && (
             drill ? <DetailScreen kind={drill} onBack={()=>setDrill(null)}/>
             : receivablesView ? <ReceivableScreen onBack={()=>setReceivablesView(false)}/>
-            : <Dashboard onAddEntry={()=>setModal(true)} onDrill={k=>setDrill(k)} onGoProjects={()=>setView('projects')} onViewReceivables={()=>setReceivablesView(true)}/>
+            : <Dashboard onAddEntry={()=>setModal(true)} onDrill={k=>setDrill(k)} onGoProjects={()=>setView('projects')} onViewReceivables={()=>setReceivablesView(true)} banks={banks} onConnectBank={openBankConnect}/>
           )}
-          {view==='projects' && <Projects/>}
-          {view==='team'     && <Team/>}
-          {view==='cashflow' && <Cashflow/>}
+          {view==='projects'  && <Projects/>}
+          {view==='team'      && <Team/>}
+          {view==='cashflow'  && <Cashflow/>}
+          {view==='settings'  && <SettingsView banks={banks} onConnect={openBankConnect} onDisconnectStart={startDisconnect}/>}
         </div>
       </main>
     </div>
