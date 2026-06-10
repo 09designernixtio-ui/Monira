@@ -133,6 +133,7 @@ const I = {
   Activity:   (p) => <Icon {...p} d={<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>}/>,
   RefreshCw:  (p) => <Icon {...p} d={<><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></>}/>,
   TrendUp:    (p) => <Icon {...p} d={<><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></>}/>,
+  Layers:     (p) => <Icon {...p} d={<><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></>}/>,
   Logo:       (p) => <Icon {...p} viewBox="0 0 20 20" d={<><path d="M3 14 L8 9 L11 12 L17 5"/><circle cx="17" cy="5" r="1.5" fill="var(--accent)" stroke="none"/></>}/>,
 };
 
@@ -206,12 +207,12 @@ const UPCOMING_RENEWALS = [
 
 // Accounts receivable — outstanding invoices
 const RECEIVABLES = [
-  { id: 1, client: 'Community Builders Lab', invoice: 'INV-CBL-009', amount: 4000, daysOverdue: 12, status: 'overdue'   },
-  { id: 2, client: 'Northpath',              invoice: 'INV-NTH-018', amount: 4400, daysOverdue: 3,  status: 'overdue'   },
-  { id: 3, client: 'Loomside',               invoice: 'INV-LMS-023', amount: 1800, daysOverdue: 0,  status: 'pending'   },
-  { id: 4, client: 'Test Client',            invoice: 'INV-TST-002', amount: 2200, daysOverdue: 0,  status: 'pending'   },
-  { id: 5, client: 'Pondid Inc.',            invoice: 'INV-PDD-014', amount: 24000, daysOverdue: 0, status: 'received'  },
-  { id: 6, client: 'Helix Studio',           invoice: 'INV-HLX-051', amount: 4500,  daysOverdue: 0, status: 'received'  },
+  { id: 1, client: 'Community Builders Lab', invoice: 'INV-CBL-009', amount: 4000,  daysOverdue: 12, status: 'overdue',  issueDate: 'May 19' },
+  { id: 2, client: 'Northpath',              invoice: 'INV-NTH-018', amount: 4400,  daysOverdue: 3,  status: 'overdue',  issueDate: 'Jun 3'  },
+  { id: 3, client: 'Loomside',               invoice: 'INV-LMS-023', amount: 1800,  daysOverdue: 0,  status: 'pending',  issueDate: 'Jun 5'  },
+  { id: 4, client: 'Test Client',            invoice: 'INV-TST-002', amount: 2200,  daysOverdue: 0,  status: 'pending',  issueDate: 'Jun 7'  },
+  { id: 5, client: 'Pondid Inc.',            invoice: 'INV-PDD-014', amount: 24000, daysOverdue: 0,  status: 'received', issueDate: 'Jun 1'  },
+  { id: 6, client: 'Helix Studio',           invoice: 'INV-HLX-051', amount: 4500,  daysOverdue: 0,  status: 'received', issueDate: 'Jun 1'  },
 ];
 
 // Cash balance across accounts
@@ -495,17 +496,18 @@ const ReceivableScreen = ({ onBack }) => {
 
       <div className="ft-card overflow-hidden">
         <div className="grid gap-3 px-5 py-3 text-[10.5px] uppercase tracking-[0.1em] font-medium border-b"
-          style={{color:'var(--ink-3)',borderColor:'var(--line)',background:'var(--bg-grain)',gridTemplateColumns:'2fr 1.2fr 1fr 1fr 0.8fr'}}>
-          <span>Client</span><span>Invoice</span><span>Amount</span><span>Status</span><span>Bank</span>
+          style={{color:'var(--ink-3)',borderColor:'var(--line)',background:'var(--bg-grain)',gridTemplateColumns:'2fr 1.2fr 0.8fr 1fr 1fr 0.8fr'}}>
+          <span>Client</span><span>Invoice</span><span>Date</span><span>Amount</span><span>Status</span><span>Bank</span>
         </div>
         {filtered.length === 0 && <div className="py-8 text-center text-[13px]" style={{color:'var(--ink-3)'}}>No items</div>}
         {filtered.map(r=>{
           const bank='Bank of America'; const bankShort=bank.length>14?bank.slice(0,14)+'…':bank;
           const amtColor = r.status==='received' ? 'var(--positive)' : (r.daysOverdue>0||r.status==='overdue') ? 'var(--negative)' : 'var(--ink)';
           return (
-            <div key={r.id} className="ft-row grid gap-3 px-5 py-3.5 items-center border-b last:border-0" style={{borderColor:'var(--line)',gridTemplateColumns:'2fr 1.2fr 1fr 1fr 0.8fr'}}>
+            <div key={r.id} className="ft-row grid gap-3 px-5 py-3.5 items-center border-b last:border-0" style={{borderColor:'var(--line)',gridTemplateColumns:'2fr 1.2fr 0.8fr 1fr 1fr 0.8fr'}}>
               <div className="flex items-center gap-2.5 min-w-0"><Avatar name={r.client} size={28}/><span className="text-[13.5px] font-medium truncate" style={{color:'var(--ink)'}}>{r.client}</span></div>
               <span className="ft-mono text-[12.5px]" style={{color:'var(--ink-3)'}}>{r.invoice}</span>
+              <span className="ft-mono text-[12.5px]" style={{color:'var(--ink-3)'}}>{r.issueDate}</span>
               <span className="ft-mono text-[13.5px] font-medium" style={{color:amtColor}}>{fmtUSD(r.amount)}</span>
               <div><StatusBadge r={r}/></div>
               <span className="text-[12px] ft-mono truncate" title={bank} style={{color:'var(--ink-3)'}}>{bankShort}</span>
@@ -575,9 +577,12 @@ const AddEntryModal = ({ onClose, onSuccess }) => {
               </div>
               <Field label={isIncome ? 'SOURCE / CLIENT' : 'SOURCE'}>
                 {isIncome ? (
-                  <div>
-                    <input className="ft-input" list="clients-list" placeholder="Select or type client…" style={{borderRadius:20}}/>
-                    <datalist id="clients-list">{CLIENTS.map(c=><option key={c.id} value={c.name}/>)}</datalist>
+                  <div className="flex gap-2">
+                    <div className="flex-1">
+                      <input className="ft-input" list="clients-list" placeholder="Select or type client…" style={{borderRadius:20}}/>
+                      <datalist id="clients-list">{CLIENTS.map(c=><option key={c.id} value={c.name}/>)}</datalist>
+                    </div>
+                    <button type="button" className="ft-btn-ghost shrink-0" style={{borderRadius:20,padding:'8px 14px'}}><I.Plus size={13}/> New</button>
                   </div>
                 ) : (
                   <input className="ft-input" placeholder="e.g. AWS, Figma…" style={{borderRadius:20}}/>
@@ -598,11 +603,6 @@ const AddEntryModal = ({ onClose, onSuccess }) => {
                   {CASH_ACCOUNTS.map(a=><option key={a.id}>{a.name}</option>)}
                 </select>
               </Field>
-              {isIncome && (
-                <Field label="Link to project">
-                  <input className="ft-input" placeholder="e.g. Pondid, Helix Design System…" style={{borderRadius:20}}/>
-                </Field>
-              )}
               <Field label="Note">
                 <div className="relative">
                   <textarea className="ft-input" rows={2} placeholder="Optional memo…" style={{borderRadius:20,resize:'none',paddingRight:40}}/>
@@ -841,94 +841,59 @@ const Dashboard = ({ onAddEntry, onDrill, onGoProjects, onViewReceivables }) => 
         <StatCard label="Net margin"     value={fmtUSD(net)}      sub={`${marginPct}% this month`}   mom={-8.0}  momInverse accent/>
       </div>
 
-      {/* Middle row: Accounts Receivable (left, wider) + Cash Balance (right) */}
-      <div className="grid grid-cols-12 gap-4 mb-4">
-        {/* Accounts Receivable — LEFT */}
-        <div className="col-span-8 ft-card p-5">
+      {/* Middle row: Received invoices (left) + Overdue (right) — no Cash Balance */}
+      <div className="grid grid-cols-2 gap-4 mb-4">
+        {/* Received invoices — LEFT */}
+        <div className="ft-card p-5">
+          <div className="flex items-center gap-2 mb-4">
+            <span style={{color:'var(--positive)'}}><I.Check2 size={14}/></span>
+            <div className="text-[11px] uppercase tracking-[0.12em] font-medium" style={{color:'var(--ink-3)'}}>Received invoices</div>
+          </div>
+          <div className="ft-mono text-[24px] font-medium mb-4" style={{color:'var(--positive)'}}>
+            {fmtUSD(receivables.filter(r=>r.status==='received').reduce((s,r)=>s+r.amount,0))}
+          </div>
+          <div>
+            {receivables.filter(r=>r.status==='received').sort((a,b)=>a.issueDate>b.issueDate?-1:1).map(r=>(
+              <div key={r.id} className="flex items-center gap-3 py-2.5 border-b last:border-0" style={{borderColor:'var(--line)'}}>
+                <Avatar name={r.client} size={28}/>
+                <div className="flex-1 min-w-0">
+                  <div className="text-[13px] font-medium truncate" style={{color:'var(--ink)'}}>{r.client}</div>
+                  <div className="text-[10.5px] ft-mono" style={{color:'var(--ink-3)'}}>Bank of America · {r.issueDate}</div>
+                </div>
+                <Badge tone="positive"><I.Check2 size={10}/> Received</Badge>
+                <div className="ft-mono text-[13px] font-medium shrink-0" style={{color:'var(--positive)'}}>{fmtUSD(r.amount)}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Overdue — RIGHT */}
+        <div className="ft-card p-5">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
-              <span style={{color:'var(--accent)'}}><I.Receipt size={14}/></span>
-              <div className="text-[11px] uppercase tracking-[0.12em] font-medium" style={{color:'var(--ink-3)'}}>Accounts receivable</div>
+              <span style={{color:'var(--negative)'}}><I.AlertCircle size={14}/></span>
+              <div className="text-[11px] uppercase tracking-[0.12em] font-medium" style={{color:'var(--ink-3)'}}>Overdue</div>
             </div>
             <button className="ft-btn-ghost" style={{padding:'5px 10px',fontSize:12}} onClick={onViewReceivables}>
               View all <I.ArrowUpRight size={11}/>
             </button>
           </div>
-          <div className="grid grid-cols-2 gap-3 mb-4">
-            <div className="ft-card p-3.5" style={{background:'var(--bg)'}}>
-              <div className="text-[10.5px] uppercase tracking-[0.1em] mb-1.5" style={{color:'var(--ink-3)'}}>Expected</div>
-              <div className="ft-mono text-[22px] font-medium" style={{color:'var(--ink)'}}>{fmtUSD(totalExpected)}</div>
-            </div>
-            <div className="p-3.5 rounded-[12px]" style={{background:'var(--negative-soft)',border:'1px solid var(--negative)'}}>
-              <div className="text-[10.5px] uppercase tracking-[0.1em] mb-1.5 flex items-center gap-1" style={{color:'var(--negative)'}}><I.AlertCircle size={11}/> Overdue</div>
-              <div className="ft-mono text-[22px] font-medium" style={{color:'var(--negative)'}}>{fmtUSD(totalOverdue)}</div>
-            </div>
+          <div className="ft-mono text-[24px] font-medium mb-4" style={{color:'var(--negative)'}}>
+            {fmtUSD(receivables.filter(r=>r.status==='overdue'||r.daysOverdue>0).reduce((s,r)=>s+r.amount,0))}
           </div>
           <div>
-            {receivables.slice(0,4).map(r => {
-              const overdue = r.daysOverdue > 0;
-              const bank = 'Bank of America';
-              const bankShort = bank.length > 14 ? bank.slice(0,14)+'…' : bank;
-              return (
-                <div key={r.id} className="flex items-center gap-3 py-2.5 border-b last:border-0" style={{borderColor:'var(--line)'}}>
-                  <Avatar name={r.client} size={28}/>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-[13px] font-medium truncate" style={{color:'var(--ink)'}}>{r.client}</div>
-                    <div className="text-[10.5px] ft-mono" style={{color:'var(--ink-3)'}}>{r.invoice} · <span title={bank}>{bankShort}</span></div>
-                  </div>
-                  {r.status === 'received'
-                    ? <Badge tone="positive"><I.Check2 size={10}/> Received</Badge>
-                    : (overdue ? <Badge tone="negative"><I.Clock size={10}/> {r.daysOverdue}d overdue</Badge> : <Badge tone="warn">Pending</Badge>)}
-                  <div className="ft-mono text-[13px] font-medium shrink-0" style={{color:overdue?'var(--negative)':'var(--ink)'}}>{fmtUSD(r.amount)}</div>
+            {receivables.filter(r=>r.status==='overdue'||r.daysOverdue>0).sort((a,b)=>b.daysOverdue-a.daysOverdue).map(r=>(
+              <div key={r.id} className="flex items-center gap-3 py-2.5 border-b last:border-0" style={{borderColor:'var(--line)'}}>
+                <Avatar name={r.client} size={28}/>
+                <div className="flex-1 min-w-0">
+                  <div className="text-[13px] font-medium truncate" style={{color:'var(--ink)'}}>{r.client}</div>
+                  <div className="text-[10.5px] ft-mono" style={{color:'var(--ink-3)'}}>Bank of America · {r.issueDate}</div>
                 </div>
-              );
-            })}
+                <Badge tone="negative"><I.Clock size={10}/> {r.daysOverdue}d overdue</Badge>
+                <div className="ft-mono text-[13px] font-medium shrink-0" style={{color:'var(--negative)'}}>{fmtUSD(r.amount)}</div>
+              </div>
+            ))}
           </div>
-        </div>
-
-        {/* Cash Balance — RIGHT */}
-        <div className="col-span-4 ft-card p-5 flex flex-col">
-          <div className="flex items-center gap-2 mb-4">
-            <span style={{color:'var(--positive)'}}><I.Wallet size={14}/></span>
-            <div className="text-[11px] uppercase tracking-[0.12em] font-medium" style={{color:'var(--ink-3)'}}>Cash balance</div>
-          </div>
-          <div className="space-y-3 flex-1">
-            {CASH_ACCOUNTS.map(a => {
-              const IconC = I[a.icon] || I.Building;
-              const isBoA = a.id === 1;
-              return (
-                <div key={a.id}>
-                  <div className="flex items-center gap-3 mb-1.5">
-                    <div className="w-7 h-7 rounded-md flex items-center justify-center shrink-0" style={{background:'var(--bg)',border:'1px solid var(--line)',color:'var(--ink-2)'}}><IconC size={13}/></div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-[13px] font-medium truncate" style={{color:'var(--ink)'}}>{a.name}</div>
-                      <div className="text-[10.5px] ft-mono" style={{color:'var(--ink-3)'}}>{a.kind}</div>
-                    </div>
-                    <div className="ft-mono text-[13px] font-medium shrink-0" style={{color:'var(--ink)'}}>{fmtUSD(a.amount)}</div>
-                  </div>
-                  {isBoA && (
-                    <div className="ml-10 space-y-0 pb-1">
-                      {BOA_TRANSACTIONS.map(t => (
-                        <div key={t.id} className="flex items-center justify-between py-2 border-b last:border-0" style={{borderColor:'var(--line)'}}>
-                          <div className="min-w-0">
-                            <div className="text-[12px] font-medium" style={{color:'var(--ink)'}}>Bank of America</div>
-                            <div className="text-[10.5px] ft-mono" style={{color:'var(--ink-3)'}}>{t.client} · {t.date}</div>
-                          </div>
-                          <div className="ft-mono text-[12px] font-medium shrink-0 ml-2" style={{color:'var(--positive)'}}>+{fmtUSD(t.amount)}</div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-          <div className="ft-divider-dotted my-3"/>
-          <div className="flex items-baseline justify-between">
-            <span className="text-[11px] uppercase tracking-[0.1em]" style={{color:'var(--ink-3)'}}>Total</span>
-            <span className="ft-mono text-[20px] font-medium" style={{color:'var(--ink)'}}>{fmtUSD(totalCash)}</span>
-          </div>
-          <div className="text-[11px] mt-1 ft-mono" style={{color:'var(--positive)'}}>+$16,892 this month</div>
         </div>
       </div>
 
@@ -1034,7 +999,7 @@ const PROJECT_ALLOCATIONS = {
     deadline: '2026-07-15', clientContact: 'alex@pondid.com',
     notes: 'Final delivery expected by mid-July. Design approved Jun 10.',
     roles: [
-      { role: 'Design',    icon: 'Pencil',  budgetH: 40, spentH: 38, rate: 28, team: [{ name:'Alexander', h:32 },{ name:'Yullia', h:6 }] },
+      { role: 'Design',    icon: 'Activity',  budgetH: 40, spentH: 38, rate: 28, team: [{ name:'Alexander', h:32 },{ name:'Yullia', h:6 }] },
       { role: 'Development', icon: 'Zap',  budgetH: 80, spentH: 92, rate: 32, team: [{ name:'Andrii', h:60 },{ name:'Max', h:32 }] },
       { role: 'QA / Testing', icon: 'Check2', budgetH: 40, spentH: 12, rate: 18, team: [{ name:'Anastasiia', h:12 }] },
     ],
@@ -1047,7 +1012,7 @@ const PROJECT_ALLOCATIONS = {
     deadline: '2026-12-31', clientContact: 'hello@helix.io',
     notes: 'Monthly retainer. Design system tokens and component library.',
     roles: [
-      { role: 'Design',     icon: 'Pencil', budgetH: 60, spentH: 54, rate: 24, team: [{ name:'Alexander', h:54 }] },
+      { role: 'Design',     icon: 'Activity', budgetH: 60, spentH: 54, rate: 24, team: [{ name:'Alexander', h:54 }] },
       { role: 'Development',icon: 'Zap',    budgetH: 30, spentH: 30, rate: 32, team: [{ name:'Max', h:30 }] },
     ],
     invoices: [{ id:1, invoiceId:'INV-HLX-051', amount:4500, status:'paid', datePaid:'Jun 4' }],
@@ -1064,7 +1029,7 @@ const PROJECT_ALLOCATIONS = {
     deadline: '2026-08-01', clientContact: 'dev@northpath.com',
     notes: 'Web redesign. Currently in development phase. 16h over budget.',
     roles: [
-      { role: 'Design',     icon: 'Pencil', budgetH: 20, spentH: 18, rate: 28, team: [{ name:'Yullia', h:18 }] },
+      { role: 'Design',     icon: 'Activity', budgetH: 20, spentH: 18, rate: 28, team: [{ name:'Yullia', h:18 }] },
       { role: 'Development',icon: 'Zap',    budgetH: 60, spentH: 78, rate: 32, team: [{ name:'Andrii', h:50 },{ name:'Max', h:28 }] },
     ],
     invoices: [{ id:1, invoiceId:'INV-NTH-017', amount:3200, status:'pending', dateIssued:'May 28' }],
@@ -1144,18 +1109,119 @@ const CreateInvoiceModal = ({ project, onClose, onCreated }) => {
   );
 };
 
-// Project Slide-out Panel
 const ProjectPanel = ({ project, onClose }) => {
   const alloc = PROJECT_ALLOCATIONS[project.id] || { roles:[], invoices:[], deadline:null, clientContact:'—', notes:'' };
   const [invoices, setInvoices] = React.useState(alloc.invoices||[]);
   const [showCreateInvoice, setShowCreateInvoice] = React.useState(false);
+  const [roleData, setRoleData] = React.useState((alloc.roles||[]).map(r=>({...r})));
+  // Edit allocation modal state
+  const [editingRole, setEditingRole] = React.useState(null); // { idx, role, budgetH, teamNames }
 
-  const roleIcon = { 'Design': I.Pencil, 'Development': I.Zap, 'QA / Testing': I.Check2 };
+  const openEdit = (idx) => {
+    const r = roleData[idx];
+    setEditingRole({ idx, role: r.role, budgetH: r.budgetH, teamNames: r.team.map(p=>p.name), teamSearch: '' });
+  };
+  const saveEdit = () => {
+    setRoleData(prev => prev.map((r,i) => i===editingRole.idx ? {
+      ...r,
+      budgetH: editingRole.budgetH,
+      team: editingRole.teamNames.map(name => {
+        const existing = r.team.find(p=>p.name===name);
+        return existing || { name, h: 0 };
+      }),
+    } : r));
+    setEditingRole(null);
+  };
+  const toggleMember = (name) => {
+    setEditingRole(prev => ({
+      ...prev,
+      teamNames: prev.teamNames.includes(name)
+        ? prev.teamNames.filter(n=>n!==name)
+        : [...prev.teamNames, name],
+    }));
+  };
+
+  const roleIcon = { 'Design': I.Activity, 'Development': I.Zap, 'QA / Testing': I.Check2 };
   const statusStyle = (pct) => pct > 110 ? { bar:'var(--negative)', label:'Overrun' } : pct > 100 ? { bar:'var(--accent-2)', label:'Over budget' } : { bar:'var(--positive)', label:'On track' };
 
   return (
     <>
       {showCreateInvoice && <CreateInvoiceModal project={project} onClose={()=>setShowCreateInvoice(false)} onCreated={(inv)=>setInvoices(p=>[...p,inv])}/>}
+
+      {/* Edit Allocation Modal */}
+      {editingRole && (
+        <div className="ft-overlay" onClick={()=>setEditingRole(null)} style={{zIndex:200}}>
+          <div className="ft-modal-panel ft-card-2 w-full max-w-[420px] p-6" onClick={e=>e.stopPropagation()} style={{borderRadius:16}}>
+            <div className="flex items-start justify-between mb-5">
+              <div>
+                <div className="text-[11px] uppercase tracking-[0.12em] font-medium mb-1" style={{color:'var(--ink-3)'}}>Project allocation</div>
+                <div className="ft-serif text-[20px] font-medium" style={{color:'var(--ink)'}}>Edit {editingRole.role} allocation</div>
+              </div>
+              <button onClick={()=>setEditingRole(null)} className="p-1.5 rounded-md hover:bg-black/5" style={{color:'var(--ink-3)'}}><I.X size={16}/></button>
+            </div>
+            <div className="space-y-4">
+              <Field label="Budget hours">
+                <input className="ft-input ft-mono" type="number" min={0}
+                  value={editingRole.budgetH}
+                  onChange={e=>setEditingRole(p=>({...p,budgetH:+e.target.value||0}))}/>
+              </Field>
+              <Field label="Team members">
+                {/* Selected members as chips */}
+                {editingRole.teamNames.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 mb-2">
+                    {editingRole.teamNames.map(name => (
+                      <div key={name} className="flex items-center gap-1.5 pl-1.5 pr-2 py-1 rounded-lg text-[12px] font-medium"
+                        style={{background:'var(--ink)',color:'var(--bg)'}}>
+                        <Avatar name={name} size={16}/>
+                        <span>{name}</span>
+                        <button type="button" onClick={()=>toggleMember(name)} className="ml-0.5 opacity-60 hover:opacity-100" style={{lineHeight:1}}>
+                          <I.X size={11}/>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {/* Combobox input with dropdown */}
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2" style={{color:'var(--ink-3)'}}><I.Search size={14}/></span>
+                  <input
+                    className="ft-input"
+                    style={{paddingLeft:32}}
+                    placeholder="Search and add team members..."
+                    value={editingRole.teamSearch||''}
+                    onFocus={()=>setEditingRole(p=>({...p,searchOpen:true}))}
+                    onChange={e=>setEditingRole(p=>({...p,teamSearch:e.target.value,searchOpen:true}))}
+                    onBlur={()=>{ setTimeout(()=>setEditingRole(p=>p?{...p,searchOpen:false}:p),150); }}
+                  />
+                  {editingRole.searchOpen && TEAM.filter(m=>!editingRole.teamNames.includes(m.name)&&((editingRole.teamSearch||'')===''.trim()||m.name.toLowerCase().includes((editingRole.teamSearch||'').toLowerCase())||m.role.toLowerCase().includes((editingRole.teamSearch||'').toLowerCase()))).length > 0 && (
+                    <div className="absolute left-0 right-0 top-full mt-1 rounded-xl overflow-hidden z-10"
+                      style={{background:'var(--surface-2)',border:'1px solid var(--line)',boxShadow:'0 8px 24px rgba(28,24,20,0.12)'}}>
+                      {TEAM.filter(m=>!editingRole.teamNames.includes(m.name)&&((editingRole.teamSearch||'')===''.trim()||m.name.toLowerCase().includes((editingRole.teamSearch||'').toLowerCase())||m.role.toLowerCase().includes((editingRole.teamSearch||'').toLowerCase()))).map(m=>(
+                        <button key={m.name} type="button"
+                          onMouseDown={e=>{e.preventDefault();toggleMember(m.name);setEditingRole(p=>({...p,teamSearch:'',searchOpen:true}));}}
+                          className="w-full flex items-center gap-3 px-4 py-2.5 text-left hover:bg-black/[0.03] transition border-b last:border-0"
+                          style={{borderColor:'var(--line)'}}>
+                          <Avatar name={m.name} size={24}/>
+                          <div className="flex-1 min-w-0">
+                            <div className="text-[13px] font-medium" style={{color:'var(--ink)'}}>{m.name}</div>
+                            <div className="text-[11px] ft-mono" style={{color:'var(--ink-3)'}}>{m.role} · {fmtUSD(m.rate)}/h</div>
+                          </div>
+                          <I.Plus size={13} style={{color:'var(--ink-3)'}}/>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </Field>
+            </div>
+            <div className="flex justify-end gap-2 mt-6">
+              <button className="ft-btn-ghost" onClick={()=>setEditingRole(null)}>Cancel</button>
+              <button className="ft-btn-primary" onClick={saveEdit}>Save changes</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="fixed inset-0 z-[90]" style={{background:'rgba(28,24,20,0.28)'}} onClick={onClose}/>
       <div className="fixed top-0 right-0 bottom-0 z-[100] flex flex-col overflow-hidden ft-fade"
         style={{width:'min(580px,48vw)', background:'var(--surface)', borderLeft:'1px solid var(--line)'}}>
@@ -1195,11 +1261,12 @@ const ProjectPanel = ({ project, onClose }) => {
           <section>
             <div className="text-[11px] uppercase tracking-[0.12em] font-medium mb-3" style={{color:'var(--ink-3)'}}>Team allocation by role</div>
             <div className="space-y-3">
-              {(alloc.roles||[]).map(r => {
+              {roleData.map((r, idx) => {
                 const pct = r.budgetH > 0 ? Math.round((r.spentH/r.budgetH)*100) : 0;
                 const s = statusStyle(pct);
                 const cost = r.spentH * r.rate;
                 const budgCost = r.budgetH * r.rate;
+                const remaining = r.budgetH - r.spentH;
                 const IconC = I[r.icon] || I.Pencil;
                 return (
                   <div key={r.role} className="ft-card p-4">
@@ -1208,25 +1275,53 @@ const ProjectPanel = ({ project, onClose }) => {
                         <span style={{color:'var(--ink-2)'}}><IconC size={14}/></span>
                         <span className="text-[13.5px] font-medium" style={{color:'var(--ink)'}}>{r.role}</span>
                       </div>
-                      <span className="ft-chip text-[11px]" style={{ background: pct>110?'var(--negative-soft)':pct>100?'var(--warn-soft)':'var(--positive-soft)', color: pct>110?'var(--negative)':pct>100?'var(--warn)':'var(--positive)' }}>
-                        {pct}% · {s.label}
-                      </span>
-                    </div>
-                    <div className="flex items-end justify-between text-[12px] mb-1.5">
-                      <span className="ft-mono" style={{color:'var(--ink-2)'}}>{r.spentH}h spent / {r.budgetH}h budgeted</span>
-                      <span className="ft-mono" style={{color:cost>budgCost?'var(--negative)':'var(--ink-3)'}}>{fmtUSD(cost)} / {fmtUSD(budgCost)}</span>
+                      <div className="flex items-center gap-2">
+                        <span className="ft-chip text-[11px]" style={{ background: pct>110?'var(--negative-soft)':pct>100?'var(--warn-soft)':'var(--positive-soft)', color: pct>110?'var(--negative)':pct>100?'var(--warn)':'var(--positive)' }}>
+                          {pct}% · {s.label}
+                        </span>
+                        <button onClick={()=>openEdit(idx)} className="p-1.5 rounded-md hover:bg-black/5" style={{color:'var(--ink-3)'}} title="Edit allocation">
+                          <I.Pencil size={13}/>
+                        </button>
+                      </div>
                     </div>
                     <div className="ft-bar-bg mb-3">
                       <div className="ft-bar-fill" style={{width:`${Math.min(pct,100)}%`, background:s.bar}}/>
                     </div>
-                    <div className="flex flex-wrap gap-2">
-                      {r.team.map(p=>(
-                        <div key={p.name} className="flex items-center gap-1.5 px-2 py-1 rounded-md" style={{background:'var(--bg)',border:'1px solid var(--line)'}}>
-                          <Avatar name={p.name} size={18}/>
-                          <span className="text-[12px]" style={{color:'var(--ink)'}}>{p.name}</span>
-                          <span className="ft-mono text-[11px]" style={{color:'var(--ink-3)'}}>{p.h}h</span>
+                    {/* Read-only hours display */}
+                    <div className="grid grid-cols-3 gap-2 mb-3">
+                      <div>
+                        <div className="text-[10px] uppercase tracking-[0.1em] mb-1" style={{color:'var(--ink-3)'}}>Spent</div>
+                        <div className="ft-mono text-[14px] font-medium" style={{color:'var(--ink)'}}>{r.spentH}h</div>
+                      </div>
+                      <div>
+                        <div className="text-[10px] uppercase tracking-[0.1em] mb-1" style={{color:'var(--ink-3)'}}>Budget</div>
+                        <div className="ft-mono text-[14px] font-medium" style={{color:'var(--ink)'}}>{r.budgetH}h</div>
+                      </div>
+                      <div>
+                        <div className="text-[10px] uppercase tracking-[0.1em] mb-1" style={{color:'var(--ink-3)'}}>Remaining</div>
+                        <div className="ft-mono text-[14px] font-medium" style={{color:remaining<0?'var(--negative)':'var(--positive)'}}>
+                          {remaining >= 0 ? `${remaining}h` : `−${Math.abs(remaining)}h`}
                         </div>
-                      ))}
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between text-[11.5px] ft-mono mb-3" style={{color:'var(--ink-3)'}}>
+                      <span>Cost: <span style={{color:cost>budgCost?'var(--negative)':'var(--ink)'}}>{fmtUSD(cost)}</span></span>
+                      <span>Budget: {fmtUSD(budgCost)}</span>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {r.team.map(p => {
+                        const member = TEAM.find(m => m.name === p.name);
+                        const personRate = member ? member.rate : r.rate;
+                        return (
+                          <div key={p.name} className="flex items-center gap-1.5 px-2 py-1.5 rounded-md" style={{background:'var(--bg)',border:'1px solid var(--line)'}}>
+                            <Avatar name={p.name} size={18}/>
+                            <div>
+                              <div className="text-[12px] font-medium leading-tight" style={{color:'var(--ink)'}}>{p.name}</div>
+                              <div className="ft-mono text-[10.5px] leading-tight" style={{color:'var(--ink-3)'}}>{p.h}h · {fmtUSD(personRate)}/h</div>
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 );
@@ -1267,7 +1362,7 @@ const ProjectRow = ({ project, onSelect }) => {
   const profitNeg = profit < 0;
   const statusTone = project.status === 'Completed' ? 'positive' : project.status === 'Active' ? 'neutral' : 'warn';
   return (
-    <div className="ft-row ft-clickable grid gap-3 px-5 py-4 items-center border-b" onClick={()=>onSelect(project)} style={{ borderColor: 'var(--line)', gridTemplateColumns: '2.2fr 0.8fr 1fr 1.2fr 0.9fr 0.9fr 1.1fr 1fr 1fr 0.4fr' }}>
+    <div className="ft-row ft-clickable grid gap-3 px-5 py-4 items-center border-b" onClick={()=>onSelect(project)} style={{ borderColor: 'var(--line)', gridTemplateColumns: '2.2fr 0.8fr 1fr 1.2fr 0.9fr 1.1fr 1fr 1fr 0.4fr' }}>
       <div className="min-w-0">
         <div className="text-[14px] font-medium" style={{color:'var(--ink)'}}>{project.name}</div>
         <div className="flex items-center gap-1.5 mt-0.5">
@@ -1285,7 +1380,6 @@ const ProjectRow = ({ project, onSelect }) => {
           <div className="ft-bar-fill" style={{ width: `${Math.min((project.spentHours/project.budgetHours)*100,100)}%`, background: project.spentHours > project.budgetHours ? 'var(--negative)' : 'var(--positive)' }}/>
         </div>
       </div>
-      <div className="ft-mono text-[13px]" style={{color:'var(--ink-2)'}}>{fmtUSD(project.internalRate)}<span className="text-[10px]" style={{color:'var(--ink-3)'}}>/h</span></div>
       <div className="ft-mono text-[13px]" style={{color:'var(--ink)'}}>{fmtUSD(project.commercialRate)}<span className="text-[10px]" style={{color:'var(--ink-3)'}}>/h</span></div>
       <div className="ft-mono text-[14px] font-medium" style={{ color: profitNeg ? 'var(--negative)' : 'var(--positive)' }}>{fmtUSD(profit, { sign: true })}</div>
       <div>
@@ -1304,6 +1398,10 @@ const ProjectRow = ({ project, onSelect }) => {
 
 const AddProjectModal = ({ onClose }) => {
   const [addingClient, setAddingClient] = React.useState(false);
+  const [execSearch, setExecSearch] = React.useState('');
+  const [execOpen, setExecOpen] = React.useState(false);
+  const [execNames, setExecNames] = React.useState([]);
+  const toggleExec = (name) => setExecNames(p => p.includes(name) ? p.filter(n=>n!==name) : [...p, name]);
   return (
     <div className="ft-overlay" onClick={onClose}>
       <div className="ft-modal-panel ft-card-2 w-full max-w-[560px] p-7" onClick={e=>e.stopPropagation()} style={{borderRadius:16}}>
@@ -1337,11 +1435,50 @@ const AddProjectModal = ({ onClose }) => {
             <Field label="Budget hours"><input className="ft-input ft-mono" placeholder="0"/></Field>
             <Field label="Sales"><select className="ft-select w-full"><option>Alex L.</option><option>Tanya</option><option value="">+ Add new</option></select></Field>
           </div>
-          <Field label="Executor (who delivers)">
-            <select className="ft-select w-full">
-              <option value="">Select executor…</option>
-              {TEAM.map(m=><option key={m.name}>{m.name} — {m.role}</option>)}
-            </select>
+          <Field label="Executors (who delivers)">
+            {/* Chips */}
+            {execNames.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 mb-2">
+                {execNames.map(name => (
+                  <div key={name} className="flex items-center gap-1.5 pl-1.5 pr-2 py-1 rounded-lg text-[12px] font-medium"
+                    style={{background:'var(--ink)',color:'var(--bg)'}}>
+                    <Avatar name={name} size={16}/>
+                    <span>{name}</span>
+                    <button type="button" onClick={()=>toggleExec(name)} className="ml-0.5 opacity-60 hover:opacity-100" style={{lineHeight:1}}>
+                      <I.X size={11}/>
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+            {/* Combobox */}
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2" style={{color:'var(--ink-3)'}}><I.Search size={14}/></span>
+              <input className="ft-input" style={{paddingLeft:32}}
+                placeholder="Search and add executors..."
+                value={execSearch}
+                onFocus={()=>setExecOpen(true)}
+                onChange={e=>{setExecSearch(e.target.value);setExecOpen(true);}}
+                onBlur={()=>setTimeout(()=>setExecOpen(false),150)}/>
+              {execOpen && TEAM.filter(m=>!execNames.includes(m.name)&&(execSearch===''||m.name.toLowerCase().includes(execSearch.toLowerCase())||m.role.toLowerCase().includes(execSearch.toLowerCase()))).length > 0 && (
+                <div className="absolute left-0 right-0 top-full mt-1 rounded-xl overflow-hidden z-10"
+                  style={{background:'var(--surface-2)',border:'1px solid var(--line)',boxShadow:'0 8px 24px rgba(28,24,20,0.12)'}}>
+                  {TEAM.filter(m=>!execNames.includes(m.name)&&(execSearch===''||m.name.toLowerCase().includes(execSearch.toLowerCase())||m.role.toLowerCase().includes(execSearch.toLowerCase()))).map(m=>(
+                    <button key={m.name} type="button"
+                      onMouseDown={e=>{e.preventDefault();toggleExec(m.name);setExecSearch('');setExecOpen(true);}}
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-left hover:bg-black/[0.03] transition border-b last:border-0"
+                      style={{borderColor:'var(--line)'}}>
+                      <Avatar name={m.name} size={24}/>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-[13px] font-medium" style={{color:'var(--ink)'}}>{m.name}</div>
+                        <div className="text-[11px] ft-mono" style={{color:'var(--ink-3)'}}>{m.role} · {fmtUSD(m.rate)}/h</div>
+                      </div>
+                      <I.Plus size={13} style={{color:'var(--ink-3)'}}/>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </Field>
           <div className="grid grid-cols-2 gap-4">
             <Field label="Status"><select className="ft-select w-full"><option>Active</option><option>Completed</option><option>Paused</option></select></Field>
@@ -1402,9 +1539,9 @@ const Projects = () => {
       </div>
       <div className="ft-card overflow-hidden">
         <div className="grid gap-3 px-5 py-3.5 text-[10.5px] uppercase tracking-[0.1em] font-medium border-b"
-          style={{color:'var(--ink-3)',borderColor:'var(--line)',background:'var(--bg-grain)',gridTemplateColumns:'2.2fr 0.8fr 1fr 1.2fr 0.9fr 0.9fr 1.1fr 1fr 1fr 0.4fr'}}>
+          style={{color:'var(--ink-3)',borderColor:'var(--line)',background:'var(--bg-grain)',gridTemplateColumns:'2.2fr 0.8fr 1fr 1.2fr 0.9fr 1.1fr 1fr 1fr 0.4fr'}}>
           <span>Project</span><span>Type</span><span>Budget / Rate</span><span>Hours</span>
-          <span>Internal</span><span>Commercial</span><span>Profit</span><span>Outstanding</span><span>Status</span><span/>
+          <span>Commercial</span><span>Profit</span><span>Outstanding</span><span>Status</span><span/>
         </div>
         {filtered.map(p => <ProjectRow key={p.id} project={p} onSelect={setSelectedProject}/>)}
       </div>
@@ -1904,6 +2041,7 @@ const Team = () => {
 const Cashflow = () => {
   const [flowFilter, setFlowFilter] = React.useState('all');
   const [expFilter, setExpFilter] = React.useState('all');
+  const [incFilter, setIncFilter] = React.useState('all');
   const expCatMap = { 'Payroll':'salary','Software':'subscription','Infrastructure':'subscription','Office':'one-time','One-time':'one-time' };
   const allItems = [
     ...INCOME_ITEMS.map(i=>({...i,kind:'in'})),
@@ -1913,6 +2051,11 @@ const Cashflow = () => {
     if (flowFilter==='in' && t.kind!=='in') return false;
     if (flowFilter==='out' && t.kind!=='out') return false;
     if (t.kind==='out' && expFilter!=='all') { if ((expCatMap[t.category]||'one-time')!==expFilter) return false; }
+    if (t.kind==='in' && incFilter!=='all') {
+      const rec = RECEIVABLES.find(r=>r.client===t.source||r.invoice===t.note);
+      const status = rec ? rec.status : 'received';
+      if (status !== incFilter) return false;
+    }
     return true;
   }).sort((a,b)=>b.amount-a.amount);
 
@@ -1936,6 +2079,19 @@ const Cashflow = () => {
             </button>
           ))}
         </div>
+        {/* Income sub-filter: pending / overdue / received — only on Income tab */}
+        {flowFilter==='in' && (
+          <div className="flex items-center gap-1 p-1 rounded-xl" style={{background:'var(--surface)',border:'1px solid var(--line)'}}>
+            {[['all','All income'],['pending','Pending'],['overdue','Overdue'],['received','Received']].map(([v,l])=>(
+              <button key={v} onClick={()=>setIncFilter(v)}
+                className="px-3 py-1.5 rounded-lg text-[12.5px] font-medium transition"
+                style={{background:incFilter===v?'var(--positive-soft)':'transparent',color:incFilter===v?'var(--positive)':'var(--ink-2)'}}>
+                {l}
+              </button>
+            ))}
+          </div>
+        )}
+        {/* Expense sub-filter */}
         {flowFilter !== 'in' && (
           <div className="flex items-center gap-1 p-1 rounded-xl" style={{background:'var(--surface)',border:'1px solid var(--line)'}}>
             {[['all','All expenses'],['salary','Salaries'],['subscription','Subscriptions'],['one-time','One-time payments']].map(([v,l])=>(
