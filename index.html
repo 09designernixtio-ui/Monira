@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=1400">
-<title>FinTrack — фінансовий дашборд</title>
+<title>Monira — фінансовий дашборд</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -89,63 +89,696 @@
 <div id="root"></div>
 
 <script type="text/babel">
-const { useState, useMemo } = React;
-const {
-  LineChart, Line, ResponsiveContainer, AreaChart, Area, BarChart, Bar, ComposedChart,
-  XAxis, YAxis, Tooltip, CartesianGrid, Legend
-} = Recharts;
+// ============================================================================
+// ■ SECTION 1: DESIGN SYSTEM PRIMITIVES
+// ============================================================================
+// ============================================================================
+// FINTRACK DESIGN SYSTEM v1.0
+// ============================================================================
+// Token reference (CSS vars defined in <style>):
+//   Surfaces : --bg #F4EFE3 | --surface #FBF8F1 | --surface-2 #FFFFFF
+//   Ink      : --ink #1C1814 | --ink-2 #4A4138 | --ink-3 #8B8175 | --ink-4 #B5AC9E
+//   Lines    : --line #E5DCC7 | --line-2 #D9CFB6
+//   Accent   : --accent #C04A24 | --accent-2 #9D3818 | --accent-soft #F4E0D2
+//   Positive : --positive #2D5A3F | --positive-2 #1F4530 | --positive-soft #DEE8D7
+//   Negative : --negative #8E2C1B | --negative-soft #F0D9D0
+//   Warn     : --warn #856611 | --warn-soft #F4E5BB
+// ============================================================================
 
-// ============================================================================
-// ICONS
-// ============================================================================
+const { useState, useMemo, useRef, useEffect } = React;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ICON PRIMITIVE
+// ─────────────────────────────────────────────────────────────────────────────
 const Icon = ({ d, size = 16, strokeWidth = 1.7, viewBox = "0 0 24 24", style }) => (
   <svg width={size} height={size} viewBox={viewBox} fill="none" stroke="currentColor"
-       strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" style={style}>{d}</svg>
+    strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" style={style}>{d}</svg>
 );
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ICON LIBRARY  (prefix I.)
+// ─────────────────────────────────────────────────────────────────────────────
 const I = {
-  LayoutGrid: (p) => <Icon {...p} d={<><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></>}/>,
-  Folder:     (p) => <Icon {...p} d={<path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>}/>,
-  Users:      (p) => <Icon {...p} d={<><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></>}/>,
-  Wallet:     (p) => <Icon {...p} d={<><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></>}/>,
-  Search:     (p) => <Icon {...p} d={<><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></>}/>,
-  Plus:       (p) => <Icon {...p} d={<><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></>}/>,
-  ChevronLeft:  (p) => <Icon {...p} d={<polyline points="15 18 9 12 15 6"/>}/>,
-  ChevronRight: (p) => <Icon {...p} d={<polyline points="9 18 15 12 9 6"/>}/>,
-  ChevronDown:  (p) => <Icon {...p} d={<polyline points="6 9 12 15 18 9"/>}/>,
-  ArrowUpRight:   (p) => <Icon {...p} d={<><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></>}/>,
-  ArrowDownRight: (p) => <Icon {...p} d={<><line x1="7" y1="7" x2="17" y2="17"/><polyline points="17 7 17 17 7 17"/></>}/>,
-  ArrowUp:    (p) => <Icon {...p} d={<><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></>}/>,
-  ArrowDown:  (p) => <Icon {...p} d={<><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></>}/>,
-  AlertCircle:(p) => <Icon {...p} d={<><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></>}/>,
-  MoreHoriz:  (p) => <Icon {...p} d={<><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></>}/>,
-  LogOut:     (p) => <Icon {...p} d={<><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></>}/>,
-  Settings:   (p) => <Icon {...p} d={<><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></>}/>,
-  Shield:     (p) => <Icon {...p} d={<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>}/>,
-  LinkIcon:   (p) => <Icon {...p} d={<><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></>}/>,
-  Unlink:     (p) => <Icon {...p} d={<><path d="m18.84 12.25 1.72-1.71h-.02a5.004 5.004 0 0 0-.12-7.07 5.006 5.006 0 0 0-6.95 0l-1.72 1.71"/><path d="m5.17 11.75-1.71 1.71a5.004 5.004 0 0 0 .12 7.07 5.006 5.006 0 0 0 6.95 0l1.71-1.71"/><line x1="8" y1="2" x2="8" y2="5"/><line x1="2" y1="8" x2="5" y2="8"/><line x1="16" y1="19" x2="16" y2="22"/><line x1="19" y1="16" x2="22" y2="16"/></>}/>,
-  RefreshCw:  (p) => <Icon {...p} d={<><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></>}/>,
-  Eye:        (p) => <Icon {...p} d={<><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></>}/>,
-  Bank:       (p) => <Icon {...p} d={<><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></>}/>,
-  Plug:       (p) => <Icon {...p} d={<><path d="M9 2v6"/><path d="M15 2v6"/><path d="M12 17v5"/><path d="M5 8h14"/><path d="M6 11V8h12v3a6 6 0 0 1-12 0Z"/></>}/>,
-  Pencil:     (p) => <Icon {...p} d={<><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"/></>}/>,
-  CircleDot:  (p) => <Icon {...p} d={<><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3" fill="currentColor"/></>}/>,
-  Check2:     (p) => <Icon {...p} d={<><circle cx="12" cy="12" r="10"/><polyline points="9 12 12 15 16 10"/></>}/>,
-  Building:   (p) => <Icon {...p} d={<><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4M8 6h.01M16 6h.01M12 6h.01M12 10h.01M12 14h.01M16 10h.01M16 14h.01M8 10h.01M8 14h.01"/></>}/>,
-  Zap:        (p) => <Icon {...p} d={<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>}/>,
-  Filter:     (p) => <Icon {...p} d={<polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>}/>,
-  X:          (p) => <Icon {...p} d={<><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></>}/>,
-  Receipt:    (p) => <Icon {...p} d={<><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M8 7h8M8 11h8M8 15h5"/></>}/>,
-  Clock:      (p) => <Icon {...p} d={<><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></>}/>,
-  CreditCard: (p) => <Icon {...p} d={<><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></>}/>,
-  Activity:   (p) => <Icon {...p} d={<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>}/>,
-  RefreshCw:  (p) => <Icon {...p} d={<><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></>}/>,
-  TrendUp:    (p) => <Icon {...p} d={<><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></>}/>,
-  Layers:     (p) => <Icon {...p} d={<><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></>}/>,
-  Logo:       (p) => <Icon {...p} viewBox="0 0 20 20" d={<><path d="M3 14 L8 9 L11 12 L17 5"/><circle cx="17" cy="5" r="1.5" fill="var(--accent)" stroke="none"/></>}/>,
+  LayoutGrid:   p=><Icon {...p} d={<><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></>}/>,
+  Folder:       p=><Icon {...p} d={<path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>}/>,
+  Users:        p=><Icon {...p} d={<><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></>}/>,
+  Wallet:       p=><Icon {...p} d={<><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></>}/>,
+  Settings:     p=><Icon {...p} d={<><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></>}/>,
+  Search:       p=><Icon {...p} d={<><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></>}/>,
+  Plus:         p=><Icon {...p} d={<><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></>}/>,
+  X:            p=><Icon {...p} d={<><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></>}/>,
+  ChevronLeft:  p=><Icon {...p} d={<polyline points="15 18 9 12 15 6"/>}/>,
+  ChevronRight: p=><Icon {...p} d={<polyline points="9 18 15 12 9 6"/>}/>,
+  ChevronDown:  p=><Icon {...p} d={<polyline points="6 9 12 15 18 9"/>}/>,
+  ArrowUpRight: p=><Icon {...p} d={<><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></>}/>,
+  ArrowDownRight:p=><Icon {...p} d={<><line x1="7" y1="7" x2="17" y2="17"/><polyline points="17 7 17 17 7 17"/></>}/>,
+  ArrowUp:      p=><Icon {...p} d={<><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></>}/>,
+  ArrowDown:    p=><Icon {...p} d={<><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></>}/>,
+  AlertCircle:  p=><Icon {...p} d={<><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></>}/>,
+  Clock:        p=><Icon {...p} d={<><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></>}/>,
+  Check2:       p=><Icon {...p} d={<><circle cx="12" cy="12" r="10"/><polyline points="9 12 12 15 16 10"/></>}/>,
+  LogOut:       p=><Icon {...p} d={<><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></>}/>,
+  Pencil:       p=><Icon {...p} d={<><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"/></>}/>,
+  Zap:          p=><Icon {...p} d={<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>}/>,
+  Filter:       p=><Icon {...p} d={<polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>}/>,
+  Receipt:      p=><Icon {...p} d={<><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M8 7h8M8 11h8M8 15h5"/></>}/>,
+  Building:     p=><Icon {...p} d={<><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4M8 6h.01M16 6h.01M12 6h.01M12 10h.01M12 14h.01M16 10h.01M16 14h.01M8 10h.01M8 14h.01"/></>}/>,
+  CreditCard:   p=><Icon {...p} d={<><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></>}/>,
+  Copy:         p=><Icon {...p} d={<><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></>}/>,
+  Paperclip:    p=><Icon {...p} d={<path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/>}/>,
+  Send:         p=><Icon {...p} d={<><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></>}/>,
+  FileText:     p=><Icon {...p} d={<><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></>}/>,
+  Activity:     p=><Icon {...p} d={<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>}/>,
+  Layers:       p=><Icon {...p} d={<><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></>}/>,
+  Shield:       p=><Icon {...p} d={<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>}/>,
+  RefreshCw:    p=><Icon {...p} d={<><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></>}/>,
+  Eye:          p=><Icon {...p} d={<><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></>}/>,
+  EyeOff:       p=><Icon {...p} d={<><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></>}/>,
+  LinkIcon:     p=><Icon {...p} d={<><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></>}/>,
+  Unlink:       p=><Icon {...p} d={<><path d="m18.84 12.25 1.72-1.71h-.02a5.004 5.004 0 0 0-.12-7.07 5.006 5.006 0 0 0-6.95 0l-1.72 1.71"/><path d="m5.17 11.75-1.71 1.71a5.004 5.004 0 0 0 .12 7.07 5.006 5.006 0 0 0 6.95 0l1.71-1.71"/><line x1="8" y1="2" x2="8" y2="5"/><line x1="2" y1="8" x2="5" y2="8"/><line x1="16" y1="19" x2="16" y2="22"/><line x1="19" y1="16" x2="22" y2="16"/></>}/>,
+  Bank:         p=><Icon {...p} d={<><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></>}/>,
+  Logo:         p=><Icon {...p} viewBox="0 0 20 20" d={<><path d="M3 14 L8 9 L11 12 L17 5"/><circle cx="17" cy="5" r="1.5" fill="var(--accent)" stroke="none"/></>}/>,
 };
 
+// ─────────────────────────────────────────────────────────────────────────────
+// BUTTON
+// @prop variant  'primary' | 'ghost' | 'danger'   default 'primary'
+// @prop size     'sm' | 'md' | 'lg'               default 'md'
+// @prop icon     ReactNode — optional leading icon
+// @prop disabled boolean
+// @prop onClick  () => void
+// @prop style    CSSProperties  — escape hatch for overrides
+// ─────────────────────────────────────────────────────────────────────────────
+const BUTTON_VARIANTS = {
+  primary: { bg:'var(--ink)',           color:'var(--surface)',   border:'transparent',         hover:'var(--accent-2)' },
+  ghost:   { bg:'transparent',          color:'var(--ink-2)',     border:'var(--line)',          hover:'var(--surface)'  },
+  danger:  { bg:'var(--negative-soft)', color:'var(--negative)',  border:'var(--negative)',      hover:'var(--negative)' },
+};
+const BUTTON_SIZES = {
+  sm: { padding:'6px 12px',  fontSize:12,   borderRadius:8,  gap:5  },
+  md: { padding:'9px 16px',  fontSize:13.5, borderRadius:10, gap:6  },
+  lg: { padding:'12px 20px', fontSize:15,   borderRadius:12, gap:8  },
+};
+/** Primary action button with variant and size system */
+const Button = ({ children, variant='primary', size='md', icon, disabled=false, onClick, style={}, type='button' }) => {
+  const v = BUTTON_VARIANTS[variant]; const s = BUTTON_SIZES[size];
+  const [hovered, setHovered] = useState(false);
+  const bg = variant==='primary' ? (hovered&&!disabled?v.hover:v.bg) : (hovered&&!disabled?v.hover:v.bg);
+  return (
+    <button type={type} onClick={onClick} disabled={disabled}
+      onMouseEnter={()=>setHovered(true)} onMouseLeave={()=>setHovered(false)}
+      style={{ display:'inline-flex', alignItems:'center', gap:s.gap, padding:s.padding,
+        fontSize:s.fontSize, fontWeight:500, borderRadius:s.borderRadius, border:`1px solid ${v.border}`,
+        background: disabled ? 'var(--line)' : bg,
+        color: disabled ? 'var(--ink-3)' : (hovered&&variant==='danger'?'#fff':v.color),
+        cursor: disabled ? 'not-allowed' : 'pointer', fontFamily:'inherit',
+        letterSpacing:'-0.005em', transition:'all 120ms ease', opacity: disabled ? 0.6 : 1,
+        ...style }}>
+      {icon && icon}{children}
+    </button>
+  );
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// INPUT
+// @prop type       string  default 'text'
+// @prop value      string
+// @prop onChange   (e) => void
+// @prop placeholder string
+// @prop prefix     ReactNode — left adornment (e.g. '$')
+// @prop mono       boolean — monospace font
+// @prop error      string  — error message shown below
+// ─────────────────────────────────────────────────────────────────────────────
+/** Controlled text/number/date input with optional prefix and error state */
+const Input = ({ type='text', value, onChange, placeholder, prefix, mono=false, error, disabled=false, style={}, ...rest }) => {
+  const [focused, setFocused] = useState(false);
+  return (
+    <div style={{position:'relative'}}>
+      {prefix && (
+        <span style={{position:'absolute',left:12,top:'50%',transform:'translateY(-50%)',
+          fontFamily:mono?'JetBrains Mono,monospace':'inherit',fontSize:13,color:'var(--ink-3)',pointerEvents:'none'}}>
+          {prefix}
+        </span>
+      )}
+      <input type={type} value={value} onChange={onChange} placeholder={placeholder} disabled={disabled}
+        onFocus={()=>setFocused(true)} onBlur={()=>setFocused(false)}
+        style={{ width:'100%', background:'var(--surface)', border:`1px solid ${error?'var(--negative)':focused?'var(--ink-3)':'var(--line)'}`,
+          borderRadius:10, padding: prefix?'9px 12px 9px 26px':'9px 12px',
+          fontSize:13.5, color:'var(--ink)', outline:'none', fontFamily:mono?'JetBrains Mono,monospace':'inherit',
+          letterSpacing:mono?'-0.02em':'inherit', transition:'border-color 120ms ease',
+          opacity:disabled?0.55:1, cursor:disabled?'not-allowed':'text', ...style }}
+        {...rest}/>
+      {error && <div style={{fontSize:11,color:'var(--negative)',marginTop:4}}>{error}</div>}
+    </div>
+  );
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SELECT
+// @prop value      string
+// @prop onChange   (e) => void
+// @prop children   <option> elements
+// @prop placeholder string — first empty option label
+// ─────────────────────────────────────────────────────────────────────────────
+/** Styled native select dropdown */
+const Select = ({ value, onChange, children, placeholder, disabled=false, style={} }) => (
+  <select value={value} onChange={onChange} disabled={disabled}
+    style={{ width:'100%', background:'var(--surface)', border:'1px solid var(--line)',
+      borderRadius:10, padding:'9px 30px 9px 12px', fontSize:13.5, color: value?'var(--ink)':'var(--ink-3)',
+      outline:'none', cursor:disabled?'not-allowed':'pointer', appearance:'none', fontFamily:'inherit',
+      backgroundImage:`url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238B8175' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>")`,
+      backgroundRepeat:'no-repeat', backgroundPosition:'right 10px center',
+      opacity:disabled?0.55:1, transition:'border-color 120ms ease', ...style }}>
+    {placeholder && <option value="">{placeholder}</option>}
+    {children}
+  </select>
+);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TEXTAREA
+// @prop value      string
+// @prop onChange   (e) => void
+// @prop rows       number default 3
+// @prop placeholder string
+// ─────────────────────────────────────────────────────────────────────────────
+/** Controlled textarea with consistent styling */
+const Textarea = ({ value, onChange, rows=3, placeholder, style={} }) => {
+  const [focused, setFocused] = useState(false);
+  return (
+    <textarea value={value} onChange={onChange} rows={rows} placeholder={placeholder}
+      onFocus={()=>setFocused(true)} onBlur={()=>setFocused(false)}
+      style={{ width:'100%', background:'var(--surface)', border:`1px solid ${focused?'var(--ink-3)':'var(--line)'}`,
+        borderRadius:10, padding:'9px 12px', fontSize:13.5, color:'var(--ink)', outline:'none',
+        fontFamily:'inherit', resize:'vertical', transition:'border-color 120ms ease', ...style }}/>
+  );
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// FIELD
+// @prop label     string  — uppercase label above input
+// @prop required  boolean — adds * to label
+// @prop hint      string  — small hint below input
+// @prop children  ReactNode — input/select/etc
+// ─────────────────────────────────────────────────────────────────────────────
+/** Wraps any input with a label and optional hint */
+const Field = ({ label, required=false, hint, children }) => (
+  <div>
+    <label style={{display:'block',fontSize:11,textTransform:'uppercase',letterSpacing:'0.1em',
+      fontWeight:500,color:'var(--ink-3)',marginBottom:6}}>
+      {label}{required && <span style={{color:'var(--negative)',marginLeft:2}}>*</span>}
+    </label>
+    {children}
+    {hint && <div style={{fontSize:11,color:'var(--ink-3)',marginTop:4}}>{hint}</div>}
+  </div>
+);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BADGE
+// @prop tone    'neutral' | 'accent' | 'warn' | 'positive' | 'negative'
+// @prop size    'sm' | 'md'   default 'md'
+// @prop children ReactNode
+// ─────────────────────────────────────────────────────────────────────────────
+const BADGE_TONES = {
+  neutral:  { bg:'var(--bg)',            color:'var(--ink-2)',      border:'var(--line)' },
+  accent:   { bg:'var(--accent-soft)',   color:'var(--accent-2)',   border:'transparent' },
+  warn:     { bg:'var(--warn-soft)',     color:'var(--warn)',        border:'transparent' },
+  positive: { bg:'var(--positive-soft)', color:'var(--positive-2)', border:'transparent' },
+  negative: { bg:'var(--negative-soft)', color:'var(--negative)',   border:'transparent' },
+};
+/** Status/category badge with semantic tone */
+const Badge = ({ children, tone='neutral', size='md' }) => {
+  const t = BADGE_TONES[tone] || BADGE_TONES.neutral;
+  const fs = size==='sm' ? 10 : 11;
+  return (
+    <span style={{ display:'inline-flex', alignItems:'center', gap:5, padding: size==='sm'?'2px 6px':'3px 8px',
+      borderRadius:6, fontSize:fs, fontWeight:500, letterSpacing:'0.02em',
+      background:t.bg, color:t.color, border:`1px solid ${t.border}` }}>
+      {children}
+    </span>
+  );
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// AVATAR
+// @prop name   string — generates initials + color
+// @prop size   number  default 28
+// ─────────────────────────────────────────────────────────────────────────────
+const AVA_PALETTE = [
+  {bg:'#C04A24',fg:'#FFFFFF'},{bg:'#2D5A3F',fg:'#FFFFFF'},
+  {bg:'#3A4A8C',fg:'#FFFFFF'},{bg:'#7B3F9C',fg:'#FFFFFF'},
+  {bg:'#856611',fg:'#FFFFFF'},{bg:'#1C1814',fg:'#F4EFE3'},
+];
+const avatarColor = name => { let h=0; for(let i=0;i<name.length;i++) h=name.charCodeAt(i)+((h<<5)-h); return AVA_PALETTE[Math.abs(h)%AVA_PALETTE.length]; };
+const initials = name => name.split(' ').map(s=>s[0]).slice(0,2).join('').toUpperCase();
+/** Circular avatar with generated initials and deterministic color */
+const Avatar = ({ name, size=28 }) => {
+  const c = avatarColor(name);
+  return (
+    <div style={{ width:size, height:size, borderRadius:'50%', background:c.bg, color:c.fg,
+      display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0,
+      fontSize:size*0.38, fontWeight:500, fontFamily:'Inter Tight,system-ui,sans-serif' }}>
+      {initials(name)}
+    </div>
+  );
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CARD
+// @prop variant   'default' | 'elevated' | 'ghost'   default 'default'
+// @prop padding   string  default '20px'
+// @prop className string
+// @prop style     CSSProperties
+// ─────────────────────────────────────────────────────────────────────────────
+/** Container card with consistent border and background */
+const Card = ({ children, variant='default', padding='20px', className='', style={} }) => {
+  const styles = {
+    default:  { background:'var(--surface)',   border:'1px solid var(--line)', borderRadius:14 },
+    elevated: { background:'var(--surface-2)', border:'1px solid var(--line)', borderRadius:14, boxShadow:'0 4px 16px rgba(28,24,20,0.08)' },
+    ghost:    { background:'transparent',      border:'none',                  borderRadius:14 },
+  };
+  return (
+    <div className={className} style={{ ...styles[variant], padding, ...style }}>
+      {children}
+    </div>
+  );
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MODAL
+// @prop isOpen    boolean
+// @prop onClose   () => void
+// @prop title     string
+// @prop subtitle  string  — small label above title
+// @prop width     string  default '520px'
+// @prop children  ReactNode — modal body
+// @prop footer    ReactNode — rendered in footer area
+// @prop zIndex    number   default 50
+// ─────────────────────────────────────────────────────────────────────────────
+/** Centered modal dialog with overlay, title, body, footer */
+const Modal = ({ isOpen, onClose, title, subtitle, width='520px', children, footer, zIndex=50 }) => {
+  if (!isOpen) return null;
+  return (
+    <div onClick={onClose}
+      style={{ position:'fixed', inset:0, zIndex, background:'rgba(28,24,20,0.32)',
+        display:'flex', alignItems:'flex-start', justifyContent:'center',
+        padding:'64px 20px', overflowY:'auto' }}>
+      <div onClick={e=>e.stopPropagation()}
+        style={{ background:'var(--surface-2)', border:'1px solid var(--line)', borderRadius:20,
+          padding:'28px', width:'100%', maxWidth:width,
+          animation:'ft-modal-in 200ms ease-out', boxShadow:'0 24px 80px rgba(28,24,20,0.18)' }}>
+        <div style={{display:'flex', alignItems:'flex-start', justifyContent:'space-between', marginBottom:24}}>
+          <div>
+            {subtitle && <div style={{fontSize:11,textTransform:'uppercase',letterSpacing:'0.12em',fontWeight:500,color:'var(--ink-3)',marginBottom:4}}>{subtitle}</div>}
+            <div style={{fontFamily:'Fraunces,Georgia,serif',fontSize:22,fontWeight:500,letterSpacing:'-0.02em',color:'var(--ink)',lineHeight:1.1}}>{title}</div>
+          </div>
+          <Button variant="ghost" size="sm" icon={<I.X size={14}/>} onClick={onClose} style={{padding:'6px 8px',marginTop:-2}}/>
+        </div>
+        <div>{children}</div>
+        {footer && <div style={{display:'flex',justifyContent:'flex-end',gap:8,marginTop:24}}>{footer}</div>}
+      </div>
+    </div>
+  );
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DRAWER  (slide-out panel)
+// @prop isOpen    boolean
+// @prop onClose   () => void
+// @prop title     string
+// @prop subtitle  string
+// @prop width     string  default 'min(580px,48vw)'
+// @prop children  ReactNode
+// @prop zIndex    number   default 100
+// ─────────────────────────────────────────────────────────────────────────────
+/** Right-side slide-out drawer panel */
+const Drawer = ({ isOpen, onClose, title, subtitle, width='min(580px,48vw)', children, zIndex=100 }) => {
+  if (!isOpen) return null;
+  return (
+    <>
+      <div onClick={onClose} style={{position:'fixed',inset:0,zIndex:zIndex-10,background:'rgba(28,24,20,0.28)'}}/>
+      <div style={{ position:'fixed',top:0,right:0,bottom:0,zIndex,
+        width, background:'var(--surface)', borderLeft:'1px solid var(--line)',
+        display:'flex', flexDirection:'column', overflow:'hidden',
+        animation:'ft-fade-in 220ms ease-out' }}>
+        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',
+          padding:'20px 24px', borderBottom:'1px solid var(--line)', flexShrink:0}}>
+          <div>
+            {subtitle && <div style={{fontSize:11,textTransform:'uppercase',letterSpacing:'0.12em',fontWeight:500,color:'var(--ink-3)',marginBottom:2}}>{subtitle}</div>}
+            <div style={{fontFamily:'Fraunces,Georgia,serif',fontSize:20,fontWeight:500,letterSpacing:'-0.02em',color:'var(--ink)'}}>{title}</div>
+          </div>
+          <Button variant="ghost" size="sm" icon={<I.X size={14}/>} onClick={onClose} style={{padding:'7px 8px'}}/>
+        </div>
+        <div style={{flex:1,overflowY:'auto',padding:'20px 24px'}}>{children}</div>
+      </div>
+    </>
+  );
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TABS
+// @prop tabs      Array<{ id: string, label: string }>
+// @prop active    string — active tab id
+// @prop onChange  (id: string) => void
+// @prop variant   'pill' | 'underline'   default 'pill'
+// ─────────────────────────────────────────────────────────────────────────────
+/** Horizontal tab switcher with pill or underline variant */
+const Tabs = ({ tabs, active, onChange, variant='pill' }) => {
+  if (variant === 'underline') {
+    return (
+      <div style={{display:'flex',gap:0,borderBottom:'1px solid var(--line)'}}>
+        {tabs.map(t=>(
+          <button key={t.id} onClick={()=>onChange(t.id)}
+            style={{ padding:'10px 16px', fontSize:13.5, fontWeight:500, background:'none', border:'none',
+              cursor:'pointer', fontFamily:'inherit', letterSpacing:'-0.005em',
+              color: active===t.id ? 'var(--ink)' : 'var(--ink-3)',
+              borderBottom: active===t.id ? '2px solid var(--ink)' : '2px solid transparent',
+              marginBottom:-1, transition:'all 120ms ease' }}>
+            {t.label}
+          </button>
+        ))}
+      </div>
+    );
+  }
+  return (
+    <div style={{display:'flex',gap:4,padding:4,borderRadius:12,background:'var(--surface)',border:'1px solid var(--line)',width:'fit-content'}}>
+      {tabs.map(t=>(
+        <button key={t.id} onClick={()=>onChange(t.id)}
+          style={{ padding:'7px 16px', fontSize:13, fontWeight:500, borderRadius:9,
+            background: active===t.id ? 'var(--ink)' : 'transparent',
+            color: active===t.id ? 'var(--bg)' : 'var(--ink-2)',
+            border:'none', cursor:'pointer', fontFamily:'inherit',
+            letterSpacing:'-0.005em', transition:'all 120ms ease' }}>
+          {t.label}
+        </button>
+      ))}
+    </div>
+  );
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TABLE
+// @prop columns  Array<{ key, label, width?, align? }>
+// @prop rows     Array<any>
+// @prop onRowClick (row) => void
+// @prop renderCell (key, row) => ReactNode  — optional custom cell renderer
+// ─────────────────────────────────────────────────────────────────────────────
+/** Data table with consistent header and row styling */
+const Table = ({ columns, rows, onRowClick, renderCell }) => (
+  <Card padding="0" style={{overflow:'hidden'}}>
+    <div style={{ display:'grid', gridTemplateColumns: columns.map(c=>c.width||'1fr').join(' '),
+      gap:12, padding:'10px 20px', background:'var(--bg)',
+      borderBottom:'1px solid var(--line)' }}>
+      {columns.map(c=>(
+        <div key={c.key} style={{fontSize:10.5,textTransform:'uppercase',letterSpacing:'0.1em',
+          fontWeight:500,color:'var(--ink-3)',textAlign:c.align||'left'}}>{c.label}</div>
+      ))}
+    </div>
+    {rows.map((row,i)=>(
+      <div key={i} onClick={()=>onRowClick&&onRowClick(row)}
+        style={{ display:'grid', gridTemplateColumns: columns.map(c=>c.width||'1fr').join(' '),
+          gap:12, padding:'14px 20px', borderBottom:'1px solid var(--line)',
+          cursor: onRowClick ? 'pointer' : 'default',
+          transition:'background 120ms ease' }}
+        onMouseEnter={e=>{ if(onRowClick) e.currentTarget.style.background='rgba(192,74,36,0.025)'; }}
+        onMouseLeave={e=>{ e.currentTarget.style.background='transparent'; }}>
+        {columns.map(c=>(
+          <div key={c.key} style={{textAlign:c.align||'left'}}>
+            {renderCell ? renderCell(c.key, row) : row[c.key]}
+          </div>
+        ))}
+      </div>
+    ))}
+  </Card>
+);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TOAST
+// @prop msg    string
+// @prop onDone () => void  — called after 2800ms
+// ─────────────────────────────────────────────────────────────────────────────
+/** Auto-dismissing success toast in bottom-right corner */
+const Toast = ({ msg, onDone }) => {
+  useEffect(()=>{ const t=setTimeout(onDone,2800); return()=>clearTimeout(t); },[]);
+  return (
+    <div style={{ position:'fixed', bottom:24, right:24, zIndex:300,
+      display:'flex', alignItems:'center', gap:10, padding:'12px 16px',
+      borderRadius:14, background:'var(--ink)', color:'var(--bg)', minWidth:240,
+      boxShadow:'0 8px 32px rgba(28,24,20,0.28)', animation:'ft-fade-in 200ms ease-out',
+      fontFamily:'inherit', fontSize:13.5, fontWeight:500 }}>
+      <I.Check2 size={16} style={{color:'var(--positive)',flexShrink:0}}/>{msg}
+    </div>
+  );
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PROGRESS BAR
+// @prop value    number  0-100
+// @prop tone     'positive' | 'negative' | 'warn' | 'neutral'  default auto
+// @prop height   number  default 4
+// @prop showLabel boolean
+// ─────────────────────────────────────────────────────────────────────────────
+/** Horizontal progress bar with semantic tone */
+const ProgressBar = ({ value, tone, height=4, showLabel=false }) => {
+  const pct = Math.min(Math.max(value,0),100);
+  const autoTone = value>110?'negative':value>100?'warn':'positive';
+  const t = tone||autoTone;
+  const colors = { positive:'var(--positive)', negative:'var(--negative)', warn:'var(--accent-2)', neutral:'var(--ink-3)' };
+  return (
+    <div style={{display:'flex',alignItems:'center',gap:8}}>
+      <div style={{flex:1,height,borderRadius:999,background:'var(--line)',overflow:'hidden'}}>
+        <div style={{height:'100%',borderRadius:999,background:colors[t]||colors.neutral,width:`${pct}%`,transition:'width 300ms ease'}}/>
+      </div>
+      {showLabel && <span style={{fontSize:10,fontFamily:'JetBrains Mono,monospace',color:colors[t],flexShrink:0}}>{value}%</span>}
+    </div>
+  );
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// STAT CARD  (KPI widget)
+// @prop label      string
+// @prop value      string
+// @prop sub        string
+// @prop mom        number   — month-over-month % (optional)
+// @prop momInverse boolean  — if true, negative change is "good"
+// @prop accent     boolean  — dark background variant
+// @prop tone       'positive' | 'negative' | 'neutral'
+// @prop onClick    () => void
+// ─────────────────────────────────────────────────────────────────────────────
+/** KPI metric card with MoM indicator */
+const StatCard = ({ label, value, sub, mom, momInverse, accent=false, tone, onClick }) => {
+  const up = mom>0, good = momInverse?!up:up;
+  const momBg = accent?'rgba(244,239,227,0.12)':(good?'var(--positive-soft)':'var(--negative-soft)');
+  const momColor = accent?'rgba(244,239,227,0.85)':(good?'var(--positive)':'var(--negative)');
+  const valueColor = accent?'var(--bg)':tone==='positive'?'var(--positive)':tone==='negative'?'var(--negative)':'var(--ink)';
+  return (
+    <div onClick={onClick}
+      style={{ padding:'16px 20px', borderRadius:14, cursor:onClick?'pointer':'default',
+        background: accent?'var(--ink)':'var(--surface)',
+        border: accent?'none':'1px solid var(--line)',
+        position:'relative', overflow:'hidden', transition:'border-color 120ms ease' }}>
+      {accent && <div style={{position:'absolute',top:-40,right:-40,width:160,height:160,borderRadius:'50%',background:'radial-gradient(circle, rgba(192,74,36,0.4), transparent 70%)'}}/>}
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:8,position:'relative'}}>
+        <div style={{fontSize:11,textTransform:'uppercase',letterSpacing:'0.14em',fontWeight:500,
+          color:accent?'rgba(244,239,227,0.5)':'var(--ink-3)'}}>{label}</div>
+        {mom!==undefined && (
+          <span style={{display:'inline-flex',alignItems:'center',gap:4,padding:'2px 7px',borderRadius:6,
+            fontSize:10.5,fontWeight:500,background:momBg,color:momColor}}>
+            {up?<I.ArrowUpRight size={10}/>:<I.ArrowDownRight size={10}/>}{Math.abs(mom).toFixed(0)}%
+          </span>
+        )}
+      </div>
+      <div style={{fontFamily:'JetBrains Mono,monospace',fontSize:26,fontWeight:500,letterSpacing:'-0.02em',
+        color:valueColor,position:'relative'}}>{value}</div>
+      <div style={{fontSize:11.5,marginTop:4,position:'relative',display:'flex',alignItems:'center',gap:4,
+        color:accent?'rgba(244,239,227,0.6)':'var(--ink-3)'}}>
+        {onClick && <I.ArrowUpRight size={11} style={{color:accent?'rgba(244,239,227,0.5)':'var(--ink-4)'}}/>}
+        {sub}
+      </div>
+    </div>
+  );
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MINI STAT  (smaller KPI variant)
+// ─────────────────────────────────────────────────────────────────────────────
+/** Compact KPI stat for secondary metrics */
+const MiniStat = ({ label, value, sub, tone, onClick }) => {
+  const valueColor = tone==='positive'?'var(--positive)':tone==='negative'?'var(--negative)':tone==='warn'?'var(--accent-2)':'var(--ink)';
+  return (
+    <div onClick={onClick} style={{padding:'16px 20px',borderRadius:14,background:'var(--surface)',border:'1px solid var(--line)',cursor:onClick?'pointer':'default'}}>
+      <div style={{fontSize:11,textTransform:'uppercase',letterSpacing:'0.12em',fontWeight:500,color:'var(--ink-3)',marginBottom:8}}>{label}</div>
+      <div style={{fontFamily:'JetBrains Mono,monospace',fontSize:22,fontWeight:500,letterSpacing:'-0.02em',color:valueColor}}>{value}</div>
+      {sub && <div style={{fontSize:12,marginTop:4,color:'var(--ink-3)'}}>{sub}</div>}
+    </div>
+  );
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TOP BAR  (page header)
+// @prop title    string — breadcrumb label
+// @prop subtitle string — large serif heading
+// @prop period   string — month navigator text
+// @prop action   ReactNode — right-side CTA
+// ─────────────────────────────────────────────────────────────────────────────
+/** Page-level header with breadcrumb, serif title, period navigator and action slot */
+const TopBar = ({ title, subtitle, period, onPrev, onNext, action }) => (
+  <div style={{display:'flex',alignItems:'flex-end',justifyContent:'space-between',paddingBottom:28,borderBottom:'1px solid var(--line)',marginBottom:28}}>
+    <div>
+      <div style={{fontSize:11,textTransform:'uppercase',letterSpacing:'0.14em',fontWeight:500,marginBottom:8,color:'var(--ink-3)'}}>Monira / {title}</div>
+      <h1 style={{fontFamily:'Fraunces,Georgia,serif',fontSize:40,lineHeight:1.05,fontWeight:500,letterSpacing:'-0.02em',color:'var(--ink)',margin:0}}>{subtitle}</h1>
+    </div>
+    <div style={{display:'flex',alignItems:'center',gap:10}}>
+      {period && (
+        <div style={{display:'flex',alignItems:'center',gap:4,padding:4,background:'var(--surface)',border:'1px solid var(--line)',borderRadius:10}}>
+          <Button variant="ghost" size="sm" icon={<I.ChevronLeft size={14}/>} onClick={onPrev} style={{padding:'6px 8px'}}/>
+          <span style={{padding:'0 8px',fontSize:13,fontWeight:500,fontFamily:'JetBrains Mono,monospace',color:'var(--ink)'}}>{period}</span>
+          <Button variant="ghost" size="sm" icon={<I.ChevronRight size={14}/>} onClick={onNext} style={{padding:'6px 8px'}}/>
+        </div>
+      )}
+      {action}
+    </div>
+  </div>
+);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// COMBOBOX  (search + chips multi-select)
+// @prop options   Array<{ value, label, meta? }>
+// @prop selected  string[]
+// @prop onChange  (selected: string[]) => void
+// @prop placeholder string
+// @prop renderOption (opt) => ReactNode  — optional custom option renderer
+// ─────────────────────────────────────────────────────────────────────────────
+/** Search input with dropdown suggestions and selected chips */
+const Combobox = ({ options=[], selected=[], onChange, placeholder='Search…', renderOption }) => {
+  const [q, setQ] = useState('');
+  const [open, setOpen] = useState(false);
+  const toggle = v => onChange(selected.includes(v) ? selected.filter(s=>s!==v) : [...selected,v]);
+  const suggestions = options.filter(o=>!selected.includes(o.value)&&(q===''||o.label.toLowerCase().includes(q.toLowerCase())||(o.meta||'').toLowerCase().includes(q.toLowerCase())));
+  return (
+    <div>
+      {selected.length>0 && (
+        <div style={{display:'flex',flexWrap:'wrap',gap:6,marginBottom:8}}>
+          {selected.map(v=>{
+            const opt=options.find(o=>o.value===v);
+            return (
+              <div key={v} style={{display:'inline-flex',alignItems:'center',gap:6,padding:'4px 10px 4px 6px',borderRadius:8,background:'var(--ink)',color:'var(--bg)',fontSize:12,fontWeight:500}}>
+                {opt?.avatar && <Avatar name={opt.label} size={18}/>}
+                {opt?.label||v}
+                <button onClick={()=>toggle(v)} style={{background:'none',border:'none',cursor:'pointer',color:'rgba(244,239,227,0.7)',padding:0,lineHeight:1,fontSize:14}}>×</button>
+              </div>
+            );
+          })}
+        </div>
+      )}
+      <div style={{position:'relative'}}>
+        <span style={{position:'absolute',left:12,top:'50%',transform:'translateY(-50%)',color:'var(--ink-3)',pointerEvents:'none'}}><I.Search size={14}/></span>
+        <Input value={q} onChange={e=>{setQ(e.target.value);setOpen(true);}} placeholder={placeholder}
+          style={{paddingLeft:34}}
+          onFocus={()=>setOpen(true)} onBlur={()=>setTimeout(()=>setOpen(false),150)}/>
+        {open && suggestions.length>0 && (
+          <div style={{position:'absolute',left:0,right:0,top:'calc(100% + 4px)',zIndex:10,
+            background:'var(--surface-2)',border:'1px solid var(--line)',borderRadius:12,overflow:'hidden',
+            boxShadow:'0 8px 24px rgba(28,24,20,0.12)'}}>
+            {suggestions.map(opt=>(
+              <button key={opt.value} type="button"
+                onMouseDown={e=>{e.preventDefault();toggle(opt.value);setQ('');setOpen(true);}}
+                style={{width:'100%',display:'flex',alignItems:'center',gap:10,padding:'10px 16px',
+                  background:'none',border:'none',cursor:'pointer',fontFamily:'inherit',
+                  borderBottom:'1px solid var(--line)',textAlign:'left',transition:'background 100ms'}}
+                onMouseEnter={e=>e.currentTarget.style.background='rgba(0,0,0,0.03)'}
+                onMouseLeave={e=>e.currentTarget.style.background='none'}>
+                {renderOption ? renderOption(opt) : (
+                  <>
+                    {opt.avatar && <Avatar name={opt.label} size={24}/>}
+                    <div style={{flex:1}}>
+                      <div style={{fontSize:13,fontWeight:500,color:'var(--ink)'}}>{opt.label}</div>
+                      {opt.meta && <div style={{fontSize:11,color:'var(--ink-3)',fontFamily:'JetBrains Mono,monospace'}}>{opt.meta}</div>}
+                    </div>
+                    <I.Plus size={13} style={{color:'var(--ink-3)',flexShrink:0}}/>
+                  </>
+                )}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SIDEBAR NAV
+// ─────────────────────────────────────────────────────────────────────────────
+const NAV_ITEMS = [
+  { id:'dashboard', label:'Dashboard', icon:I.LayoutGrid },
+  { id:'projects',  label:'Projects',  icon:I.Folder },
+  { id:'team',      label:'Team',      icon:I.Users },
+  { id:'cashflow',  label:'Cashflow',  icon:I.Wallet },
+];
+/** Main navigation sidebar */
+const Sidebar = ({ view, setView, showSettingsBadge=false }) => (
+  <aside style={{width:230,flexShrink:0,display:'flex',flexDirection:'column',
+    background:'var(--surface)',borderRight:'1px solid var(--line)',position:'sticky',top:0,height:'100vh',zIndex:1}}>
+    <div style={{padding:'20px',borderBottom:'1px solid var(--line)',display:'flex',alignItems:'center',gap:10}}>
+      <div style={{width:32,height:32,borderRadius:9,background:'var(--accent)',display:'flex',alignItems:'center',justifyContent:'center',color:'#fff'}}>
+        <I.Logo size={18}/>
+      </div>
+      <span style={{fontFamily:'Fraunces,Georgia,serif',fontSize:19,fontWeight:500,letterSpacing:'-0.02em',color:'var(--ink)'}}>Monira</span>
+    </div>
+    <nav style={{flex:1,padding:'12px',display:'flex',flexDirection:'column',gap:2,overflowY:'auto'}}>
+      {NAV_ITEMS.map(item=>{
+        const active=view===item.id; const IconC=item.icon;
+        return (
+          <button key={item.id} onClick={()=>setView(item.id)}
+            style={{ width:'100%',display:'flex',alignItems:'center',gap:12,padding:'9px 12px',
+              borderRadius:9,fontSize:13.5,fontWeight:500,border:'none',cursor:'pointer',
+              fontFamily:'inherit',letterSpacing:'-0.005em',textAlign:'left',position:'relative',
+              background:active?'var(--accent-soft)':'transparent',
+              color:active?'var(--accent-2)':'var(--ink-2)',transition:'background 100ms ease' }}>
+            {active && <span style={{position:'absolute',left:0,top:6,bottom:6,width:3,borderRadius:99,background:'var(--accent)'}}/>}
+            <IconC size={17}/>{item.label}
+          </button>
+        );
+      })}
+    </nav>
+    <div style={{padding:'0 12px 12px',display:'flex',flexDirection:'column',gap:2,borderTop:'1px solid var(--line)',paddingTop:12}}>
+      <button onClick={()=>setView('settings')}
+        style={{ width:'100%',display:'flex',alignItems:'center',gap:12,padding:'9px 12px',
+          borderRadius:9,fontSize:13.5,fontWeight:500,border:'none',cursor:'pointer',
+          fontFamily:'inherit',letterSpacing:'-0.005em',textAlign:'left',position:'relative',
+          background:view==='settings'?'var(--accent-soft)':'transparent',
+          color:view==='settings'?'var(--accent-2)':'var(--ink-2)',transition:'background 100ms ease' }}>
+        {view==='settings' && <span style={{position:'absolute',left:0,top:6,bottom:6,width:3,borderRadius:99,background:'var(--accent)'}}/>}
+        <I.Settings size={17}/>Settings
+        {showSettingsBadge && <span style={{marginLeft:'auto',background:'var(--accent)',color:'#fff',borderRadius:99,fontSize:10,fontWeight:600,padding:'1px 6px'}}>1</span>}
+      </button>
+      <div style={{display:'flex',alignItems:'center',gap:8,padding:'8px 8px'}}>
+        <Avatar name="Admin" size={26}/>
+        <div style={{flex:1,minWidth:0}}>
+          <div style={{fontSize:12.5,fontWeight:500,color:'var(--ink)',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>admin@monira.com</div>
+          <div style={{fontSize:11,color:'var(--ink-3)'}}>Owner</div>
+        </div>
+        <Button variant="ghost" size="sm" icon={<I.LogOut size={14}/>} style={{padding:'6px 7px'}}/>
+      </div>
+    </div>
+  </aside>
+);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────────────────────────────────────────
+const fmtUSD = (n, opts={}) => {
+  const {sign=false} = opts;
+  const abs = Math.abs(n);
+  const fmt = `$${abs.toLocaleString('en-US')}`;
+  if(n<0) return `−${fmt}`;
+  if(sign&&n>0) return `+${fmt}`;
+  return fmt;
+};
+
+
 // ============================================================================
-// MOCK DATA
+// ■ SECTION 2: MOCK DATA
 // ============================================================================
 const CLIENTS = [
   { id: 1, name: 'Pondid Inc.' },
@@ -165,6 +798,11 @@ const PROJECTS = [
   { id: 4, name: 'Northpath Web',          client: 'Northpath',   type: 'Fixed',        budget: 22000,  rate: null, thisMonth: 3200, budgetHours: 80,  spentHours: 96,  internalRate: 32, commercialRate: 55, outstanding: 8000, sales: 'Tanya',   status: 'Active'    },
   { id: 5, name: 'Приклад',                client: 'Test Client', type: 'T&M',          budget: null,   rate: 50,   thisMonth: 200,  budgetHours: 8,   spentHours: 4,   internalRate: 18, commercialRate: 50, outstanding: 200,  sales: 'Tanya',   status: 'Active'    },
   { id: 6, name: 'Loomside Mobile',        client: 'Loomside',    type: 'T&M',          budget: null,   rate: 65,   thisMonth: 2470, budgetHours: 50,  spentHours: 38,  internalRate: 30, commercialRate: 65, outstanding: 1800, sales: 'Alex L.', status: 'Active'    },
+  { id: 7, name: 'Vanta Onboarding',       client: 'Vanta Corp',  type: 'Fixed',        budget: 45000,  rate: null, thisMonth: 5800, budgetHours: 120, spentHours: 74,  internalRate: 26, commercialRate: 80, outstanding: 3200, sales: 'Alex L.', status: 'Active'    },
+  { id: 8, name: 'Marble Analytics',       client: 'Marble',      type: 'T&M',          budget: null,   rate: 75,   thisMonth: 1875, budgetHours: 40,  spentHours: 25,  internalRate: 22, commercialRate: 75, outstanding: 0,    sales: 'Tanya',   status: 'Active'    },
+  { id: 9, name: 'Orbit CRM',              client: 'Orbit Labs',  type: 'Subscription', budget: null,   rate: 6000, thisMonth: 6000, budgetHours: 100, spentHours: 98,  internalRate: 25, commercialRate: 90, outstanding: 6000, sales: 'Alex L.', status: 'Active'    },
+  { id: 10, name: 'Fold Brand Identity',   client: 'Fold Studio', type: 'Fixed',        budget: 18000,  rate: null, thisMonth: 0,    budgetHours: 60,  spentHours: 60,  internalRate: 20, commercialRate: 60, outstanding: 0,    sales: 'Tanya',   status: 'Completed' },
+  { id: 11, name: 'Stride Mobile App',     client: 'Stride Inc.', type: 'T&M',          budget: null,   rate: 70,   thisMonth: 3640, budgetHours: 80,  spentHours: 52,  internalRate: 28, commercialRate: 70, outstanding: 2100, sales: 'Tanya',   status: 'Active'    },
 ];
 
 const computeProfit = (p) => (p.commercialRate - p.internalRate) * p.spentHours;
@@ -259,196 +897,41 @@ const EXPENSE_ITEMS = [
 // ============================================================================
 // HELPERS
 // ============================================================================
-const fmtUSD = (n, opts = {}) => {
-  const { sign = false } = opts;
-  const abs = Math.abs(n);
-  const formatted = `$${abs.toLocaleString('en-US')}`;
-  if (n < 0) return `−${formatted}`;
-  if (sign && n > 0) return `+${formatted}`;
-  return formatted;
-};
-const initials = (name) => name.split(' ').map(s => s[0]).slice(0,2).join('').toUpperCase();
-const AVA_COLORS = [
-  { bg: '#C04A24', fg: '#FFFFFF' }, { bg: '#2D5A3F', fg: '#FFFFFF' },
-  { bg: '#3A4A8C', fg: '#FFFFFF' }, { bg: '#7B3F9C', fg: '#FFFFFF' },
-  { bg: '#856611', fg: '#FFFFFF' }, { bg: '#1C1814', fg: '#F4EFE3' },
-];
-const avatarColor = (name) => {
-  let h = 0; for (let i=0;i<name.length;i++) h = name.charCodeAt(i) + ((h<<5)-h);
-  return AVA_COLORS[Math.abs(h) % AVA_COLORS.length];
-};
-const Avatar = ({ name, size = 28 }) => {
-  const c = avatarColor(name);
-  return (
-    <div className="rounded-full flex items-center justify-center shrink-0 font-medium"
-      style={{ width: size, height: size, background: c.bg, color: c.fg, fontSize: size*0.38, fontFamily: 'Inter Tight' }}>
-      {initials(name)}
-    </div>
-  );
-};
-const Badge = ({ children, tone = 'neutral' }) => {
-  const map = {
-    neutral:  { bg: 'var(--bg)',           fg: 'var(--ink-2)',     bd: 'var(--line)' },
-    accent:   { bg: 'var(--accent-soft)',  fg: 'var(--accent-2)',  bd: 'transparent' },
-    warn:     { bg: 'var(--warn-soft)',    fg: 'var(--warn)',      bd: 'transparent' },
-    positive: { bg: 'var(--positive-soft)',fg: 'var(--positive-2)',bd: 'transparent' },
-    negative: { bg: 'var(--negative-soft)',fg: 'var(--negative)',  bd: 'transparent' },
-  };
-  const c = map[tone] || map.neutral;
-  return <span className="ft-chip" style={{ background: c.bg, color: c.fg, border: `1px solid ${c.bd}` }}>{children}</span>;
-};
-const Sparkline = ({ data, color }) => (
-  <ResponsiveContainer width="100%" height="100%">
-    <LineChart data={data} margin={{ top: 2, right: 2, left: 2, bottom: 2 }}>
-      <Line type="monotone" dataKey="v" stroke={color} strokeWidth={1.6} dot={false}/>
-    </LineChart>
-  </ResponsiveContainer>
-);
 
 // ============================================================================
-// SIDEBAR
+// ■ SECTION 3: PAGE COMPONENTS
 // ============================================================================
-const NAV = [
-  { id: 'dashboard', label: 'Dashboard', icon: I.LayoutGrid },
-  { id: 'projects',  label: 'Projects',  icon: I.Folder },
-  { id: 'team',      label: 'Team',      icon: I.Users },
-  { id: 'cashflow',  label: 'Cashflow',  icon: I.Wallet },
-];
-const Sidebar = ({ view, setView, showSettingsBadge }) => (
-  <aside className="w-[230px] shrink-0 flex flex-col border-r" style={{ borderColor: 'var(--line)', background: 'var(--surface)', position:'relative', zIndex:1 }}>
-    <div className="px-5 py-5 flex items-center gap-2.5 border-b" style={{ borderColor: 'var(--line)' }}>
-      <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'var(--accent)', color: '#fff' }}><I.Logo size={18}/></div>
-      <span className="ft-serif text-[19px] font-medium" style={{ color: 'var(--ink)' }}>FinTrack</span>
-    </div>
-    <nav className="flex-1 px-3 py-3 space-y-0.5">
-      {NAV.map(item => {
-        const IconComp = item.icon; const active = view === item.id;
-        return (
-          <button key={item.id} onClick={() => setView(item.id)}
-            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13.5px] font-medium relative ${active ? 'ft-tab-active' : 'hover:bg-black/[0.03]'}`}
-            style={{ color: active ? 'var(--accent-2)' : 'var(--ink-2)' }}>
-            {active && <span className="ft-tab-bar absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-full" />}
-            <IconComp size={17}/>{item.label}
-          </button>
-        );
-      })}
-    </nav>
-    <div className="px-3 pb-3 space-y-0.5">
-      {/* Settings link */}
-      <button onClick={() => setView('settings')}
-        className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13.5px] font-medium relative ${view==='settings' ? 'ft-tab-active' : 'hover:bg-black/[0.03]'}`}
-        style={{ color: view==='settings' ? 'var(--accent-2)' : 'var(--ink-2)' }}>
-        {view==='settings' && <span className="ft-tab-bar absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-full" />}
-        <I.Settings size={17}/>
-        Settings
-        {showSettingsBadge && (
-          <span className="ml-auto text-[10px] font-semibold px-1.5 py-0.5 rounded-full" style={{background:'var(--accent)',color:'#fff'}}>1</span>
-        )}
-      </button>
-      {/* User row */}
-      <div className="flex items-center gap-2 px-2 py-2">
-        <Avatar name="Admin" size={26}/>
-        <div className="flex-1 min-w-0">
-          <div className="text-[12.5px] font-medium truncate" style={{color:'var(--ink)'}}>admin@fintrack.com</div>
-          <div className="text-[11px] truncate" style={{color:'var(--ink-3)'}}>Owner</div>
-        </div>
-        <button className="p-1.5 rounded-md hover:bg-black/5" style={{color:'var(--ink-3)'}}><I.LogOut size={14}/></button>
-      </div>
-    </div>
-  </aside>
-);
 
-// ============================================================================
-// TOPBAR
-// ============================================================================
-const TopBar = ({ title, subtitle, period, onPrev, onNext, action }) => (
-  <div className="flex items-end justify-between pb-7 border-b mb-7" style={{ borderColor: 'var(--line)' }}>
-    <div>
-      <div className="text-[11px] uppercase tracking-[0.14em] font-medium mb-2" style={{color:'var(--ink-3)'}}>FinTrack / {title}</div>
-      <h1 className="ft-serif text-[40px] leading-[1.05] font-medium" style={{color:'var(--ink)'}}>{subtitle}</h1>
-    </div>
-    <div className="flex items-center gap-2.5">
-      {period && (
-        <div className="ft-card flex items-center gap-1 p-1 pr-1.5">
-          <button onClick={onPrev} className="p-1.5 rounded-md hover:bg-black/5" style={{color:'var(--ink-2)'}}><I.ChevronLeft size={15}/></button>
-          <div className="px-2 text-[13px] font-medium ft-mono" style={{color:'var(--ink)'}}>{period}</div>
-          <button onClick={onNext} className="p-1.5 rounded-md hover:bg-black/5" style={{color:'var(--ink-2)'}}><I.ChevronRight size={15}/></button>
-        </div>
-      )}
-      {action}
-    </div>
-  </div>
-);
-const LegendDot = ({ color }) => <span className="inline-flex items-center gap-1.5"><span className="inline-block w-2 h-2 rounded-full" style={{ background: color }}/></span>;
-const MiniStat = ({ label, value, sub, tone, onClick }) => {
-  const valueColor = tone === 'positive' ? 'var(--positive)' : tone === 'warn' ? 'var(--accent-2)' : tone === 'negative' ? 'var(--negative)' : 'var(--ink)';
-  return (
-    <div className={`ft-card p-5 ${onClick ? 'ft-clickable hover:border-[var(--line-2)]' : ''}`} onClick={onClick} style={{ transition: 'border-color 120ms ease' }}>
-      <div className="flex items-center justify-between mb-3">
-        <div className="text-[11px] uppercase tracking-[0.12em]" style={{color:'var(--ink-3)'}}>{label}</div>
-        {onClick && <span style={{color:'var(--ink-4)'}}><I.ArrowUpRight size={13}/></span>}
-      </div>
-      <div className="ft-mono text-[24px] font-medium" style={{ color: valueColor }}>{value}</div>
-      <div className="text-[12px] mt-1" style={{color:'var(--ink-3)'}}>{sub}</div>
-    </div>
-  );
-};
-
-// ============================================================================
-// MODAL — Add income / expense
-// ============================================================================
-const Field = ({ label, children }) => (
-  <div>
-    <label className="block text-[11px] uppercase tracking-[0.1em] font-medium mb-1.5" style={{color:'var(--ink-3)'}}>{label}</label>
-    {children}
-  </div>
-);
-// Toast notification
-const Toast = ({ msg, onDone }) => {
-  React.useEffect(() => { const t = setTimeout(onDone, 2800); return () => clearTimeout(t); }, []);
-  return (
-    <div className="ft-fade fixed bottom-6 right-6 z-[300] flex items-center gap-3 px-4 py-3 rounded-xl"
-      style={{background:'var(--ink)',color:'var(--bg)',minWidth:240,boxShadow:'0 8px 32px rgba(28,24,20,0.28)'}}>
-      <span style={{color:'var(--positive)'}}><I.Check2 size={16}/></span>
-      <span className="text-[13.5px] font-medium">{msg}</span>
-    </div>
-  );
-};
-
-// Accounts Receivable full screen
 const AddReceivableModal = ({ onClose, onAdd }) => {
-  const [form, setForm] = React.useState({ client:'', invoice:'', amount:'', status:'pending', daysOverdue:0 });
+  const [form, setForm] = useState({ client:'', invoice:'', amount:'', status:'pending', daysOverdue:0 });
   const set = (k,v) => setForm(p=>({...p,[k]:v}));
   return (
-    <div className="ft-overlay" onClick={onClose} style={{zIndex:200}}>
-      <div className="ft-modal-panel ft-card-2 w-full max-w-[460px] p-7" onClick={e=>e.stopPropagation()} style={{borderRadius:20}}>
-        <div className="flex items-start justify-between mb-5">
-          <div className="ft-serif text-[22px] font-medium" style={{color:'var(--ink)'}}>Add receivable</div>
-          <button onClick={onClose} className="p-1.5 rounded-md hover:bg-black/5" style={{color:'var(--ink-3)'}}><I.X size={16}/></button>
+    <Modal isOpen title="Add receivable" onClose={onClose}
+      footer={<>
+        <Button variant="ghost" onClick={onClose}>Cancel</Button>
+        <Button variant="primary" icon={<I.Plus size={14}/>}
+          onClick={()=>{ onAdd({...form,id:Date.now(),amount:+String(form.amount).replace(/[^0-9.]/g,'')||0,daysOverdue:form.status==='overdue'?form.daysOverdue:0}); onClose(); }}>
+          Add
+        </Button>
+      </>} zIndex={200} width="460px">
+      <div style={{display:'flex',flexDirection:'column',gap:14}}>
+        <Field label="Client name"><Input value={form.client} onChange={e=>set('client',e.target.value)} placeholder="e.g. Acme Corp"/></Field>
+        <Field label="Invoice ID"><Input value={form.invoice} onChange={e=>set('invoice',e.target.value)} placeholder="INV-XXX-001" mono/></Field>
+        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
+          <Field label="Amount"><Input value={form.amount} onChange={e=>set('amount',e.target.value)} placeholder="$0" mono/></Field>
+          <Field label="Status">
+            <Select value={form.status} onChange={e=>set('status',e.target.value)}>
+              <option value="pending">Pending</option>
+              <option value="overdue">Overdue</option>
+              <option value="received">Received</option>
+            </Select>
+          </Field>
         </div>
-        <div className="space-y-3.5">
-          <Field label="Client name"><input className="ft-input" placeholder="e.g. Acme Corp" value={form.client} onChange={e=>set('client',e.target.value)}/></Field>
-          <Field label="Invoice ID"><input className="ft-input ft-mono" placeholder="INV-XXX-001" value={form.invoice} onChange={e=>set('invoice',e.target.value)}/></Field>
-          <div className="grid grid-cols-2 gap-3">
-            <Field label="Amount"><input className="ft-input ft-mono" placeholder="$0" value={form.amount} onChange={e=>set('amount',e.target.value)}/></Field>
-            <Field label="Status">
-              <select className="ft-select w-full" value={form.status} onChange={e=>set('status',e.target.value)}>
-                <option value="pending">Pending</option>
-                <option value="overdue">Overdue</option>
-                <option value="received">Received</option>
-              </select>
-            </Field>
-          </div>
-          {form.status==='overdue' && <Field label="Days overdue"><input className="ft-input ft-mono" type="number" min={1} value={form.daysOverdue} onChange={e=>set('daysOverdue',+e.target.value)}/></Field>}
-        </div>
-        <div className="flex justify-end gap-2 mt-6">
-          <button className="ft-btn-ghost" onClick={onClose}>Cancel</button>
-          <button className="ft-btn-primary" onClick={()=>{ onAdd({...form,id:Date.now(),amount:+String(form.amount).replace(/[^0-9.]/g,'')||0,daysOverdue:form.status==='overdue'?form.daysOverdue:0}); onClose(); }}>
-            <I.Plus size={14}/> Add
-          </button>
-        </div>
+        {form.status==='overdue' && (
+          <Field label="Days overdue"><Input type="number" value={form.daysOverdue} onChange={e=>set('daysOverdue',+e.target.value)} mono/></Field>
+        )}
       </div>
-    </div>
+    </Modal>
   );
 };
 
@@ -547,113 +1030,127 @@ const ReceivableScreen = ({ onBack }) => {
 const AddEntryModal = ({ onClose, onSuccess }) => {
   const [tab, setTab] = useState('income');
   const isIncome = tab === 'income';
-  const [noteFile, setNoteFile] = React.useState(null);
-  const [submitted, setSubmitted] = React.useState(false);
-  const [expCat, setExpCat] = React.useState('one-time');
-  const fileRef = React.useRef();
-
-  const incomeCategories = ['Project payment','Retainer','Consulting fee','Other income'];
-  const expenseCategories = ['One-time payment','Salary','Subscription'];
+  const [noteFile, setNoteFile] = useState(null);
+  const [submitted, setSubmitted] = useState(false);
+  const [expCat, setExpCat] = useState('one-time');
+  const [amount, setAmount] = useState('');
+  const [source, setSource] = useState('');
+  const [account, setAccount] = useState('');
+  const [note, setNote] = useState('');
+  const fileRef = useRef();
   const accentColor = isIncome ? 'var(--positive)' : 'var(--negative)';
 
   const handleSubmit = () => {
     setSubmitted(true);
-    setTimeout(() => { onSuccess(isIncome ? 'Income added successfully' : 'Expense added successfully'); onClose(); }, 700);
+    setTimeout(() => { onSuccess(isIncome ? 'Income added' : 'Expense added'); onClose(); }, 700);
   };
 
-  return (
-    <div className="ft-overlay" onClick={onClose}>
-      <div className="ft-modal-panel ft-card-2 w-full max-w-[520px]"
-        onClick={e => e.stopPropagation()}
-        style={{ borderRadius: 32, padding: '28px 28px 24px', boxShadow: '0 24px 80px rgba(28,24,20,0.18)' }}>
-
-        {submitted ? (
-          <div className="flex flex-col items-center justify-center py-10 gap-3">
-            <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{background:'var(--positive-soft)'}}><I.Check2 size={28} style={{color:'var(--positive)'}}/></div>
-            <div className="ft-serif text-[20px] font-medium" style={{color:'var(--ink)'}}>{isIncome ? 'Income' : 'Expense'} added!</div>
-          </div>
-        ) : (
-          <>
-            <div className="flex items-start justify-between mb-6">
-              <div>
-                <div className="text-[11px] uppercase tracking-[0.14em] font-medium mb-1" style={{color:'var(--ink-3)'}}>New entry</div>
-                <div className="ft-serif text-[22px] font-medium" style={{color:'var(--ink)'}}>Add income or expense</div>
-              </div>
-              <button onClick={onClose} className="p-1.5 rounded-[10px] hover:bg-black/5" style={{color:'var(--ink-3)'}}><I.X size={16}/></button>
-            </div>
-            {/* Tabs */}
-            <div className="grid grid-cols-2 gap-2 mb-5">
-              {[['income','Income'],['expense','Expense']].map(([t,label]) => {
-                const active = tab===t; const col = t==='income'?'var(--positive)':'var(--negative)';
-                return (
-                  <button key={t} onClick={()=>setTab(t)} className="py-3 font-medium text-[13.5px] transition-all"
-                    style={{borderRadius:20,border:`1.5px solid ${active?col:'var(--line)'}`,background:active?(t==='income'?'var(--positive-soft)':'var(--negative-soft)'):'var(--surface)',color:active?col:'var(--ink-3)'}}>
-                    {label}
-                  </button>
-                );
-              })}
-            </div>
-            <div className="space-y-3.5">
-              <div className="grid grid-cols-2 gap-3">
-                <Field label="Amount">
-                  <div className="relative"><span className="absolute left-3.5 top-1/2 -translate-y-1/2 ft-mono text-[13px]" style={{color:'var(--ink-3)'}}>$</span><input className="ft-input ft-mono" style={{paddingLeft:22,borderRadius:20}} placeholder="0.00"/></div>
-                </Field>
-                <Field label="Date"><input className="ft-input ft-mono" type="date" defaultValue="2026-06-09" style={{borderRadius:20}}/></Field>
-              </div>
-              <Field label={isIncome ? 'SOURCE / CLIENT' : 'SOURCE'}>
-                {isIncome ? (
-                  <div className="flex gap-2">
-                    <div className="flex-1">
-                      <input className="ft-input" list="clients-list" placeholder="Select or type client…" style={{borderRadius:20}}/>
-                      <datalist id="clients-list">{CLIENTS.map(c=><option key={c.id} value={c.name}/>)}</datalist>
-                    </div>
-                    <button type="button" className="ft-btn-ghost shrink-0" style={{borderRadius:20,padding:'8px 14px'}}><I.Plus size={13}/> New</button>
-                  </div>
-                ) : (
-                  <input className="ft-input" placeholder="e.g. AWS, Figma…" style={{borderRadius:20}}/>
-                )}
-              </Field>
-              {!isIncome && (
-                <Field label="Category">
-                  <select className="ft-select w-full" value={expCat} onChange={e => setExpCat(e.target.value)} style={{borderRadius:20}}>
-                    <option value="one-time">One-time payment</option>
-                    <option value="salary">Salary</option>
-                    <option value="subscription">Subscription</option>
-                  </select>
-                </Field>
-              )}
-              <Field label="Account / Wallet">
-                <select className="ft-select w-full" style={{borderRadius:20}}>
-                  <option value="">Select account…</option>
-                  {CASH_ACCOUNTS.map(a=><option key={a.id}>{a.name}</option>)}
-                </select>
-              </Field>
-              <Field label="Note">
-                <div className="relative">
-                  <textarea className="ft-input" rows={2} placeholder="Optional memo…" style={{borderRadius:20,resize:'none',paddingRight:40}}/>
-                  <button type="button" onClick={()=>fileRef.current?.click()}
-                    className="absolute right-3 bottom-3 p-1.5 rounded-lg hover:bg-black/5"
-                    style={{color:noteFile?'var(--positive)':'var(--ink-3)'}} title="Attach file">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
-                  </button>
-                  <input ref={fileRef} type="file" className="hidden" onChange={e=>setNoteFile(e.target.files?.[0]?.name||null)}/>
-                </div>
-                {noteFile && <div className="text-[11px] mt-1 ft-mono flex items-center gap-1" style={{color:'var(--positive)'}}><I.Check2 size={11}/> {noteFile}</div>}
-              </Field>
-            </div>
-            <div className="flex justify-end gap-2 mt-5">
-              <button className="ft-btn-ghost" style={{borderRadius:20}} onClick={onClose}>Cancel</button>
-              <button className="ft-btn-primary" style={{borderRadius:20,background:accentColor}} onClick={handleSubmit}>
-                <I.Plus size={14}/> {isIncome ? 'Add income' : 'Add expense'}
-              </button>
-            </div>
-          </>
-        )}
+  const successState = (
+    <div style={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:'40px 0',gap:12}}>
+      <div style={{width:56,height:56,borderRadius:'50%',background:'var(--positive-soft)',display:'flex',alignItems:'center',justifyContent:'center'}}>
+        <I.Check2 size={28} style={{color:'var(--positive)'}}/>
+      </div>
+      <div style={{fontFamily:'Fraunces,Georgia,serif',fontSize:20,fontWeight:500,color:'var(--ink)'}}>
+        {isIncome ? 'Income' : 'Expense'} added!
       </div>
     </div>
   );
-};
 
+  const formState = (
+    <>
+      {/* Tab switcher */}
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8,marginBottom:20}}>
+        {[['income','Income'],['expense','Expense']].map(([t,label]) => {
+          const active = tab===t;
+          const col = t==='income' ? 'var(--positive)' : 'var(--negative)';
+          const colSoft = t==='income' ? 'var(--positive-soft)' : 'var(--negative-soft)';
+          return (
+            <button key={t} onClick={()=>setTab(t)} style={{
+              padding:'11px',fontSize:13.5,fontWeight:500,borderRadius:10,fontFamily:'inherit',
+              border:`1.5px solid ${active?col:'var(--line)'}`,
+              background:active?colSoft:'var(--surface)',color:active?col:'var(--ink-3)',
+              cursor:'pointer',transition:'all 120ms ease'}}>
+              {label}
+            </button>
+          );
+        })}
+      </div>
+      <div style={{display:'flex',flexDirection:'column',gap:14}}>
+        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
+          <Field label="Amount">
+            <Input value={amount} onChange={e=>setAmount(e.target.value)} placeholder="0.00" prefix="$" mono/>
+          </Field>
+          <Field label="Date">
+            <Input type="date" value="2026-06-09" onChange={()=>{}}/>
+          </Field>
+        </div>
+        <Field label={isIncome ? 'Source / Client' : 'Source'}>
+          {isIncome ? (
+            <div style={{display:'flex',gap:8}}>
+              <div style={{flex:1}}>
+                <input list="clients-list" value={source} onChange={e=>setSource(e.target.value)}
+                  placeholder="Select or type client…"
+                  style={{width:'100%',background:'var(--surface)',border:'1px solid var(--line)',
+                    borderRadius:10,padding:'9px 12px',fontSize:13.5,color:'var(--ink)',outline:'none',fontFamily:'inherit'}}/>
+                <datalist id="clients-list">{CLIENTS.map(c=><option key={c.id} value={c.name}/>)}</datalist>
+              </div>
+              <Button variant="ghost" icon={<I.Plus size={13}/>}>New</Button>
+            </div>
+          ) : (
+            <Input value={source} onChange={e=>setSource(e.target.value)} placeholder="e.g. AWS, Figma…"/>
+          )}
+        </Field>
+        {!isIncome && (
+          <Field label="Category">
+            <Select value={expCat} onChange={e=>setExpCat(e.target.value)}>
+              <option value="one-time">One-time payment</option>
+              <option value="salary">Salary</option>
+              <option value="subscription">Subscription</option>
+            </Select>
+          </Field>
+        )}
+        <Field label="Account / Wallet">
+          <Select value={account} onChange={e=>setAccount(e.target.value)} placeholder="Select account…">
+            {CASH_ACCOUNTS.map(a=><option key={a.id} value={a.name}>{a.name}</option>)}
+          </Select>
+        </Field>
+        <Field label="Note">
+          <div style={{position:'relative'}}>
+            <Textarea value={note} onChange={e=>setNote(e.target.value)} rows={2} placeholder="Optional memo…" style={{paddingRight:40}}/>
+            <button type="button" onClick={()=>fileRef.current?.click()}
+              style={{position:'absolute',right:10,bottom:10,background:'none',border:'none',cursor:'pointer',
+                color:noteFile?'var(--positive)':'var(--ink-3)',padding:4}} title="Attach file">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+              </svg>
+            </button>
+            <input ref={fileRef} type="file" style={{display:'none'}} onChange={e=>setNoteFile(e.target.files?.[0]?.name||null)}/>
+          </div>
+          {noteFile && (
+            <div style={{fontSize:11,marginTop:4,display:'flex',alignItems:'center',gap:4,color:'var(--positive)',fontFamily:'JetBrains Mono,monospace'}}>
+              <I.Check2 size={11}/> {noteFile}
+            </div>
+          )}
+        </Field>
+      </div>
+    </>
+  );
+
+  return (
+    <Modal isOpen title="Add income or expense" subtitle="New entry" onClose={onClose}
+      footer={submitted ? null : (
+        <>
+          <Button variant="ghost" onClick={onClose}>Cancel</Button>
+          <Button variant="primary" icon={<I.Plus size={14}/>} onClick={handleSubmit}
+            style={{background:accentColor}}>
+            {isIncome ? 'Add income' : 'Add expense'}
+          </Button>
+        </>
+      )}>
+      {submitted ? successState : formState}
+    </Modal>
+  );
+};
 
 // ============================================================================
 // DRILL-DOWN SCREEN — income / expense detail
@@ -680,7 +1177,7 @@ const DetailScreen = ({ kind, onBack }) => {
       <div className="flex items-end justify-between pb-7 border-b mb-7" style={{ borderColor: 'var(--line)' }}>
         <div>
           <div className="text-[11px] uppercase tracking-[0.14em] font-medium mb-2" style={{color:'var(--ink-3)'}}>
-            FinTrack / {isIncome ? 'Income' : 'Expenses'} detail
+            Monira / {isIncome ? 'Income' : 'Expenses'} detail
           </div>
           <h1 className="ft-serif text-[40px] leading-[1.05] font-medium" style={{color:'var(--ink)'}}>
             {isIncome ? 'All income' : 'All expenses'}, June.
@@ -750,25 +1247,6 @@ const MoM = ({ value, accent, inverse }) => {
   );
 };
 
-const StatCard = ({ label, value, sub, mom, momInverse, accent, tone, onClick }) => {
-  const valueColor = accent ? 'var(--bg)' : tone === 'positive' ? 'var(--positive)' : tone === 'negative' ? 'var(--negative)' : 'var(--ink)';
-  return (
-    <div className={`px-5 py-4 ${accent ? 'relative overflow-hidden' : 'ft-card'} ${onClick ? 'ft-clickable' : ''}`}
-      onClick={onClick}
-      style={accent ? { background: 'var(--ink)', borderRadius: 14 } : {}}>
-      {accent && <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full" style={{ background: 'radial-gradient(circle, rgba(192,74,36,0.4), transparent 70%)' }}/>}
-      <div className="flex items-center justify-between mb-2 relative">
-        <div className="text-[11px] uppercase tracking-[0.14em] font-medium" style={{ color: accent ? 'rgba(244,239,227,0.5)' : 'var(--ink-3)' }}>{label}</div>
-        {mom !== undefined && <MoM value={mom} accent={accent} inverse={momInverse}/>}
-      </div>
-      <div className="ft-mono text-[26px] font-medium tracking-tight relative" style={{ color: valueColor }}>{value}</div>
-      <div className="text-[11.5px] mt-1 relative flex items-center gap-1" style={{ color: accent ? 'rgba(244,239,227,0.6)' : 'var(--ink-3)' }}>
-        {onClick && <I.ArrowUpRight size={11} style={{ color: accent ? 'rgba(244,239,227,0.5)' : 'var(--ink-4)' }}/>}
-        {sub}
-      </div>
-    </div>
-  );
-};
 
 // Small insight widget (renewals / utilization)
 const InsightCard = ({ icon: IconC, title, children, tone }) => (
@@ -1218,6 +1696,9 @@ const ProjectPanel = ({ project, onClose }) => {
   const [invoices, setInvoices] = React.useState(alloc.invoices||[]);
   const [showCreateInvoice, setShowCreateInvoice] = React.useState(false);
   const [roleData, setRoleData] = React.useState((alloc.roles||[]).map(r=>({...r})));
+  const [panelNotes, setPanelNotes] = React.useState(alloc.notes||'');
+  const [panelNoteFile, setPanelNoteFile] = React.useState(null);
+  const panelFileRef = React.useRef();
   // Edit allocation modal state
   const [editingRole, setEditingRole] = React.useState(null); // { idx, role, budgetH, teamNames }
 
@@ -1352,10 +1833,27 @@ const ProjectPanel = ({ project, onClose }) => {
                 {alloc.deadline && <div><div className="text-[10.5px] uppercase tracking-[0.1em] mb-1" style={{color:'var(--ink-3)'}}>Deadline</div><div className="ft-mono text-[13px]" style={{color:'var(--ink)'}}>{alloc.deadline}</div></div>}
                 <div><div className="text-[10.5px] uppercase tracking-[0.1em] mb-1" style={{color:'var(--ink-3)'}}>Contact</div><div className="text-[12.5px] ft-mono truncate" style={{color:'var(--accent-2)'}}>{alloc.clientContact}</div></div>
               </div>
-              {alloc.notes && (
+              {(
                 <div className="pt-2 border-t" style={{borderColor:'var(--line)'}}>
                   <div className="text-[10.5px] uppercase tracking-[0.1em] mb-1.5" style={{color:'var(--ink-3)'}}>Notes</div>
-                  <div className="text-[13px]" style={{color:'var(--ink-2)'}}>{alloc.notes}</div>
+                  <div style={{position:'relative'}}>
+                    <textarea className="ft-input" rows={3}
+                      placeholder="Add a note…"
+                      value={panelNotes} onChange={e=>setPanelNotes(e.target.value)}
+                      style={{paddingRight:36,resize:'none',fontSize:13}}/>
+                    <button type="button" onClick={()=>panelFileRef.current?.click()}
+                      style={{position:'absolute',right:8,bottom:8,background:'none',border:'none',cursor:'pointer',
+                        color:panelNoteFile?'var(--positive)':'var(--ink-3)',padding:4}} title="Attach file">
+                      <I.Paperclip size={13}/>
+                    </button>
+                    <input ref={panelFileRef} type="file" style={{display:'none'}} multiple
+                      onChange={e=>setPanelNoteFile(e.target.files?.[0]?.name||null)}/>
+                  </div>
+                  {panelNoteFile && (
+                    <div style={{fontSize:11,marginTop:4,display:'flex',alignItems:'center',gap:4,color:'var(--positive)',fontFamily:'JetBrains Mono,monospace'}}>
+                      <I.Check2 size={11}/> {panelNoteFile}
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -1407,10 +1905,6 @@ const ProjectPanel = ({ project, onClose }) => {
                           {remaining >= 0 ? `${remaining}h` : `−${Math.abs(remaining)}h`}
                         </div>
                       </div>
-                    </div>
-                    <div className="flex items-center justify-between text-[11.5px] ft-mono mb-3" style={{color:'var(--ink-3)'}}>
-                      <span>Cost: <span style={{color:cost>budgCost?'var(--negative)':'var(--ink)'}}>{fmtUSD(cost)}</span></span>
-                      <span>Budget: {fmtUSD(budgCost)}</span>
                     </div>
                     <div className="flex flex-wrap gap-2">
                       {r.team.map(p => {
@@ -1500,6 +1994,33 @@ const ProjectRow = ({ project, onSelect }) => {
   );
 };
 
+// Shared Note field — textarea + paperclip attachment (same as AddEntryModal)
+const NoteField = ({ placeholder = 'Optional memo…', rows = 3 }) => {
+  const [noteText, setNoteText] = React.useState('');
+  const [noteFile, setNoteFile] = React.useState(null);
+  const fileRef = React.useRef();
+  return (
+    <div style={{position:'relative'}}>
+      <textarea className="ft-input" rows={rows}
+        placeholder={placeholder}
+        value={noteText} onChange={e=>setNoteText(e.target.value)}
+        style={{paddingRight:40,resize:'none'}}/>
+      <button type="button" onClick={()=>fileRef.current?.click()}
+        style={{position:'absolute',right:10,bottom:10,background:'none',border:'none',cursor:'pointer',
+          color:noteFile?'var(--positive)':'var(--ink-3)',padding:4}} title="Attach file">
+        <I.Paperclip size={14}/>
+      </button>
+      <input ref={fileRef} type="file" style={{display:'none'}} multiple
+        onChange={e=>setNoteFile(e.target.files?.[0]?.name||null)}/>
+      {noteFile && (
+        <div style={{fontSize:11,marginTop:4,display:'flex',alignItems:'center',gap:4,color:'var(--positive)',fontFamily:'JetBrains Mono,monospace'}}>
+          <I.Check2 size={11}/> {noteFile}
+        </div>
+      )}
+    </div>
+  );
+};
+
 const AddProjectModal = ({ onClose }) => {
   const [addingClient, setAddingClient] = React.useState(false);
   const [execSearch, setExecSearch] = React.useState('');
@@ -1517,16 +2038,15 @@ const AddProjectModal = ({ onClose }) => {
           <button onClick={onClose} className="p-1.5 rounded-md hover:bg-black/5" style={{color:'var(--ink-3)'}}><I.X size={16}/></button>
         </div>
         <div className="space-y-4">
-          <Field label="Project name"><input className="ft-input" placeholder="e.g. Acme Redesign"/></Field>
-          <Field label="Client">
+          <Field label="Project name">
             {!addingClient ? (
               <div className="flex gap-2">
-                <select className="ft-select flex-1"><option value="">Select client…</option>{CLIENTS.map(c=><option key={c.id}>{c.name}</option>)}</select>
+                <select className="ft-select flex-1"><option value="">Select project…</option>{CLIENTS.map(c=><option key={c.id}>{c.name}</option>)}</select>
                 <button className="ft-btn-ghost" onClick={()=>setAddingClient(true)}><I.Plus size={13}/> New</button>
               </div>
             ) : (
               <div className="flex gap-2">
-                <input className="ft-input" placeholder="New client name…" autoFocus/>
+                <input className="ft-input" placeholder="New project name…" autoFocus/>
                 <button className="ft-btn-ghost" onClick={()=>setAddingClient(false)}>Cancel</button>
               </div>
             )}
@@ -1588,6 +2108,9 @@ const AddProjectModal = ({ onClose }) => {
             <Field label="Status"><select className="ft-select w-full"><option>Active</option><option>Completed</option><option>Paused</option></select></Field>
             <Field label="Deadline"><input className="ft-input" type="date"/></Field>
           </div>
+          <Field label="Notes">
+            <NoteField/>
+          </Field>
         </div>
         <div className="flex justify-end gap-2 mt-7">
           <button className="ft-btn-ghost" onClick={onClose}>Cancel</button>
@@ -1604,6 +2127,8 @@ const Projects = () => {
   const [sortBy, setSortBy] = useState('profit');
   const [showAdd, setShowAdd] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
+  const [page, setPage] = useState(1);
+  const PAGE_SIZE = 7;
 
   const filtered = useMemo(() => {
     return PROJECTS
@@ -1615,6 +2140,12 @@ const Projects = () => {
         return 0;
       });
   }, [search, typeFilter, sortBy]);
+
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+  const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+  // Reset to page 1 when filters change
+  React.useEffect(() => { setPage(1); }, [search, typeFilter, sortBy]);
 
   const activeCount = PROJECTS.filter(p => p.status === 'Active').length;
   const outstanding = PROJECTS.reduce((s,p) => s + p.outstanding, 0);
@@ -1647,8 +2178,42 @@ const Projects = () => {
           <span>Project</span><span>Type</span><span>Budget / Rate</span><span>Hours</span>
           <span>Commercial</span><span>Profit</span><span>Outstanding</span><span>Status</span><span/>
         </div>
-        {filtered.map(p => <ProjectRow key={p.id} project={p} onSelect={setSelectedProject}/>)}
+        {paginated.map(p => <ProjectRow key={p.id} project={p} onSelect={setSelectedProject}/>)}
       </div>
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between mt-4">
+          <span className="text-[12px]" style={{color:'var(--ink-3)'}}>
+            {(page-1)*PAGE_SIZE+1}–{Math.min(page*PAGE_SIZE, filtered.length)} of {filtered.length} projects
+          </span>
+          <div className="flex items-center gap-1">
+            <button
+              className="ft-btn-ghost px-2.5 py-1.5 text-[12px] disabled:opacity-30"
+              disabled={page === 1}
+              onClick={() => setPage(p => p - 1)}
+            >
+              <I.ChevronLeft size={14}/>
+            </button>
+            {Array.from({length: totalPages}, (_, i) => i + 1).map(n => (
+              <button
+                key={n}
+                onClick={() => setPage(n)}
+                className="px-2.5 py-1 rounded-md text-[12px] font-medium transition-colors"
+                style={{
+                  background: n === page ? 'var(--ink)' : 'transparent',
+                  color: n === page ? 'var(--bg)' : 'var(--ink-3)',
+                }}
+              >{n}</button>
+            ))}
+            <button
+              className="ft-btn-ghost px-2.5 py-1.5 text-[12px] disabled:opacity-30"
+              disabled={page === totalPages}
+              onClick={() => setPage(p => p + 1)}
+            >
+              <I.ChevronRight size={14}/>
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -1658,6 +2223,9 @@ const Projects = () => {
 // ============================================================================
 const EmployeeDrawer = ({ member, onClose }) => {
   const capacity = 160;
+  const [editVals, setEditVals] = React.useState({ salary: member.salary, rate: member.rate, earned: member.earned });
+  const [editing, setEditing] = React.useState(false);
+  const updateVal = (k, v) => setEditVals(p => ({...p, [k]: +v||0}));
 
   // Per-project Clockify entries — keyed by project name
   const CLOCKIFY_BY_PROJECT = {
@@ -1701,18 +2269,65 @@ const EmployeeDrawer = ({ member, onClose }) => {
 
         <div className="flex-1 overflow-y-auto px-6 py-5 space-y-6">
 
-          {/* Overview — unchanged */}
+          {/* Overview */}
           <section>
-            <div className="text-[11px] uppercase tracking-[0.12em] font-medium mb-3" style={{color:'var(--ink-3)'}}>Overview</div>
+            <div className="flex items-center justify-between mb-3">
+              <div className="text-[11px] uppercase tracking-[0.12em] font-medium" style={{color:'var(--ink-3)'}}>Overview</div>
+              <button
+                className="ft-btn-ghost"
+                style={{fontSize:11.5,padding:'4px 10px'}}
+                onClick={()=>setEditing(e=>!e)}>
+                {editing ? <><I.Check2 size={12}/> Done</> : <><I.Pencil size={12}/> Edit</>}
+              </button>
+            </div>
             <div className="ft-card p-4 grid grid-cols-2 gap-3">
-              <div><div className="text-[10.5px] uppercase tracking-[0.1em] mb-1" style={{color:'var(--ink-3)'}}>Salary</div><div className="ft-mono text-[15px] font-medium" style={{color:'var(--ink)'}}>{fmtUSD(member.salary)}/mo</div></div>
-              <div><div className="text-[10.5px] uppercase tracking-[0.1em] mb-1" style={{color:'var(--ink-3)'}}>Rate</div><div className="ft-mono text-[15px] font-medium" style={{color:'var(--ink)'}}>{fmtUSD(member.rate)}/h</div></div>
+              {/* Salary */}
+              <div>
+                <div className="text-[10.5px] uppercase tracking-[0.1em] mb-1" style={{color:'var(--ink-3)'}}>Salary</div>
+                {editing ? (
+                  <div className="flex items-center gap-1">
+                    <span className="ft-mono text-[12px]" style={{color:'var(--ink-3)'}}>$</span>
+                    <input className="ft-input ft-mono" style={{padding:'4px 6px',fontSize:14,width:'100%'}}
+                      type="number" value={editVals.salary} onChange={e=>updateVal('salary',e.target.value)}/>
+                    <span className="ft-mono text-[11px]" style={{color:'var(--ink-3)'}}>/ mo</span>
+                  </div>
+                ) : (
+                  <div className="ft-mono text-[15px] font-medium" style={{color:'var(--ink)'}}>{fmtUSD(editVals.salary)}/mo</div>
+                )}
+              </div>
+              {/* Rate */}
+              <div>
+                <div className="text-[10.5px] uppercase tracking-[0.1em] mb-1" style={{color:'var(--ink-3)'}}>Rate</div>
+                {editing ? (
+                  <div className="flex items-center gap-1">
+                    <span className="ft-mono text-[12px]" style={{color:'var(--ink-3)'}}>$</span>
+                    <input className="ft-input ft-mono" style={{padding:'4px 6px',fontSize:14,width:'100%'}}
+                      type="number" value={editVals.rate} onChange={e=>updateVal('rate',e.target.value)}/>
+                    <span className="ft-mono text-[11px]" style={{color:'var(--ink-3)'}}>/ h</span>
+                  </div>
+                ) : (
+                  <div className="ft-mono text-[15px] font-medium" style={{color:'var(--ink)'}}>{fmtUSD(editVals.rate)}/h</div>
+                )}
+              </div>
+              {/* Hours */}
               <div>
                 <div className="text-[10.5px] uppercase tracking-[0.1em] mb-1" style={{color:'var(--ink-3)'}}>Hours logged / capacity</div>
                 <div className="ft-mono text-[15px] font-medium" style={{color:'var(--ink)'}}>{member.hours}h / {capacity}h</div>
                 <div className="ft-bar-bg mt-1.5"><div className="ft-bar-fill" style={{width:`${Math.min(member.hours/capacity*100,100)}%`,background:'var(--positive)'}}/></div>
               </div>
-              <div><div className="text-[10.5px] uppercase tracking-[0.1em] mb-1" style={{color:'var(--ink-3)'}}>Earned</div><div className="ft-mono text-[15px] font-medium" style={{color:'var(--positive)'}}>{fmtUSD(member.earned)}</div></div>
+              {/* Earned */}
+              <div>
+                <div className="text-[10.5px] uppercase tracking-[0.1em] mb-1" style={{color:'var(--ink-3)'}}>Earned</div>
+                {editing ? (
+                  <div className="flex items-center gap-1">
+                    <span className="ft-mono text-[12px]" style={{color:'var(--ink-3)'}}>$</span>
+                    <input className="ft-input ft-mono" style={{padding:'4px 6px',fontSize:14,width:'100%'}}
+                      type="number" value={editVals.earned} onChange={e=>updateVal('earned',e.target.value)}/>
+                  </div>
+                ) : (
+                  <div className="ft-mono text-[15px] font-medium" style={{color:'var(--positive)'}}>{fmtUSD(editVals.earned)}</div>
+                )}
+              </div>
             </div>
           </section>
 
@@ -1804,11 +2419,24 @@ const EmployeeDrawer = ({ member, onClose }) => {
 const PayrollTab = () => {
   const [teamData, setTeamData] = React.useState(TEAM.map(m=>({...m})));
   const [selectedMember, setSelectedMember] = React.useState(null);
-  const update = (name,field,val) => setTeamData(p=>p.map(m=>m.name===name?{...m,[field]:+val||0}:m));
+  const [copiedId, setCopiedId] = React.useState(null);
+  const update = (name,field,val) => setTeamData(p=>p.map(m=>m.name===name?{...m,[field]:typeof val==='function'?val(m[field]):val}:m));
   const capacity = 160;
   const totalMonthly = teamData.reduce((s,m)=>s+m.total,0);
   const totalOT = teamData.reduce((s,m)=>s+m.ot,0);
-  const COLS = '1.8fr 1fr 1.3fr 0.8fr 1fr 0.9fr 1.2fr 0.4fr';
+  const COLS = '1.6fr 0.9fr 1.1fr 0.6fr 0.85fr 0.75fr 1fr 1.4fr 0.45fr';
+
+  const copyReq = (m) => {
+    navigator.clipboard.writeText(m.requisites.value).catch(()=>{});
+    setCopiedId(m.name);
+    setTimeout(()=>setCopiedId(null), 1500);
+  };
+
+  const reqIcon = (type) => {
+    if (type==='crypto') return <span className="ft-mono text-[10px] font-bold" style={{color:'var(--ink-3)'}}>₿</span>;
+    if (type==='fop') return <I.FileText size={12}/>;
+    return <I.CreditCard size={12}/>;
+  };
 
   return (
     <>
@@ -1821,44 +2449,74 @@ const PayrollTab = () => {
       <div className="ft-card overflow-hidden">
         <div className="grid gap-3 px-5 py-3.5 text-[10.5px] uppercase tracking-[0.1em] font-medium border-b"
           style={{color:'var(--ink-3)',borderColor:'var(--line)',background:'var(--bg-grain)',gridTemplateColumns:COLS}}>
-          <span>Name</span><span>Salary / Rate</span><span>Hours / Capacity</span><span>Overtime</span>
-          <span>Earned</span><span>Bonus</span><span>Total pay</span><span/>
+          <span>Name</span><span>Salary / Rate</span><span>Hours / Cap.</span><span>OT</span>
+          <span>Earned</span><span>Bonus</span><span>Total pay</span><span>Requisites</span><span className="text-center">Paid</span>
         </div>
-        {teamData.map(m=>(
-          <div key={m.name} className="ft-row ft-clickable grid gap-3 px-5 py-4 items-center border-b"
-            style={{borderColor:'var(--line)',gridTemplateColumns:COLS}}
-            onClick={()=>setSelectedMember(m)}>
-            <div className="flex items-center gap-3 min-w-0">
-              <Avatar name={m.name} size={32}/>
-              <div className="min-w-0">
-                <div className="text-[14px] font-medium truncate" style={{color:'var(--ink)'}}>{m.name}</div>
-                <div className="mt-0.5"><Badge tone={m.role==='Designer'?'accent':m.role==='PM'?'warn':'neutral'}>{m.role}</Badge></div>
+        {teamData.map(m=>{
+          const req = m.requisites;
+          const isCopied = copiedId===m.name;
+          return (
+            <div key={m.name} className="ft-row ft-clickable grid gap-3 px-5 py-3.5 items-center border-b"
+              style={{borderColor:'var(--line)',gridTemplateColumns:COLS, opacity: m.paid ? 0.6 : 1}}
+              onClick={()=>setSelectedMember(m)}>
+              <div className="flex items-center gap-2.5 min-w-0">
+                <Avatar name={m.name} size={30}/>
+                <div className="min-w-0">
+                  <div className="text-[13.5px] font-medium truncate" style={{color:'var(--ink)'}}>{m.name}</div>
+                  <div className="mt-0.5"><Badge tone={m.role==='Designer'?'accent':m.role==='PM'?'warn':'neutral'}>{m.role}</Badge></div>
+                </div>
+              </div>
+              <div>
+                <div className="ft-mono text-[13px] font-medium" style={{color:'var(--ink)'}}>{fmtUSD(m.salary)}</div>
+                <div className="text-[10.5px] ft-mono" style={{color:'var(--ink-3)'}}>{fmtUSD(m.rate)}/hr</div>
+              </div>
+              <div onClick={e=>e.stopPropagation()}>
+                <div className="ft-mono text-[12px]" style={{color:'var(--ink)'}}>{m.hours}h <span style={{color:'var(--ink-3)'}}>/ {capacity}h</span></div>
+                <div className="ft-bar-bg mt-1.5" style={{width:72}}>
+                  <div className="ft-bar-fill" style={{width:`${Math.min(m.hours/capacity*100,100)}%`,background:m.hours>=capacity?'var(--positive)':'var(--ink-3)'}}/>
+                </div>
+              </div>
+              <div onClick={e=>e.stopPropagation()}>
+                <input className="ft-input ft-mono" style={{width:52,padding:'4px 6px',fontSize:12}}
+                  defaultValue={m.ot||''} placeholder="—" onBlur={e=>update(m.name,'ot',+e.target.value||0)}/>
+              </div>
+              <div className="ft-mono text-[13px]" style={{color:'var(--ink)'}}>{fmtUSD(m.earned)}</div>
+              <div onClick={e=>e.stopPropagation()}>
+                <input className="ft-input ft-mono" style={{width:52,padding:'4px 6px',fontSize:12}}
+                  defaultValue={m.bonus||''} placeholder="—" onBlur={e=>update(m.name,'bonus',+e.target.value||0)}/>
+              </div>
+              <div className="ft-mono text-[13.5px] font-medium" style={{color:'var(--ink)'}}>{fmtUSD(m.total+(m.bonus||0))}</div>
+              <div onClick={e=>e.stopPropagation()}>
+                <div className="flex items-center gap-1.5 min-w-0">
+                  <span style={{color:'var(--ink-3)',flexShrink:0}}>{reqIcon(req.type)}</span>
+                  <span className="ft-mono text-[10.5px] truncate" style={{color:'var(--ink-2)',maxWidth:100}} title={req.value}>
+                    {req.label}
+                    {req.type==='crypto' ? ` ···${req.value.slice(-6)}` : req.type==='monobank' ? ` ···${req.value.slice(-4)}` : ''}
+                  </span>
+                  <button
+                    onClick={()=>copyReq(m)}
+                    className="p-1 rounded hover:bg-black/5 flex-shrink-0 transition-colors"
+                    style={{color: isCopied ? 'var(--positive)' : 'var(--ink-3)'}}
+                    title="Copy requisites">
+                    {isCopied ? <I.Check2 size={12}/> : <I.Copy size={12}/>}
+                  </button>
+                </div>
+              </div>
+              <div className="flex justify-center" onClick={e=>e.stopPropagation()}>
+                <button
+                  onClick={()=>update(m.name,'paid',v=>!v)}
+                  className="w-5 h-5 rounded flex items-center justify-center transition-all border"
+                  style={{
+                    background: m.paid ? 'var(--positive)' : 'transparent',
+                    borderColor: m.paid ? 'var(--positive)' : 'var(--line)',
+                    color: '#fff',
+                  }}>
+                  {m.paid && <I.Check2 size={12}/>}
+                </button>
               </div>
             </div>
-            <div>
-              <div className="ft-mono text-[13.5px] font-medium" style={{color:'var(--ink)'}}>{fmtUSD(m.salary)}</div>
-              <div className="text-[11px] ft-mono" style={{color:'var(--ink-3)'}}>{fmtUSD(m.rate)}/hr</div>
-            </div>
-            <div onClick={e=>e.stopPropagation()}>
-              <div className="ft-mono text-[12.5px]" style={{color:'var(--ink)'}}>{m.hours}h <span style={{color:'var(--ink-3)'}}>/ {capacity}h</span></div>
-              <div className="ft-bar-bg mt-1.5" style={{width:80}}>
-                <div className="ft-bar-fill" style={{width:`${Math.min(m.hours/capacity*100,100)}%`,background:m.hours>=capacity?'var(--positive)':'var(--ink-3)'}}/>
-              </div>
-            </div>
-            <div onClick={e=>e.stopPropagation()}>
-              <input className="ft-input ft-mono" style={{width:60,padding:'4px 8px',fontSize:12}}
-                defaultValue={m.ot||''} placeholder="—" onBlur={e=>update(m.name,'ot',e.target.value||0)}/>
-              <div className="text-[10px] mt-0.5 ft-mono" style={{color:'var(--ink-3)'}}>h</div>
-            </div>
-            <div className="ft-mono text-[13.5px]" style={{color:'var(--ink)'}}>{fmtUSD(m.earned)}</div>
-            <div onClick={e=>e.stopPropagation()}>
-              <input className="ft-input ft-mono" style={{width:60,padding:'4px 8px',fontSize:12}}
-                defaultValue={m.bonus||''} placeholder="—" onBlur={e=>update(m.name,'bonus',e.target.value||0)}/>
-            </div>
-            <div className="ft-mono text-[14px] font-medium" style={{color:'var(--ink)'}}>{fmtUSD(m.total+(m.bonus||0))}</div>
-            <button onClick={e=>{e.stopPropagation();}} className="p-1.5 rounded-md hover:bg-black/5 justify-self-end" style={{color:'var(--ink-3)'}}><I.Pencil size={13}/></button>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </>
   );
@@ -1870,12 +2528,12 @@ const PayrollTab = () => {
 
 // Extended team data with HR fields
 const TEAM = [
-  { name:'Alexander', salary:700,  rate:4,  hours:40, ot:0,  earned:164, bonus:0, total:700,  role:'Designer',  comment:'', birthday:'1994-03-15', startDate:'2022-01-10', absences:[] },
-  { name:'Anastasiia',salary:500,  rate:3,  hours:0,  ot:0,  earned:0,   bonus:0, total:500,  role:'Developer', comment:'', birthday:'1997-06-09', startDate:'2023-03-01', absences:[] },
-  { name:'Andrii',    salary:2000, rate:12, hours:0,  ot:0,  earned:0,   bonus:0, total:2000, role:'Developer', comment:'', birthday:'1990-11-22', startDate:'2021-06-15', absences:[] },
-  { name:'Max',       salary:600,  rate:4,  hours:38, ot:2,  earned:133, bonus:0, total:600,  role:'Developer', comment:'', birthday:'1995-08-04', startDate:'2022-09-01', absences:[] },
-  { name:'Tanya',     salary:700,  rate:4,  hours:0,  ot:0,  earned:0,   bonus:0, total:700,  role:'PM',        comment:'', birthday:'1992-12-28', startDate:'2021-01-05', absences:[] },
-  { name:'Yullia',    salary:550,  rate:3,  hours:17, ot:0,  earned:53,  bonus:0, total:550,  role:'Designer',  comment:'', birthday:'1998-06-16', startDate:'2023-09-12', absences:[] },
+  { name:'Alexander', salary:700,  rate:4,  hours:40, ot:0,  earned:164, bonus:0, total:700,  role:'Designer',  comment:'', birthday:'1994-03-15', startDate:'2022-01-10', absences:[], paid:false, requisites:{ type:'monobank', value:'4441 1111 2222 3333', label:'Monobank' } },
+  { name:'Anastasiia',salary:500,  rate:3,  hours:0,  ot:0,  earned:0,   bonus:0, total:500,  role:'Developer', comment:'', birthday:'1997-06-09', startDate:'2023-03-01', absences:[], paid:false, requisites:{ type:'fop', value:'ФОП Анастасія К. · ЄДРПОУ 3456789012', label:'ФОП' } },
+  { name:'Andrii',    salary:2000, rate:12, hours:0,  ot:0,  earned:0,   bonus:0, total:2000, role:'Developer', comment:'', birthday:'1990-11-22', startDate:'2021-06-15', absences:[], paid:true,  requisites:{ type:'crypto', value:'0x71C7656EC7ab88b098defB751B7401B5f6d8976F', label:'ETH' } },
+  { name:'Max',       salary:600,  rate:4,  hours:38, ot:2,  earned:133, bonus:0, total:600,  role:'Developer', comment:'', birthday:'1995-08-04', startDate:'2022-09-01', absences:[], paid:false, requisites:{ type:'monobank', value:'4441 9999 8888 7777', label:'Monobank' } },
+  { name:'Tanya',     salary:700,  rate:4,  hours:0,  ot:0,  earned:0,   bonus:0, total:700,  role:'PM',        comment:'', birthday:'1992-12-28', startDate:'2021-01-05', absences:[], paid:true,  requisites:{ type:'fop', value:'ФОП Тетяна М. · ЄДРПОУ 1234567890', label:'ФОП' } },
+  { name:'Yullia',    salary:550,  rate:3,  hours:17, ot:0,  earned:53,  bonus:0, total:550,  role:'Designer',  comment:'', birthday:'1998-06-16', startDate:'2023-09-12', absences:[], paid:false, requisites:{ type:'monobank', value:'4441 5555 6666 7777', label:'Monobank' } },
 ];
 
 // Calendar settings
@@ -2035,7 +2693,7 @@ const HRTab = ({ calSettings, setCalSettings }) => {
               <span className="ft-mono text-[16px]" style={{color:'var(--ink-3)'}}>{wd.hours} hrs</span>
             </div>
           </div>
-          <button className="ft-btn-ghost" onClick={()=>setShowCal(p=>!p)}><I.Filter size={13}/> Settings</button>
+          <button className="ft-btn-ghost" onClick={()=>setShowCal(p=>!p)}><I.Filter size={13}/> Edit schedule</button>
         </div>
         {showCal && (
           <div className="pt-4 border-t space-y-4" style={{borderColor:'var(--line)'}}>
@@ -2439,31 +3097,607 @@ const ModalDisconnect = ({ bankName, onConfirm, onClose }) => (
   </div>
 );
 
+// ─── Clockify Integration ───────────────────────────────────────────────────
+const CLOCKIFY_PROJECTS = [
+  { id:'cp1',  name:'Website Redesign',      autoMatch:'Pondid',           autoMatchId:1  },
+  { id:'cp2',  name:'Q3 Marketing',          autoMatch:null,               autoMatchId:null },
+  { id:'cp3',  name:'Internal Meetings',     autoMatch:null,               autoMatchId:null },
+  { id:'cp4',  name:'Mobile App Dev',        autoMatch:'Loomside Mobile',  autoMatchId:6  },
+  { id:'cp5',  name:'Brand Guidelines',      autoMatch:null,               autoMatchId:null },
+  { id:'cp6',  name:'Vanta Onboarding',      autoMatch:'Vanta Onboarding', autoMatchId:7  },
+  { id:'cp7',  name:'Analytics Dashboard',   autoMatch:null,               autoMatchId:null },
+  { id:'cp8',  name:'API Integration',       autoMatch:null,               autoMatchId:null },
+  { id:'cp9',  name:'Design Audit',          autoMatch:null,               autoMatchId:null },
+  { id:'cp10', name:'Marble Reports',        autoMatch:'Marble Analytics', autoMatchId:8  },
+  { id:'cp11', name:'Sprint Planning',       autoMatch:null,               autoMatchId:null },
+  { id:'cp12', name:'Orbit Dashboard',       autoMatch:'Orbit CRM',        autoMatchId:9  },
+  { id:'cp13', name:'Fold Identity',         autoMatch:'Fold Brand Identity', autoMatchId:10 },
+  { id:'cp14', name:'Stride iOS',            autoMatch:'Stride Mobile App',autoMatchId:11 },
+  { id:'cp15', name:'Admin & Operations',    autoMatch:null,               autoMatchId:null },
+];
+
+const Toggle = ({ value, onChange, label, sub }) => (
+  <div className="flex items-center justify-between gap-4 py-3.5 border-b last:border-0" style={{borderColor:'var(--line)'}}>
+    <div className="flex-1 min-w-0">
+      <div className="text-[13.5px] font-medium" style={{color:'var(--ink)'}}>{label}</div>
+      {sub && <div className="text-[12px] mt-0.5" style={{color:'var(--ink-3)'}}>{sub}</div>}
+    </div>
+    <button
+      onClick={()=>onChange(!value)}
+      className="relative shrink-0 transition-colors"
+      style={{width:40,height:22,borderRadius:99,background:value?'var(--positive)':'var(--line-2)',border:'none',cursor:'pointer',padding:0}}>
+      <span className="absolute top-[3px] transition-all"
+        style={{left:value?'calc(100% - 19px)':'3px',width:16,height:16,borderRadius:'50%',background:'#fff',display:'block',boxShadow:'0 1px 3px rgba(0,0,0,0.2)'}}/>
+    </button>
+  </div>
+);
+
+// ─── Clockify Connect Modal (API key flow) ───────────────────────────────────
+const ClockifyConnectModal = ({ onClose, onConnected }) => {
+  const [apiKey, setApiKey] = React.useState('');
+  const [step, setStep] = React.useState('input'); // input | validating | success | error
+  const [showKey, setShowKey] = React.useState(false);
+
+  const validate = () => {
+    if (!apiKey.trim()) return;
+    setStep('validating');
+    setTimeout(() => {
+      if (apiKey.trim().length > 0) { setStep('success'); }
+      else { setStep('error'); }
+    }, 1400);
+  };
+
+  return (
+    <div className="ft-overlay" onClick={onClose} style={{zIndex:300}}>
+      <div className="ft-modal-panel ft-card-2 w-full max-w-[500px] p-7" onClick={e=>e.stopPropagation()} style={{borderRadius:16}}>
+        <div className="flex items-start justify-between mb-6">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center text-[20px]" style={{background:'var(--bg-grain)',border:'1px solid var(--line)'}}>⏱</div>
+            <div>
+              <div className="ft-serif text-[20px] font-medium" style={{color:'var(--ink)'}}>Connect Clockify</div>
+              <div className="text-[12px] mt-0.5" style={{color:'var(--ink-3)'}}>via API key</div>
+            </div>
+          </div>
+          <button onClick={onClose} className="p-1.5 rounded-md hover:bg-black/5" style={{color:'var(--ink-3)'}}><I.X size={16}/></button>
+        </div>
+
+        {(step === 'input' || step === 'error') && (<>
+          {/* How to find API key */}
+          <div className="rounded-xl p-4 mb-5 space-y-2.5" style={{background:'var(--bg-grain)',border:'1px solid var(--line)'}}>
+            <div className="text-[11.5px] font-semibold mb-1" style={{color:'var(--ink-2)'}}>How to get your API key</div>
+            {[
+              ['1', 'Open Clockify in your browser'],
+              ['2', 'Click your avatar → Profile Settings'],
+              ['3', 'Scroll to the bottom — find "API key"'],
+              ['4', 'Click "Generate" if empty, then copy it'],
+            ].map(([n, t]) => (
+              <div key={n} className="flex items-start gap-2.5">
+                <span className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5"
+                  style={{background:'var(--ink)',color:'var(--bg)'}}>{n}</span>
+                <span className="text-[12.5px]" style={{color:'var(--ink-2)'}}>{t}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Key input */}
+          <div className="mb-4">
+            <label className="text-[11px] uppercase tracking-[0.1em] font-medium block mb-2" style={{color:'var(--ink-3)'}}>API Key</label>
+            <div className="relative">
+              <input
+                className="ft-input ft-mono w-full"
+                type={showKey ? 'text' : 'password'}
+                placeholder="Paste your Clockify API key…"
+                value={apiKey}
+                onChange={e=>{ setApiKey(e.target.value); if(step==='error') setStep('input'); }}
+                style={{paddingRight:40,letterSpacing: showKey ? 'normal' : '0.1em'}}
+                autoFocus
+              />
+              <button type="button" onClick={()=>setShowKey(v=>!v)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1"
+                style={{background:'none',border:'none',cursor:'pointer',color:'var(--ink-3)'}}>
+                {showKey ? <I.EyeOff size={14}/> : <I.Eye size={14}/>}
+              </button>
+            </div>
+            {step === 'error' && (
+              <div className="flex items-center gap-1.5 mt-2 text-[12px]" style={{color:'var(--negative)'}}>
+                <I.AlertCircle size={13}/> Invalid API key — please check and try again
+              </div>
+            )}
+            <div className="text-[11.5px] mt-2" style={{color:'var(--ink-3)'}}>
+              Your key is stored securely and only used to sync data with Monira.
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-2">
+            <button className="ft-btn-ghost" onClick={onClose}>Cancel</button>
+            <button className="ft-btn-primary" onClick={validate} disabled={!apiKey.trim()}>
+              <I.LinkIcon size={14}/> Connect
+            </button>
+          </div>
+        </>)}
+
+        {step === 'validating' && (
+          <div className="py-8 flex flex-col items-center gap-4">
+            <div className="w-10 h-10 rounded-full border-2 border-t-transparent animate-spin" style={{borderColor:'var(--accent)'}}/>
+            <div className="text-[13.5px] font-medium" style={{color:'var(--ink)'}}>Validating API key…</div>
+            <div className="text-[12px]" style={{color:'var(--ink-3)'}}>Connecting to Clockify workspace</div>
+          </div>
+        )}
+
+        {step === 'success' && (
+          <div className="py-6 flex flex-col items-center gap-4">
+            <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{background:'var(--positive-soft)'}}>
+              <I.Check2 size={24} style={{color:'var(--positive)'}}/>
+            </div>
+            <div className="text-center">
+              <div className="ft-serif text-[18px] font-medium mb-1" style={{color:'var(--ink)'}}>Connected!</div>
+              <div className="text-[12.5px]" style={{color:'var(--ink-3)'}}>Clockify workspace found: <span className="font-medium" style={{color:'var(--ink)'}}>Main Workspace</span></div>
+            </div>
+            <button className="ft-btn-primary" onClick={()=>{ onConnected(); }}>
+              Configure integration <I.ChevronRight size={14}/>
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// ─── Clockify Config Modal (after connect) ───────────────────────────────────
+// Custom select for data mapping — truncates displayed value with CSS, full text in dropdown
+const MappingSelect = ({ value, onChange, projects }) => {
+  const [open, setOpen] = React.useState(false);
+  const [dropUp, setDropUp] = React.useState(false);
+  const ref = React.useRef();
+  const btnRef = React.useRef();
+
+  React.useEffect(() => {
+    if (!open) return;
+    const handler = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [open]);
+
+  const handleOpen = () => {
+    if (btnRef.current) {
+      const rect = btnRef.current.getBoundingClientRect();
+      const spaceBelow = window.innerHeight - rect.bottom;
+      setDropUp(spaceBelow < 240);
+    }
+    setOpen(o => !o);
+  };
+
+  const activeProjects = projects.filter(p => p.status === 'Active');
+
+  const getLabel = (v) => {
+    if (v === 'create') return 'Create as new';
+    if (v === 'ignore') return 'Ignore';
+    const pid = +v.replace('link:', '');
+    const p = activeProjects.find(p => p.id === pid);
+    return p ? p.name : v;
+  };
+
+  const isIgnore = value === 'ignore';
+  const select = (v) => { onChange(v); setOpen(false); };
+
+  return (
+    <div ref={ref} style={{position:'relative', width:'100%'}}>
+      <button
+        ref={btnRef}
+        type="button"
+        onClick={handleOpen}
+        style={{
+          width:'100%', height:32, display:'flex', alignItems:'center', justifyContent:'space-between',
+          padding:'0 8px 0 10px', borderRadius:8, fontSize:12, cursor:'pointer', gap:4,
+          background:'var(--surface)', border:'1px solid var(--line)',
+          color: isIgnore ? 'var(--ink-3)' : 'var(--ink)',
+        }}>
+        <span style={{overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', flex:1, textAlign:'left'}}>
+          {getLabel(value)}
+        </span>
+        <I.ChevronDown size={12} style={{flexShrink:0, color:'var(--ink-3)', transform: open ? 'rotate(180deg)' : 'none', transition:'transform 150ms'}}/>
+      </button>
+
+      {open && (
+        <div style={{
+          position:'fixed',
+          ...(dropUp
+            ? { bottom: window.innerHeight - btnRef.current.getBoundingClientRect().top + 4 }
+            : { top: btnRef.current.getBoundingClientRect().bottom + 4 }),
+          left: btnRef.current.getBoundingClientRect().left,
+          width: btnRef.current.getBoundingClientRect().width,
+          zIndex:9999,
+          background:'var(--surface)', border:'1px solid var(--line)',
+          borderRadius:10, boxShadow:'0 8px 24px rgba(28,24,20,0.14)',
+          display:'flex', flexDirection:'column', maxHeight:220,
+        }}>
+          <div style={{overflowY:'auto', flex:1}}>
+            <div style={{padding:'5px 10px 3px', fontSize:10, textTransform:'uppercase', letterSpacing:'0.1em', color:'var(--ink-3)', fontWeight:500, position:'sticky', top:0, background:'var(--surface)', borderBottom:'1px solid var(--line)'}}>
+              Existing projects
+            </div>
+            {activeProjects.map(p => {
+              const v = `link:${p.id}`;
+              const active = value === v;
+              return (
+                <button key={p.id} type="button"
+                  onMouseDown={e=>{ e.preventDefault(); select(v); }}
+                  style={{
+                    width:'100%', padding:'6px 10px', fontSize:12, textAlign:'left', display:'flex', alignItems:'center', justifyContent:'space-between',
+                    background: active ? 'var(--accent-soft)' : 'transparent',
+                    color: active ? 'var(--accent-2)' : 'var(--ink-2)',
+                    border:'none', cursor:'pointer', gap:6,
+                  }}>
+                  <span style={{overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap'}}>{p.name}</span>
+                  {active && <I.Check2 size={12} style={{flexShrink:0}}/>}
+                </button>
+              );
+            })}
+          </div>
+          <div style={{borderTop:'1px solid var(--line)', flexShrink:0}}>
+            {[{v:'create',l:'Create as new'},{v:'ignore',l:'Ignore'}].map(({v,l})=>{
+              const active = value === v;
+              return (
+                <button key={v} type="button"
+                  onMouseDown={e=>{ e.preventDefault(); select(v); }}
+                  style={{
+                    width:'100%', padding:'6px 10px', fontSize:12, textAlign:'left', display:'flex', alignItems:'center', justifyContent:'space-between',
+                    background: active ? 'var(--accent-soft)' : 'transparent',
+                    color: active ? 'var(--accent-2)' : 'var(--ink-2)',
+                    border:'none', cursor:'pointer',
+                  }}>
+                  {l}
+                  {active && <I.Check2 size={12}/>}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+const ClockifyConfigModal = ({ onClose, onSaved }) => {
+  const [step, setStep] = React.useState('config'); // config | syncing | done
+  const [workspace, setWorkspace] = React.useState('main');
+  const [syncTime, setSyncTime] = React.useState(true);
+  const [syncProjects, setSyncProjects] = React.useState(true);
+  const [mappings, setMappings] = React.useState(() =>
+    CLOCKIFY_PROJECTS.map(p => ({
+      ...p,
+      action: p.autoMatch ? `link:${p.autoMatchId}` : p.id==='cp3' ? 'ignore' : 'create',
+    }))
+  );
+  const [progress, setProgress] = React.useState(0);
+
+  // Data mapping: search + filter + pagination
+  const MAP_PAGE_SIZE = 8;
+  const [mapSearch, setMapSearch] = React.useState('');
+  const [mapFilter, setMapFilter] = React.useState('all'); // all | matched | unmatched | ignored
+  const [mapPage, setMapPage] = React.useState(1);
+  // Manual add
+  const [addingManual, setAddingManual] = React.useState(false);
+  const [manualName, setManualName] = React.useState('');
+  const addManual = () => {
+    if (!manualName.trim()) return;
+    const newId = 'manual_' + Date.now();
+    setMappings(prev => [...prev, { id: newId, name: manualName.trim(), autoMatch: null, autoMatchId: null, action: 'create' }]);
+    setManualName('');
+    setAddingManual(false);
+  };
+
+  const setAction = (id, val) => setMappings(prev => prev.map(m => m.id===id ? {...m, action:val} : m));
+
+  const importAllUnmapped = () => {
+    setMappings(prev => prev.map(m => (!m.autoMatch && m.action!=='ignore') ? {...m, action:'create'} : m));
+  };
+
+  const filteredMappings = React.useMemo(() => {
+    return mappings.filter(m => {
+      const matchesSearch = m.name.toLowerCase().includes(mapSearch.toLowerCase());
+      const matchesFilter =
+        mapFilter === 'all' ? true :
+        mapFilter === 'matched' ? !!m.autoMatch :
+        mapFilter === 'unmatched' ? (!m.autoMatch && m.action !== 'ignore') :
+        mapFilter === 'ignored' ? m.action === 'ignore' : true;
+      return matchesSearch && matchesFilter;
+    });
+  }, [mappings, mapSearch, mapFilter]);
+
+  const mapTotalPages = Math.ceil(filteredMappings.length / MAP_PAGE_SIZE);
+  const paginatedMappings = filteredMappings.slice((mapPage-1)*MAP_PAGE_SIZE, mapPage*MAP_PAGE_SIZE);
+
+  React.useEffect(() => { setMapPage(1); }, [mapSearch, mapFilter]);
+
+  const runSync = () => {
+    setStep('syncing');
+    setProgress(0);
+    let p = 0;
+    const iv = setInterval(()=>{
+      p += Math.random()*18 + 4;
+      if(p >= 100) { p=100; clearInterval(iv); setTimeout(()=>setStep('done'), 400); }
+      setProgress(Math.min(p,100));
+    }, 180);
+  };
+
+  const actionLabel = (action) => {
+    if (!action) return '—';
+    if (action === 'ignore') return 'Do not import';
+    if (action === 'create') return 'Create as new';
+    const pid = action.replace('link:','');
+    const proj = PROJECTS.find(p=>p.id===+pid);
+    return proj ? proj.name : 'Linked';
+  };
+
+  const unmappedCount = mappings.filter(m=>!m.autoMatch && m.action!=='ignore' && m.action==='create').length;
+  const matchedCount = mappings.filter(m=>m.autoMatch).length;
+  const ignoredCount = mappings.filter(m=>m.action==='ignore').length;
+
+  return (
+    <div className="ft-overlay" onClick={onClose} style={{zIndex:300}}>
+      <div className="ft-modal-panel ft-card-2 w-full max-w-[660px]" onClick={e=>e.stopPropagation()} style={{borderRadius:16,overflow:'hidden'}}>
+
+        {/* Header */}
+        <div className="flex items-center justify-between px-7 py-5 border-b" style={{borderColor:'var(--line)'}}>
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center text-[18px]" style={{background:'var(--bg-grain)',border:'1px solid var(--line)'}}>⏱</div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="ft-serif text-[18px] font-medium" style={{color:'var(--ink)'}}>Clockify Configuration</span>
+                <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full" style={{background:'#dcfce7',color:'#15803d'}}>● Connected</span>
+              </div>
+              <div className="text-[11.5px] mt-0.5" style={{color:'var(--ink-3)'}}>API key · workspace synced 3 min ago</div>
+            </div>
+          </div>
+          <button onClick={onClose} className="p-1.5 rounded-md hover:bg-black/5" style={{color:'var(--ink-3)'}}><I.X size={16}/></button>
+        </div>
+
+        {step === 'config' && (
+          <>
+            <div className="px-7 py-5 space-y-5 overflow-y-auto" style={{maxHeight:'72vh'}}>
+              {/* General */}
+              <section>
+                <div className="text-[11px] uppercase tracking-[0.12em] font-medium mb-3" style={{color:'var(--ink-3)'}}>General</div>
+                <div className="ft-card p-4 space-y-0">
+                  <div className="pb-3.5 border-b" style={{borderColor:'var(--line)'}}>
+                    <label className="text-[11px] uppercase tracking-[0.1em] font-medium block mb-2" style={{color:'var(--ink-3)'}}>Workspace</label>
+                    <select className="ft-select w-full" value={workspace} onChange={e=>setWorkspace(e.target.value)}>
+                      <option value="main">Main Workspace</option>
+                      <option value="agency">Design Agency</option>
+                      <option value="freelance">Freelance Projects</option>
+                    </select>
+                  </div>
+                  <Toggle value={syncTime} onChange={setSyncTime}
+                    label="Sync Time Entries"
+                    sub="Automatically import user hours based on email matching"/>
+                  <Toggle value={syncProjects} onChange={setSyncProjects}
+                    label="Sync Projects"
+                    sub="Import and map Clockify projects to Monira"/>
+                </div>
+              </section>
+
+              {/* Data mapping */}
+              {syncProjects && (
+                <section>
+                  {/* Section header */}
+                  <div className="flex items-center justify-between mb-3">
+                    <div>
+                      <span className="text-[11px] uppercase tracking-[0.12em] font-medium" style={{color:'var(--ink-3)'}}>Data mapping</span>
+                      <span className="ml-2 text-[11px] ft-mono" style={{color:'var(--ink-3)'}}>
+                        {mappings.length} projects · {matchedCount} auto-matched · {ignoredCount} ignored
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Search + filter toolbar */}
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="relative flex-1">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2" style={{color:'var(--ink-3)'}}><I.Search size={13}/></span>
+                      <input className="ft-input w-full" style={{paddingLeft:30,fontSize:12.5,height:34}}
+                        placeholder="Search Clockify projects…"
+                        value={mapSearch} onChange={e=>setMapSearch(e.target.value)}/>
+                    </div>
+                    <select className="ft-select" style={{height:34,fontSize:12.5,minWidth:148}}
+                      value={mapFilter} onChange={e=>setMapFilter(e.target.value)}>
+                      <option value="all">All projects</option>
+                      <option value="unmatched">Needs review</option>
+                      <option value="matched">Auto-matched</option>
+                      <option value="ignored">Ignored</option>
+                    </select>
+                  </div>
+
+                  {/* Table */}
+                  <div className="ft-card overflow-hidden">
+                    <div className="grid px-4 py-2.5 text-[10.5px] uppercase tracking-[0.1em] font-medium border-b"
+                      style={{color:'var(--ink-3)',borderColor:'var(--line)',background:'var(--bg-grain)',gridTemplateColumns:'minmax(0,1fr) 210px'}}>
+                      <span>Clockify project</span><span>Action in Monira</span>
+                    </div>
+
+                    {paginatedMappings.length === 0 ? (
+                      <div className="px-4 py-8 text-center text-[12.5px]" style={{color:'var(--ink-3)'}}>
+                        No projects match your filter
+                      </div>
+                    ) : paginatedMappings.map(m=>(
+                      <div key={m.id} className="grid px-4 py-3 border-b last:border-0 items-center gap-3"
+                        style={{borderColor:'var(--line)',gridTemplateColumns:'minmax(0,1fr) 210px',
+                          opacity: m.action==='ignore' ? 0.5 : 1}}>
+                        <div className="flex items-center gap-2 min-w-0">
+                          <span className="text-[13px] font-medium truncate" style={{color:'var(--ink)'}}>{m.name}</span>
+                          {m.autoMatch && (
+                            <span className="shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded-full" style={{background:'#eff6ff',color:'#2563eb'}}>Auto</span>
+                          )}
+                        </div>
+                        <MappingSelect
+                          value={m.action}
+                          onChange={val=>setAction(m.id,val)}
+                          projects={PROJECTS}
+                        />
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Pagination */}
+                  {mapTotalPages > 1 && (
+                    <div className="flex items-center justify-between mt-3">
+                      <span className="text-[11.5px]" style={{color:'var(--ink-3)'}}>
+                        {(mapPage-1)*MAP_PAGE_SIZE+1}–{Math.min(mapPage*MAP_PAGE_SIZE, filteredMappings.length)} of {filteredMappings.length}
+                      </span>
+                      <div className="flex items-center gap-1">
+                        <button className="ft-btn-ghost" style={{padding:'4px 8px'}} disabled={mapPage===1} onClick={()=>setMapPage(p=>p-1)}>
+                          <I.ChevronLeft size={13}/>
+                        </button>
+                        {Array.from({length:mapTotalPages},(_,i)=>i+1).map(n=>(
+                          <button key={n} onClick={()=>setMapPage(n)}
+                            className="w-7 h-7 rounded-md text-[12px] font-medium transition-colors"
+                            style={{background:n===mapPage?'var(--ink)':'transparent',color:n===mapPage?'var(--bg)':'var(--ink-3)'}}>
+                            {n}
+                          </button>
+                        ))}
+                        <button className="ft-btn-ghost" style={{padding:'4px 8px'}} disabled={mapPage===mapTotalPages} onClick={()=>setMapPage(p=>p+1)}>
+                          <I.ChevronRight size={13}/>
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {unmappedCount > 0 && (
+                    <div className="flex items-center gap-2 mt-2 text-[12px]" style={{color:'var(--ink-3)'}}>
+                      <I.AlertCircle size={13}/>
+                      <span>{unmappedCount} project{unmappedCount!==1?'s':''} will be created as new in Monira</span>
+                    </div>
+                  )}
+
+                </section>
+              )}
+            </div>
+            <div className="flex items-center justify-between px-7 py-4 border-t" style={{borderColor:'var(--line)',background:'var(--bg-grain)'}}>
+              <button className="ft-btn-ghost" onClick={onClose}>Cancel</button>
+              <button className="ft-btn-primary" onClick={runSync}>
+                <I.Zap size={14}/> Save & Sync
+              </button>
+            </div>
+          </>
+        )}
+
+        {step === 'syncing' && (
+          <div className="px-7 py-12 flex flex-col items-center gap-5">
+            <div className="w-12 h-12 rounded-full flex items-center justify-center text-[24px]" style={{background:'var(--bg-grain)',border:'1px solid var(--line)'}}>⏱</div>
+            <div className="text-center">
+              <div className="ft-serif text-[18px] font-medium mb-1" style={{color:'var(--ink)'}}>Syncing with Clockify…</div>
+              <div className="text-[13px]" style={{color:'var(--ink-3)'}}>Importing time entries and mapping projects</div>
+            </div>
+            <div className="w-full max-w-sm">
+              <div className="flex items-center justify-between text-[12px] ft-mono mb-2" style={{color:'var(--ink-3)'}}>
+                <span>Progress</span><span>{Math.round(progress)}%</span>
+              </div>
+              <div className="ft-bar-bg" style={{height:6,borderRadius:99}}>
+                <div className="ft-bar-fill" style={{width:`${progress}%`,background:'var(--positive)',transition:'width 0.2s ease',borderRadius:99}}/>
+              </div>
+            </div>
+            <div className="space-y-1.5 text-[12px] w-full max-w-sm">
+              {[
+                {label:'Validating API key', done: progress>15},
+                {label:'Fetching workspace data', done: progress>35},
+                {label:'Mapping projects', done: progress>55},
+                {label:'Importing time entries', done: progress>75},
+                {label:'Finalizing sync', done: progress>92},
+              ].map((s,i)=>(
+                <div key={i} className="flex items-center gap-2.5" style={{color:s.done?'var(--positive)':'var(--ink-3)'}}>
+                  {s.done ? <I.Check2 size={13}/> : <span className="w-3.5 h-3.5 rounded-full border-2 inline-block" style={{borderColor:'var(--line-2)'}}/>}
+                  <span>{s.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {step === 'done' && (
+          <div className="px-7 py-12 flex flex-col items-center gap-5">
+            <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{background:'var(--positive-soft)'}}>
+              <I.Check2 size={28} style={{color:'var(--positive)'}}/>
+            </div>
+            <div className="text-center">
+              <div className="ft-serif text-[20px] font-medium mb-1.5" style={{color:'var(--ink)'}}>Sync complete</div>
+              <div className="text-[13px]" style={{color:'var(--ink-3)'}}>
+                {mappings.filter(m=>m.action!=='ignore').length} projects synced · {syncTime ? 'Time entries imported' : 'Time sync disabled'}
+              </div>
+            </div>
+            <div className="ft-card p-4 w-full max-w-sm space-y-2">
+              {mappings.filter(m=>m.action!=='ignore').map(m=>(
+                <div key={m.id} className="flex items-center justify-between text-[12.5px]">
+                  <span style={{color:'var(--ink-2)'}}>{m.name}</span>
+                  <span className="ft-mono text-[11.5px]" style={{color:'var(--ink-3)'}}>{actionLabel(m.action)}</span>
+                </div>
+              ))}
+            </div>
+            <button className="ft-btn-primary" onClick={()=>{onSaved();onClose();}}>Done</button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
 // ─── Settings page ─────────────────────────────────────────────────────────────
-const SettingsView = ({ banks, onConnect, onDisconnectStart }) => {
+const SettingsView = ({ banks, onConnect, onDisconnectStart, setView }) => {
+  const [clockifyModal, setClockifyModal] = React.useState(null); // null | 'connect' | 'config'
+  const [clockifyConnected, setClockifyConnected] = React.useState(false);
+  const [clockifyLastSync, setClockifyLastSync] = React.useState(null);
   const defs = [
     { id:'boa',  name:'Bank of America', logo:'🏦', tag:'Plaid',     sync:'2 min ago' },
     { id:'mono', name:'Monobank',         logo:'🐱', tag:'API token', sync:'5 min ago' },
   ];
   const anyConnected = Object.values(banks).some(Boolean);
+
+  const integrations = [
+    {
+      id: 'clockify',
+      name: 'Clockify',
+      logo: '⏱',
+      desc: 'Track time entries, sync projects and map hours to Monira.',
+      tag: 'API key',
+      connected: clockifyConnected,
+      sync: clockifyLastSync,
+      onConfigure: () => setClockifyModal('config'),
+      onConnect: () => setClockifyModal('connect'),
+      onDisconnect: () => { setClockifyConnected(false); setClockifyLastSync(null); },
+    },
+  ];
+
   return (
     <div className="ft-fade">
-      <TopBar title="Settings" subtitle="Settings." period={null}/>
+      {clockifyModal === 'connect' && (
+        <ClockifyConnectModal
+          onClose={()=>setClockifyModal(null)}
+          onConnected={()=>{ setClockifyConnected(true); setClockifyModal('config'); }}
+        />
+      )}
+      {clockifyModal === 'config' && (
+        <ClockifyConfigModal
+          onClose={()=>setClockifyModal(null)}
+          onSaved={()=>{ setClockifyLastSync('just now'); }}
+        />
+      )}
+      <TopBar title="Settings" subtitle="Manage integrations and workspace configuration." period={null}/>
+
+      {/* Bank accounts */}
       <div className="ft-card overflow-hidden mb-5">
         <div className="flex items-center justify-between px-5 py-4 border-b" style={{borderColor:'var(--line)'}}>
           <div>
-            <div className="text-[14px] font-semibold" style={{color:'var(--ink)'}}>Connected accounts</div>
+            <div className="text-[14px] font-semibold" style={{color:'var(--ink)'}}>Bank accounts</div>
             <div className="text-[12px] mt-0.5" style={{color:'var(--ink-3)'}}>Manage your bank integrations</div>
           </div>
           {anyConnected&&<button className="ft-btn-ghost" style={{fontSize:12,padding:'6px 12px'}} onClick={onConnect}><I.Plus size={13}/> Add bank</button>}
         </div>
-        {defs.map((bank,idx)=>{
+        {defs.map((bank)=>{
           const connected=banks[bank.id];
           return (
             <div key={bank.id} className="flex items-center gap-4 px-5 py-4 border-b last:border-0" style={{borderColor:'var(--line)'}}>
-              <div className="text-[28px] shrink-0">{bank.logo}</div>
+              <div className="text-[26px] shrink-0">{bank.logo}</div>
               <div className="flex-1 min-w-0">
-                <div className="text-[14px] font-semibold" style={{color:'var(--ink)'}}>{bank.name}</div>
+                <div className="text-[13.5px] font-semibold" style={{color:'var(--ink)'}}>{bank.name}</div>
                 {connected?(
                   <div className="flex items-center gap-2 mt-0.5">
                     <div className="w-1.5 h-1.5 rounded-full" style={{background:'var(--positive)'}}/>
@@ -2477,7 +3711,7 @@ const SettingsView = ({ banks, onConnect, onDisconnectStart }) => {
                 )}
               </div>
               {connected?(
-                <button className="ft-btn-ghost" style={{fontSize:12,padding:'6px 12px',color:'var(--negative)',borderColor:'var(--negative)'}} onClick={()=>onDisconnectStart(bank.id,bank.name)}>
+                <button className="ft-btn-ghost" style={{fontSize:12,padding:'6px 12px',color:'var(--negative)'}} onClick={()=>onDisconnectStart(bank.id,bank.name)}>
                   <I.Unlink size={13}/> Disconnect
                 </button>
               ):(
@@ -2496,7 +3730,60 @@ const SettingsView = ({ banks, onConnect, onDisconnectStart }) => {
         )}
       </div>
 
-      {/* Other settings — placeholder */}
+      {/* Integrations */}
+      <div className="ft-card overflow-hidden mb-5">
+        <div className="px-5 py-4 border-b" style={{borderColor:'var(--line)'}}>
+          <div className="text-[14px] font-semibold" style={{color:'var(--ink)'}}>Integrations</div>
+          <div className="text-[12px] mt-0.5" style={{color:'var(--ink-3)'}}>Connect third-party tools to automate your workflow</div>
+        </div>
+        {integrations.map(intg=>(
+          <div key={intg.id} className="flex items-center gap-4 px-5 py-4 border-b last:border-0" style={{borderColor:'var(--line)'}}>
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center text-[22px] shrink-0"
+              style={{background:'var(--bg-grain)',border:'1px solid var(--line)'}}>{intg.logo}</div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2">
+                <span className="text-[13.5px] font-semibold" style={{color:'var(--ink)'}}>{intg.name}</span>
+                {intg.connected && (
+                  <span className="text-[10.5px] font-semibold px-1.5 py-0.5 rounded-full" style={{background:'#dcfce7',color:'#15803d'}}>Connected</span>
+                )}
+              </div>
+              <div className="text-[12px] mt-0.5" style={{color:'var(--ink-3)'}}>{intg.desc}</div>
+              {intg.connected && (
+                <div className="text-[11.5px] ft-mono mt-1" style={{color:'var(--ink-3)'}}>via {intg.tag} · Last sync: {intg.sync}</div>
+              )}
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              {intg.connected ? (
+                <>
+                  <button className="ft-btn-ghost" style={{fontSize:12,padding:'6px 12px'}} onClick={intg.onConfigure}>
+                    <I.Settings size={13}/> Configure
+                  </button>
+                  <button className="ft-btn-ghost" style={{fontSize:12,padding:'6px 12px',color:'var(--negative)'}} onClick={intg.onDisconnect}>
+                    <I.Unlink size={13}/> Disconnect
+                  </button>
+                </>
+              ) : (
+                <button className="ft-btn-primary" style={{fontSize:12,padding:'7px 13px'}} onClick={intg.onConnect}>
+                  <I.LinkIcon size={13}/> Connect
+                </button>
+              )}
+            </div>
+          </div>
+        ))}
+        {/* Coming soon */}
+        {[{logo:'📊',name:'Google Sheets'},{logo:'🔔',name:'Slack Notifications'},{logo:'📧',name:'Email Reports'}].map(c=>(
+          <div key={c.name} className="flex items-center gap-4 px-5 py-3.5 border-b last:border-0" style={{borderColor:'var(--line)',opacity:0.45}}>
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center text-[20px] shrink-0"
+              style={{background:'var(--bg-grain)',border:'1px solid var(--line)'}}>{c.logo}</div>
+            <div className="flex-1">
+              <span className="text-[13px] font-medium" style={{color:'var(--ink)'}}>{c.name}</span>
+              <span className="ml-2 text-[10.5px] px-1.5 py-0.5 rounded-full font-medium" style={{background:'var(--bg-grain)',border:'1px solid var(--line)',color:'var(--ink-3)'}}>Coming soon</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Other settings */}
       <div className="ft-card overflow-hidden" style={{opacity:0.45}}>
         {[['General','Company name, timezone, currency'],['Team & permissions','Roles, invitations, access levels'],['Billing','Plan, invoices, payment method']].map(([t,s],i,arr)=>(
           <div key={t} className="px-5 py-4" style={{borderBottom:i<arr.length-1?'1px solid var(--line)':'none'}}>
@@ -2556,13 +3843,14 @@ function App() {
           {view==='projects'  && <Projects/>}
           {view==='team'      && <Team/>}
           {view==='cashflow'  && <Cashflow/>}
-          {view==='settings'  && <SettingsView banks={banks} onConnect={openBankConnect} onDisconnectStart={startDisconnect}/>}
+          {view==='settings'  && <SettingsView banks={banks} onConnect={openBankConnect} onDisconnectStart={startDisconnect} setView={setView}/>}
         </div>
       </main>
     </div>
   );
 }
 ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+
 </script>
 </body>
 </html>
