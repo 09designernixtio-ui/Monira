@@ -52,8 +52,8 @@
   }
   .ft-serif { font-family: 'Inter', system-ui, sans-serif; font-weight: 600; letter-spacing: -0.02em; }
   .ft-mono  { font-family: 'Inter', system-ui, sans-serif; font-feature-settings: "tnum"; letter-spacing: -0.02em; }
-  .ft-card { background: var(--surface); border: none; border-radius: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.05); }
-  .ft-card-2 { background: var(--surface-2); border: none; border-radius: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+  .ft-card { background: var(--surface); border: none; border-radius: 14px; }
+  .ft-card-2 { background: var(--surface-2); border: none; border-radius: 14px; }
   .ft-row:hover { background: rgba(59,91,219,0.03); }
   .ft-row { transition: background 120ms ease; }
   .ft-clickable { cursor: pointer; }
@@ -71,15 +71,15 @@
   ::-webkit-scrollbar { width: 8px; height: 8px; }
   ::-webkit-scrollbar-thumb { background: var(--line-2); border-radius: 4px; }
   ::-webkit-scrollbar-track { background: transparent; }
-  .ft-btn-primary { background: var(--accent); color: #ffffff; padding: 0 16px; height: 38px; border-radius: 9px; font-weight: 500; font-size: 13.5px; display: inline-flex; align-items: center; gap: 6px; transition: all 120ms ease; border: none; cursor: pointer; font-family: inherit; white-space: nowrap; }
-  .ft-btn-primary:hover { background: var(--accent-2); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(59,91,219,0.3); }
+  .ft-btn-primary { background: #1C1C1C; color: #ffffff; padding: 0 16px; height: 38px; border-radius: 9px; font-weight: 500; font-size: 13.5px; display: inline-flex; align-items: center; gap: 6px; transition: background 120ms ease; border: none; cursor: pointer; font-family: inherit; white-space: nowrap; }
+  .ft-btn-primary:hover { background: var(--accent); }
   .ft-btn-ghost { background: #FFFFFF; color: var(--ink-2); padding: 0 12px; height: 38px; border-radius: 9px; font-weight: 500; font-size: 13px; display: inline-flex; align-items: center; gap: 6px; transition: all 120ms ease; border: 1px solid #E0E0E0; cursor: pointer; font-family: inherit; }
   .ft-btn-ghost:hover { background: #EFEFEF; color: var(--ink); }
   .ft-input { background: #EFEFEF; border: none; border-radius: 9px; padding: 9px 12px; font-size: 13.5px; width: 100%; color: var(--ink); outline: none; font-family: inherit; transition: box-shadow 120ms ease; }
   .ft-input.with-icon { padding-left: 36px; }
   .ft-input:focus { box-shadow: 0 0 0 2px var(--accent); }
   .ft-input::placeholder { color: var(--ink-4); }
-  .ft-select { background: #F5F5F5; border: none; border-radius: 9px; padding: 9px 30px 9px 12px; font-size: 13.5px; color: var(--ink-2); outline: none; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238B8175' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>"); background-repeat: no-repeat; background-position: right 10px center; font-family: inherit; transition: border-color 120ms ease; }
+  .ft-select { background: #FFFFFF; border: none; border: none; border-radius: 9px; padding: 9px 30px 9px 12px; font-size: 13.5px; color: var(--ink-2); outline: none; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238B8175' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>"); background-repeat: no-repeat; background-position: right 10px center; font-family: inherit; transition: border-color 120ms ease; }
   .ft-select:focus { box-shadow: 0 0 0 2px var(--accent); outline: none; }
   /* Nav item hover */
   .ft-nav-item:hover { background: rgba(0,0,0,0.06) !important; color: var(--ink) !important; }
@@ -96,13 +96,13 @@
   /* Shared border-only hover button — used by StatCard sub-link AND View all */
   .ft-border-btn {
     display: inline-flex; align-items: center; gap: 4px;
-    background: #FFFFFF; border: 1px solid #E0E0E0; border-radius: 8px;
+    background: transparent; border: 1px solid #E0E0E0; border-radius: 8px;
     cursor: pointer; font-size: 12px; font-weight: 500;
     color: var(--ink-2); padding: 5px 10px;
-    font-family: inherit; transition: border-color 100ms ease, color 100ms ease;
+    font-family: inherit; transition: background 100ms ease, color 100ms ease, border-color 100ms ease;
     text-decoration: none;
   }
-  .ft-border-btn:hover { border-color: #AAAAAA; color: var(--ink); }
+  .ft-border-btn:hover { background: #EFEFEF; border-color: #CCCCCC; color: var(--ink); }
 
   /* StatCard sub-label reuses the same border-btn look */
   .ft-stat-sub {
@@ -217,7 +217,7 @@ const I = {
 // @prop style    CSSProperties  — escape hatch for overrides
 // ─────────────────────────────────────────────────────────────────────────────
 const BUTTON_VARIANTS = {
-  primary: { bg:'var(--accent)',  color:'#ffffff',       border:'transparent',   hover:'var(--accent-2)' },
+  primary: { bg:'#1C1C1C',        color:'#ffffff',       border:'transparent',   hover:'var(--accent)'   },
   ghost:   { bg:'#FFFFFF',        color:'var(--ink-2)',   border:'#E0E0E0',       hover:'#F5F5F5'         },
   danger:  { bg:'var(--negative-soft)', color:'var(--negative)', border:'var(--negative)', hover:'var(--negative)' },
 };
@@ -231,8 +231,6 @@ const Button = ({ children, variant='primary', size='md', icon, disabled=false, 
   const v = BUTTON_VARIANTS[variant]; const s = BUTTON_SIZES[size];
   const [hovered, setHovered] = useState(false);
   const bg = hovered&&!disabled ? v.hover : v.bg;
-  const shadow = variant==='primary' && hovered && !disabled ? '0 4px 12px rgba(59,91,219,0.3)' : 'none';
-  const ty = variant==='primary' && hovered && !disabled ? 'translateY(-1px)' : 'translateY(0)';
   const border = variant==='ghost' ? `1px solid ${hovered ? '#CCCCCC' : v.border}` : 'none';
   return (
     <button type={type} onClick={onClick} disabled={disabled}
@@ -242,8 +240,8 @@ const Button = ({ children, variant='primary', size='md', icon, disabled=false, 
         background: disabled ? '#E0E0E0' : bg,
         color: disabled ? '#AAAAAA' : (hovered&&variant==='danger'?'#fff':v.color),
         cursor: disabled ? 'not-allowed' : 'pointer', fontFamily:'inherit',
-        letterSpacing:'-0.005em', transition:'all 120ms ease', opacity: disabled ? 0.6 : 1,
-        boxShadow: shadow, transform: ty, whiteSpace:'nowrap',
+        letterSpacing:'-0.005em', transition:'background 120ms ease', opacity: disabled ? 0.6 : 1,
+        whiteSpace:'nowrap',
         ...style }}>
       {icon && icon}{children}
     </button>
@@ -406,8 +404,8 @@ const Avatar = ({ name, size=28 }) => {
 /** Container card with consistent border and background */
 const Card = ({ children, variant='default', padding='20px', className='', style={} }) => {
   const styles = {
-    default:  { background:'var(--surface)',   border:'none', borderRadius:14, boxShadow:'0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.05)' },
-    elevated: { background:'var(--surface-2)', border:'none', borderRadius:14, boxShadow:'0 4px 16px rgba(0,0,0,0.1)' },
+    default:  { background:'var(--surface)',   border:'none', borderRadius:14 },
+    elevated: { background:'var(--surface-2)', border:'none', borderRadius:14 },
     ghost:    { background:'transparent',      border:'none',                  borderRadius:14 },
   };
   return (
@@ -514,7 +512,7 @@ const Tabs = ({ tabs, active, onChange, variant='pill' }) => {
     );
   }
   return (
-    <div style={{display:'flex',gap:4,padding:4,borderRadius:12,background:'#FFFFFF',border:'1px solid #E8E8E8',width:'fit-content'}}>
+    <div style={{display:'flex',gap:4,padding:4,borderRadius:12,background:'#FFFFFF',border:'none',width:'fit-content'}}>
       {tabs.map(t=>(
         <button key={t.id} onClick={()=>onChange(t.id)}
           style={{ padding:'7px 16px', fontSize:13, fontWeight:500, borderRadius:9,
@@ -629,7 +627,7 @@ const StatCard = ({ label, value, sub, mom, momInverse, accent=false, tone, onCl
       style={{ padding:'16px 20px', borderRadius:14, cursor:onClick?'pointer':'default',
         background: accent?'var(--ink)':'var(--surface)',
         border: 'none',
-        boxShadow: accent ? 'none' : '0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.05)',
+        boxShadow: 'none',
         position:'relative', overflow:'hidden' }}>
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:8,position:'relative'}}>
         <div style={{fontSize:11,textTransform:'uppercase',letterSpacing:'0.14em',fontWeight:500,
@@ -667,7 +665,7 @@ const StatCard = ({ label, value, sub, mom, momInverse, accent=false, tone, onCl
 const MiniStat = ({ label, value, sub, tone, onClick }) => {
   const valueColor = tone==='positive'?'var(--positive)':tone==='negative'?'var(--negative)':tone==='warn'?'var(--accent-2)':'var(--ink)';
   return (
-    <div onClick={onClick} style={{padding:'16px 20px',borderRadius:14,background:'var(--surface)',border:'none',boxShadow:'0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.05)',cursor:onClick?'pointer':'default'}}>
+    <div onClick={onClick} style={{padding:'16px 20px',borderRadius:14,background:'var(--surface)',border:'none',cursor:onClick?'pointer':'default'}}>
       <div style={{fontSize:11,textTransform:'uppercase',letterSpacing:'0.12em',fontWeight:500,color:'var(--ink-3)',marginBottom:8}}>{label}</div>
       <div style={{fontFamily:'Inter,system-ui,sans-serif',fontSize:22,fontWeight:500,letterSpacing:'-0.02em',color:valueColor}}>{value}</div>
       {sub && <div style={{fontSize:12,marginTop:4,color:'var(--ink-3)'}}>{sub}</div>}
@@ -691,7 +689,7 @@ const TopBar = ({ title, subtitle, period, onPrev, onNext, action }) => (
     </div>
     <div style={{display:'flex',alignItems:'center',gap:8}}>
       {period && (
-        <div style={{display:'flex',alignItems:'center',height:38,background:'#FFFFFF',border:'1px solid #E8E8E8',borderRadius:10,padding:'0 2px'}}>
+        <div style={{display:'flex',alignItems:'center',height:38,background:'#FFFFFF',border:'1px solid #EBEBEB',borderRadius:10,padding:'0 2px'}}>
           <Button variant="ghost" size="sm" icon={<I.ChevronLeft size={14}/>} onClick={onPrev} style={{padding:'0 9px',height:'100%',border:'none',background:'transparent'}}/>
           <span style={{padding:'0 6px',fontSize:13,fontWeight:500,fontFamily:'Inter,system-ui,sans-serif',color:'var(--ink)',whiteSpace:'nowrap'}}>{period}</span>
           <Button variant="ghost" size="sm" icon={<I.ChevronRight size={14}/>} onClick={onNext} style={{padding:'0 9px',height:'100%',border:'none',background:'transparent'}}/>
@@ -780,9 +778,9 @@ const NAV_ITEMS = [
 /** Main navigation sidebar */
 const Sidebar = ({ view, setView, showSettingsBadge=false }) => (
   <aside style={{width:230,flexShrink:0,display:'flex',flexDirection:'column',
-    background:'#FFFFFF',borderRight:'none',boxShadow:'2px 0 8px rgba(0,0,0,0.06)',
+    background:'#FFFFFF',borderRight:'none',
     position:'fixed',top:0,left:0,height:'100vh',zIndex:10,overflowY:'auto'}}>
-    <div style={{padding:'20px',borderBottom:'1px solid #EBEBEB',display:'flex',alignItems:'center',gap:10}}>
+    <div style={{padding:'20px',display:'flex',alignItems:'center',gap:10}}>
       <div style={{width:32,height:32,borderRadius:9,background:'var(--accent)',display:'flex',alignItems:'center',justifyContent:'center',color:'#fff'}}>
         <I.Logo size={18}/>
       </div>
@@ -805,7 +803,7 @@ const Sidebar = ({ view, setView, showSettingsBadge=false }) => (
         );
       })}
     </nav>
-    <div style={{padding:'0 12px 12px',display:'flex',flexDirection:'column',gap:2,borderTop:'1px solid #EBEBEB',paddingTop:12}}>
+    <div style={{padding:'0 12px 12px',display:'flex',flexDirection:'column',gap:2,paddingTop:12}}>
       <button onClick={()=>setView('settings')}
         className="ft-nav-item"
         style={{ width:'100%',display:'flex',alignItems:'center',gap:12,padding:'9px 12px',
@@ -1551,7 +1549,7 @@ const DetailScreen = ({ kind, onBack }) => {
       <div className="flex items-center gap-2 mb-5" style={{flexWrap:'wrap'}}>
         {/* Expense category filters */}
         {!isIncome && (
-          <div className="flex items-center gap-1 p-1 rounded-xl" style={{background:'#FFFFFF',border:'1px solid #E8E8E8'}}>
+          <div className="flex items-center gap-1 p-1 rounded-xl" style={{background:'#FFFFFF',border:'none'}}>
             {[['all','All expenses'],['salary','Salaries'],['subscription','Subscriptions'],['one-time','One-time']].map(([v,l]) => (
               <button key={v} onClick={() => setExpFilter(v)}
                 className="px-3 py-1.5 rounded-lg text-[12.5px] font-medium transition"
@@ -1695,7 +1693,7 @@ const LinkPaymentModal = ({ transaction, onClose, onLink }) => {
         </div>
 
         {/* Transaction info */}
-        <div className="rounded-xl px-4 py-3 mb-5 flex items-center gap-3" style={{background:'#FFFFFF',border:'1px solid #E8E8E8'}}>
+        <div className="rounded-xl px-4 py-3 mb-5 flex items-center gap-3" style={{background:'#F5F5F5',border:'none'}}>
           <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style={{background:'var(--positive-soft)'}}><I.Bank size={16} style={{color:'var(--positive)'}}/></div>
           <div className="flex-1 min-w-0">
             <div className="text-[13px] font-medium" style={{color:'var(--ink)'}}>{transaction.from}</div>
@@ -1739,40 +1737,39 @@ const LinkPaymentModal = ({ transaction, onClose, onLink }) => {
 };
 
 const DynamicsChart = ({ trendData, trendMode = 'months' }) => {
-  const W = 880, H = 240, PAD_L = 62, PAD_R = 8, PAD_B = 22, PAD_T = 12;
+  const W = 880, H = 260, PAD_L = 54, PAD_R = 8, PAD_B = 28, PAD_T = 12;
   const chartW = W - PAD_L - PAD_R;
   const chartH = H - PAD_B - PAD_T;
   const fmtK = v => v >= 1000 ? `$${Math.round(v/1000)}k` : `$${v}`;
   const data = trendData;
 
-  // Colors
-  const C_REV = '#10B981';
+  const C_REV = '#2D5A3F';
   const C_EXP = '#C0392B';
-  const C_MAR = '#6366F1';
 
   const [hovered, setHovered] = React.useState(null);
   const [rangeFrom, setRangeFrom] = React.useState(0);
   const [rangeTo, setRangeTo] = React.useState(data.length - 1);
-  const prevDataLen = React.useRef(data.length);
-  React.useEffect(() => {
-    if (data.length !== prevDataLen.current) {
-      setRangeFrom(0);
-      setRangeTo(data.length - 1);
-      prevDataLen.current = data.length;
-    }
-  }, [data.length]);
   const [openPicker, setOpenPicker] = React.useState(null);
   const fromRef = React.useRef();
   const toRef   = React.useRef();
   const pickerRef = React.useRef();
-  const svgRef  = React.useRef();
+  const [calYear, setCalYear]   = React.useState(new Date().getFullYear());
+  const [calMonth, setCalMonth] = React.useState(new Date().getMonth());
+
+  const prevDataLen = React.useRef(data.length);
+  React.useEffect(() => {
+    if (data.length !== prevDataLen.current) {
+      setRangeFrom(0); setRangeTo(data.length - 1);
+      prevDataLen.current = data.length;
+    }
+  }, [data.length]);
 
   React.useEffect(() => {
     if (!openPicker) return;
     const h = e => {
       if (pickerRef.current && !pickerRef.current.contains(e.target)
         && fromRef.current && !fromRef.current.contains(e.target)
-        && toRef.current   && !toRef.current.contains(e.target))
+        && toRef.current && !toRef.current.contains(e.target))
         setOpenPicker(null);
     };
     document.addEventListener('mousedown', h);
@@ -1781,74 +1778,31 @@ const DynamicsChart = ({ trendData, trendMode = 'months' }) => {
 
   const safeFrom = Math.min(rangeFrom, data.length - 1);
   const safeTo   = Math.min(rangeTo,   data.length - 1);
-  const visData = data.slice(safeFrom, safeTo + 1).length > 0
-    ? data.slice(safeFrom, safeTo + 1)
-    : data;
+  const visData = data.slice(safeFrom, safeTo + 1).length > 0 ? data.slice(safeFrom, safeTo + 1) : data;
   const visN    = visData.length;
 
-  // Scales — all three metrics on one Y axis (normalised 0-1)
+  // Scale
   const revMax = Math.max(...visData.map(d => d.rev)) * 1.12 || 1;
   const expMax = Math.max(...visData.map(d => d.exp)) * 1.12 || 1;
-  const marMax = Math.max(...visData.map(d => d.margin), 10) * 1.12;
-  // Use same scale for rev/exp so they're comparable; margin on own scale
   const valMax = Math.max(revMax, expMax);
   const valMin = Math.min(...visData.map(d => Math.min(d.rev, d.exp))) * 0.82;
   const valRange = valMax - valMin || 1;
+  const yV = v => PAD_T + chartH - ((v - valMin) / valRange) * chartH;
+  // Bar layout: tight group per month, visible gap between months
+  // Group width = chartW / visN
+  // Each group: [REV bar | gap | EXP bar | gap | MAR bar] + inter-month gap
+  const slotW = chartW / Math.max(visN, 1);
+  const interGap = Math.max(8, slotW * 0.18);       // gap between month groups
+  const innerW   = slotW - interGap;                  // usable width per group
+  const barGap   = Math.max(3, innerW * 0.08);        // gap between bars within group
+  const barW     = Math.max(10, (innerW - barGap) / 2); // each bar width — 2 bars now
 
-  const xOf  = i  => PAD_L + (i / Math.max(visN - 1, 1)) * chartW;
-  const yRev = v  => PAD_T + chartH - ((v - valMin) / valRange) * chartH;
-  const yExp = v  => PAD_T + chartH - ((v - valMin) / valRange) * chartH;
-  const marMin = Math.min(...visData.map(d => d.margin)) * 0.85;
-  const marRange = marMax - marMin || 1;
-  const yMar = v  => PAD_T + chartH - ((v - marMin) / marRange) * chartH;
-
-  // Smooth bezier curve helper
-  const smoothPath = (pts) => {
-    if (pts.length < 2) return '';
-    let d = `M${pts[0][0]},${pts[0][1]}`;
-    for (let i = 1; i < pts.length; i++) {
-      const prev = pts[i - 1];
-      const curr = pts[i];
-      const cp1x = prev[0] + (curr[0] - prev[0]) * 0.45;
-      const cp1y = prev[1];
-      const cp2x = prev[0] + (curr[0] - prev[0]) * 0.55;
-      const cp2y = curr[1];
-      d += ` C${cp1x},${cp1y} ${cp2x},${cp2y} ${curr[0]},${curr[1]}`;
-    }
-    return d;
-  };
-
-  const revPts = visData.map((d, i) => [xOf(i), yRev(d.rev)]);
-  const expPts = visData.map((d, i) => [xOf(i), yExp(d.exp)]);
-  const marPts = visData.map((d, i) => [xOf(i), yMar(d.margin)]);
-
-  const areaSmooth = (pts) => {
-    const line = smoothPath(pts);
-    return `${line} L${pts[pts.length-1][0]},${PAD_T+chartH} L${pts[0][0]},${PAD_T+chartH} Z`;
-  };
-
-  // Y ticks (left axis — $ values)
+  // Y ticks
   const yTicks = [0, 0.33, 0.66, 1].map(f => ({
     val: valMin + valRange * f,
-    y:   PAD_T + chartH * (1 - f),
+    y: PAD_T + chartH * (1 - f),
   }));
 
-  // Crosshair x position
-  const hovX = hovered !== null ? xOf(hovered) : null;
-
-  // Handle mouse move over SVG
-  const onMouseMove = e => {
-    const svg = svgRef.current;
-    if (!svg) return;
-    const rect = svg.getBoundingClientRect();
-    const mx = (e.clientX - rect.left) * (W / rect.width);
-    const slotW = chartW / Math.max(visN - 1, 1);
-    const idx = Math.round((mx - PAD_L) / slotW);
-    setHovered(Math.max(0, Math.min(visN - 1, idx)));
-  };
-
-  const [calYear, setCalYear]   = React.useState(new Date().getFullYear());
-  const [calMonth, setCalMonth] = React.useState(new Date().getMonth());
   const CAL_MONTHS_FULL  = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   const CAL_MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const CAL_DAYS = ['Mo','Tu','We','Th','Fr','Sa','Su'];
@@ -1858,20 +1812,18 @@ const DynamicsChart = ({ trendData, trendMode = 'months' }) => {
     const btnRef = isFrom ? fromRef : toRef;
     const rect = btnRef.current ? btnRef.current.getBoundingClientRect() : { left: 0, bottom: 0 };
 
-    // ── YEARLY MODE: year grid ──
     if (trendMode === 'years') {
       return (
         <div ref={pickerRef} className="ft-card ft-fade" style={{
           position:'fixed', left: Math.min(rect.left, window.innerWidth - 200),
           top: rect.bottom + 6, zIndex: 500, padding: '16px', minWidth: 180,
           boxShadow: '0 8px 28px rgba(0,0,0,0.12)' }}>
-          <div style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.1em',
-            fontWeight: 600, color: 'var(--ink-3)', marginBottom: 10 }}>
+          <div style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 600, color: 'var(--ink-3)', marginBottom: 10 }}>
             {isFrom ? 'From' : 'To'}
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 6 }}>
             {data.map((d, i) => {
-              const active   = isFrom ? i === rangeFrom : i === rangeTo;
+              const active = isFrom ? i === rangeFrom : i === rangeTo;
               const disabled = isFrom ? i > rangeTo : i < rangeFrom;
               return (
                 <button key={i} type="button" disabled={disabled}
@@ -1879,8 +1831,7 @@ const DynamicsChart = ({ trendData, trendMode = 'months' }) => {
                   style={{ padding: '10px 8px', borderRadius: 8, fontSize: 15, fontWeight: active ? 600 : 400,
                     cursor: disabled ? 'not-allowed' : 'pointer', border: 'none', textAlign: 'center',
                     opacity: disabled ? 0.3 : 1, transition: 'all 80ms',
-                    background: active ? 'var(--ink)' : '#F5F5F5',
-                    color: active ? '#fff' : 'var(--ink-2)' }}>
+                    background: active ? 'var(--ink)' : '#F5F5F5', color: active ? '#fff' : 'var(--ink-2)' }}>
                   {d.m}
                 </button>
               );
@@ -1890,7 +1841,6 @@ const DynamicsChart = ({ trendData, trendMode = 'months' }) => {
       );
     }
 
-    // ── MONTHLY MODE: calendar ──
     let startDow = new Date(calYear, calMonth, 1).getDay();
     startDow = startDow === 0 ? 6 : startDow - 1;
     const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
@@ -1902,229 +1852,158 @@ const DynamicsChart = ({ trendData, trendMode = 'months' }) => {
     const dataIdx = data.findIndex(d => d.m === CAL_MONTHS_SHORT[calMonth]);
     const isDisabled = dataIdx < 0 || (isFrom ? dataIdx > rangeTo : dataIdx < rangeFrom);
 
-    const handleDayClick = () => {
-      if (!isDisabled && dataIdx >= 0) {
-        if (isFrom) setRangeFrom(dataIdx); else setRangeTo(dataIdx);
-        setOpenPicker(null);
-      }
-    };
-
     return (
       <div ref={pickerRef} style={{
-        position:'fixed',
-        left: Math.min(rect.left, window.innerWidth - 290),
-        top: rect.bottom + 6,
-        zIndex: 500,
-        background:'#FFFFFF',
-        borderRadius:14,
-        padding:'16px 18px 18px',
-        width:268,
-        boxShadow:'0 4px 24px rgba(0,0,0,0.12)',
-      }}>
-        {/* Header label */}
-        <div style={{fontSize:10,textTransform:'uppercase',letterSpacing:'0.12em',fontWeight:600,color:'var(--ink-3)',marginBottom:12}}>
-          {isFrom ? 'From' : 'To'}
+        position:'fixed', left: Math.min(rect.left, window.innerWidth - 290),
+        top: rect.bottom + 6, zIndex: 500, background:'#FFFFFF', borderRadius:14,
+        padding:'16px 18px 18px', width:268, boxShadow:'0 4px 24px rgba(0,0,0,0.12)' }}>
+        <div style={{ fontSize:10, textTransform:'uppercase', letterSpacing:'0.12em', fontWeight:600, color:'var(--ink-3)', marginBottom:10 }}>{isFrom ? 'From' : 'To'}</div>
+        <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:10 }}>
+          <button type="button" onClick={prevCal} style={{ background:'none', border:'none', cursor:'pointer', color:'var(--ink-3)', padding:'4px 6px', fontSize:18 }}
+            onMouseEnter={e=>e.currentTarget.style.color='var(--ink)'} onMouseLeave={e=>e.currentTarget.style.color='var(--ink-3)'}>‹</button>
+          <span style={{ fontSize:13, fontWeight:600, color:'var(--ink)' }}>{CAL_MONTHS_FULL[calMonth]} {calYear}</span>
+          <button type="button" onClick={nextCal} style={{ background:'none', border:'none', cursor:'pointer', color:'var(--ink-3)', padding:'4px 6px', fontSize:18 }}
+            onMouseEnter={e=>e.currentTarget.style.color='var(--ink)'} onMouseLeave={e=>e.currentTarget.style.color='var(--ink-3)'}>›</button>
         </div>
-        {/* Month nav */}
-        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:12}}>
-          <button type="button" onClick={prevCal}
-            style={{background:'none',border:'none',cursor:'pointer',color:'var(--ink-3)',padding:'4px 2px',lineHeight:1,fontSize:16,fontFamily:'inherit'}}
-            onMouseEnter={e=>e.currentTarget.style.color='var(--ink)'}
-            onMouseLeave={e=>e.currentTarget.style.color='var(--ink-3)'}>‹</button>
-          <span style={{fontSize:14,fontWeight:600,color:'var(--ink)'}}>{CAL_MONTHS_FULL[calMonth]} {calYear}</span>
-          <button type="button" onClick={nextCal}
-            style={{background:'none',border:'none',cursor:'pointer',color:'var(--ink-3)',padding:'4px 2px',lineHeight:1,fontSize:16,fontFamily:'inherit'}}
-            onMouseEnter={e=>e.currentTarget.style.color='var(--ink)'}
-            onMouseLeave={e=>e.currentTarget.style.color='var(--ink-3)'}>›</button>
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(7,1fr)', textAlign:'center', marginBottom:2 }}>
+          {CAL_DAYS.map(d => <div key={d} style={{ fontSize:9.5, fontWeight:600, color:'var(--ink-3)', paddingBottom:5 }}>{d}</div>)}
         </div>
-        {/* Day headers */}
-        <div style={{display:'grid',gridTemplateColumns:'repeat(7,1fr)',textAlign:'center',marginBottom:4}}>
-          {CAL_DAYS.map(d=>(
-            <div key={d} style={{fontSize:11,fontWeight:500,color:'var(--ink-3)',paddingBottom:6}}>{d}</div>
-          ))}
-        </div>
-        {/* Day cells */}
-        <div style={{display:'grid',gridTemplateColumns:'repeat(7,1fr)'}}>
-          {cells.map((day,i)=>{
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(7,1fr)', rowGap:2 }}>
+          {cells.map((day, i) => {
             if (!day) return <div key={`e${i}`}/>;
-            const isWeekend = i%7===5 || i%7===6;
+            const isWeekend = i % 7 === 5 || i % 7 === 6;
             return (
-              <div key={day} onClick={handleDayClick}
-                style={{
-                  height:34, display:'flex', alignItems:'center', justifyContent:'center',
-                  fontSize:13, cursor: isWeekend||isDisabled ? 'default' : 'pointer',
-                  color: isWeekend ? 'var(--ink-4)' : isDisabled ? '#DDDDDD' : 'var(--ink)',
-                  fontWeight: 400,
-                  transition:'color 80ms',
-                }}
-                onMouseEnter={e=>{ if(!isWeekend&&!isDisabled) e.currentTarget.style.color='var(--accent)'; }}
-                onMouseLeave={e=>{ e.currentTarget.style.color = isWeekend?'var(--ink-4)':isDisabled?'#DDDDDD':'var(--ink)'; }}>
+              <div key={day} onClick={() => { if (!isWeekend && !isDisabled && dataIdx >= 0) { if (isFrom) setRangeFrom(dataIdx); else setRangeTo(dataIdx); setOpenPicker(null); } }}
+                style={{ width:26, height:26, borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center',
+                  margin:'1px auto', fontSize:11.5, cursor: isWeekend || isDisabled ? 'default' : 'pointer',
+                  color: isWeekend ? '#CCCCCC' : isDisabled ? '#DDDDDD' : 'var(--ink)', transition:'background 80ms' }}
+                onMouseEnter={e => { if (!isWeekend && !isDisabled) e.currentTarget.style.background='#F0F0F0'; }}
+                onMouseLeave={e => { e.currentTarget.style.background='transparent'; }}>
                 {day}
               </div>
             );
           })}
         </div>
-        {dataIdx < 0 && (
-          <div style={{marginTop:8,fontSize:11,color:'var(--ink-4)',textAlign:'center',fontStyle:'italic'}}>
-            No data for {CAL_MONTHS_FULL[calMonth]}
-          </div>
-        )}
+        {dataIdx < 0 && <div style={{ marginTop:8, fontSize:11, color:'var(--ink-4)', textAlign:'center', fontStyle:'italic' }}>No data for {CAL_MONTHS_FULL[calMonth]}</div>}
       </div>
     );
   };
 
+  const barR = Math.min(4, barW / 2.5);
+
   return (
     <div>
-      {/* Controls row */}
+      {/* Controls */}
       <div className="flex items-center justify-between mb-4">
-        {/* Legend */}
         <div className="flex items-center gap-4 text-[11.5px]" style={{ color: 'var(--ink-3)' }}>
           <span className="flex items-center gap-1.5">
-            <span style={{ width: 12, height: 2, background: C_REV, display: 'inline-block', borderRadius: 2 }}/>Revenue
+            <span style={{ width:10, height:10, borderRadius:3, background:C_REV, display:'inline-block' }}/>Revenue
           </span>
           <span className="flex items-center gap-1.5">
-            <span style={{ width: 12, height: 2, background: C_EXP, display: 'inline-block', borderRadius: 2 }}/>Expenses
-          </span>
-          <span className="flex items-center gap-1.5">
-            <span style={{ width: 12, height: 2, background: C_MAR, display: 'inline-block', borderRadius: 2 }}/>Margin %
+            <span style={{ width:10, height:10, borderRadius:3, background:C_EXP, display:'inline-block' }}/>Expenses
           </span>
         </div>
-        {/* Period picker */}
-        <div className="flex items-center gap-2" style={{ position: 'relative' }}>
-          <I.Calendar size={13} style={{ color: 'var(--ink-3)', flexShrink: 0 }}/>
-          <button ref={fromRef} type="button"
-            onClick={() => setOpenPicker(openPicker === 'from' ? null : 'from')}
-            style={{ padding: '5px 14px', borderRadius: 8, fontSize: 13, fontWeight: 400, cursor: 'pointer',
-              fontFamily: 'inherit', border: '1px solid #E0E0E0', background: '#FFFFFF',
-              color: rangeFrom === 0 ? 'var(--ink-3)' : 'var(--ink)',
-              outline: openPicker === 'from' ? '2px solid var(--ink)' : 'none', outlineOffset: 1, minWidth: 72 }}>
-            {rangeFrom === 0 ? 'From' : data[rangeFrom].m}
+        <div className="flex items-center gap-2" style={{ position:'relative' }}>
+          <I.Calendar size={13} style={{ color:'var(--ink-3)', flexShrink:0 }}/>
+          <button ref={fromRef} type="button" onClick={() => setOpenPicker(openPicker==='from'?null:'from')}
+            style={{ padding:'5px 14px', borderRadius:8, fontSize:13, fontWeight:400, cursor:'pointer',
+              fontFamily:'inherit', border:'1px solid #E0E0E0', background:'#FFFFFF',
+              color: rangeFrom===0?'var(--ink-3)':'var(--ink)',
+              outline: openPicker==='from'?'2px solid var(--ink)':'none', outlineOffset:1, minWidth:72 }}>
+            {rangeFrom===0 ? 'From' : data[rangeFrom].m}
           </button>
-          <span style={{ fontSize: 13, color: 'var(--ink-3)' }}>→</span>
-          <button ref={toRef} type="button"
-            onClick={() => setOpenPicker(openPicker === 'to' ? null : 'to')}
-            style={{ padding: '5px 14px', borderRadius: 8, fontSize: 13, fontWeight: 400, cursor: 'pointer',
-              fontFamily: 'inherit', border: '1px solid #E0E0E0', background: '#FFFFFF',
-              color: rangeTo === data.length - 1 ? 'var(--ink-3)' : 'var(--ink)',
-              outline: openPicker === 'to' ? '2px solid var(--ink)' : 'none', outlineOffset: 1, minWidth: 60 }}>
-            {rangeTo === data.length - 1 ? 'To' : data[rangeTo].m}
+          <span style={{ fontSize:13, color:'var(--ink-3)' }}>→</span>
+          <button ref={toRef} type="button" onClick={() => setOpenPicker(openPicker==='to'?null:'to')}
+            style={{ padding:'5px 14px', borderRadius:8, fontSize:13, fontWeight:400, cursor:'pointer',
+              fontFamily:'inherit', border:'1px solid #E0E0E0', background:'#FFFFFF',
+              color: rangeTo===data.length-1?'var(--ink-3)':'var(--ink)',
+              outline: openPicker==='to'?'2px solid var(--ink)':'none', outlineOffset:1, minWidth:60 }}>
+            {rangeTo===data.length-1 ? 'To' : data[rangeTo].m}
           </button>
-          {(rangeFrom !== 0 || rangeTo !== data.length - 1) && (
-            <button type="button" onClick={() => { setRangeFrom(0); setRangeTo(data.length - 1); }}
-              style={{ fontSize: 11.5, color: 'var(--ink-3)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit', padding: '2px 4px' }}
-              onMouseEnter={e => e.currentTarget.style.color = 'var(--ink)'}
-              onMouseLeave={e => e.currentTarget.style.color = 'var(--ink-3)'}>Reset</button>
+          {(rangeFrom!==0||rangeTo!==data.length-1) && (
+            <button type="button" onClick={()=>{setRangeFrom(0);setRangeTo(data.length-1);}}
+              style={{ fontSize:11.5, color:'var(--ink-3)', background:'none', border:'none', cursor:'pointer', fontFamily:'inherit' }}
+              onMouseEnter={e=>e.currentTarget.style.color='var(--ink)'}
+              onMouseLeave={e=>e.currentTarget.style.color='var(--ink-3)'}>Reset</button>
           )}
           {openPicker && <PickerPopup/>}
         </div>
       </div>
 
-      {/* SVG chart */}
-      <svg ref={svgRef} width="100%" viewBox={`0 0 ${W} ${H}`}
-        style={{ display: 'block', overflow: 'visible', cursor: 'crosshair' }}
-        onMouseMove={onMouseMove}
-        onMouseLeave={() => setHovered(null)}>
-
-        <defs>
-          {/* Gradient fills */}
-          <linearGradient id="grad-rev" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%"   stopColor={C_REV} stopOpacity="0.18"/>
-            <stop offset="100%" stopColor={C_REV} stopOpacity="0.01"/>
-          </linearGradient>
-          <linearGradient id="grad-exp" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%"   stopColor={C_EXP} stopOpacity="0.15"/>
-            <stop offset="100%" stopColor={C_EXP} stopOpacity="0.01"/>
-          </linearGradient>
-          <linearGradient id="grad-mar" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%"   stopColor={C_MAR} stopOpacity="0.15"/>
-            <stop offset="100%" stopColor={C_MAR} stopOpacity="0.01"/>
-          </linearGradient>
-          <filter id="tt-shadow" x="-10%" y="-10%" width="130%" height="140%">
-            <feDropShadow dx="0" dy="4" stdDeviation="8" floodColor="rgba(0,0,0,0.1)"/>
-          </filter>
-        </defs>
-
-        {/* Grid lines */}
-        {yTicks.map(({ val, y }, i) => (
+      {/* SVG */}
+      <svg width="100%" viewBox={`0 0 ${W} ${H}`} style={{ display:'block', overflow:'visible' }}>
+        {/* Y grid + labels */}
+        {yTicks.map(({val,y},i) => (
           <g key={i}>
-            <line x1={PAD_L} y1={y} x2={W - PAD_R} y2={y}
-              stroke="#EBEBEB" strokeWidth="1" strokeDasharray="4 4"/>
-            <text x={PAD_L - 8} y={y + 3.5} fontSize="9.5" fill="#CCCCCC"
-              textAnchor="end" fontFamily="Inter">{fmtK(val)}</text>
+            <line x1={PAD_L} y1={y} x2={W-PAD_R} y2={y} stroke="#F0F0F0" strokeWidth="1"/>
+            <text x={PAD_L-8} y={y+3.5} fontSize="9.5" fill="#CCCCCC" textAnchor="end" fontFamily="Inter">{fmtK(val)}</text>
           </g>
         ))}
 
-        {/* X labels */}
-        {visData.map((d, i) => (
-          <text key={i} x={xOf(i)} y={H - 6} fontSize="10"
-            fill={hovered === i ? '#444' : '#CCCCCC'}
-            textAnchor="middle" fontFamily="Inter"
-            fontWeight={hovered === i ? '500' : '400'}>{d.m}</text>
-        ))}
+        {/* Bars */}
+        {visData.map((d, i) => {
+          const slotStart = PAD_L + i * slotW;
+          const groupStart = slotStart + interGap / 2;
+          const revX = groupStart;
+          const expX = groupStart + barW + barGap;
+          const cx   = slotStart + slotW / 2;
 
-        {/* Area fills */}
-        <path d={areaSmooth(revPts)} fill="url(#grad-rev)"/>
-        <path d={areaSmooth(expPts)} fill="url(#grad-exp)"/>
-        <path d={areaSmooth(marPts)} fill="url(#grad-mar)"/>
+          const revH = Math.max(2, ((d.rev - valMin) / valRange) * chartH);
+          const expH = Math.max(2, ((d.exp - valMin) / valRange) * chartH);
+          const ip = d.inProgress;
+          const isHov = hovered === i;
+          return (
+            <g key={i}
+              onMouseEnter={()=>setHovered(i)}
+              onMouseLeave={()=>setHovered(null)}
+              style={{ cursor:'pointer' }}>
+              {isHov && <rect x={slotStart} y={PAD_T} width={slotW} height={chartH} fill="rgba(0,0,0,0.025)" rx="4"/>}
 
-        {/* Smooth lines */}
-        <path d={smoothPath(revPts)} fill="none" stroke={C_REV} strokeWidth="1.5"
-          strokeLinejoin="round" strokeLinecap="round"/>
-        <path d={smoothPath(expPts)} fill="none" stroke={C_EXP} strokeWidth="1.5"
-          strokeLinejoin="round" strokeLinecap="round"/>
-        <path d={smoothPath(marPts)} fill="none" stroke={C_MAR} strokeWidth="1.5"
-          strokeLinejoin="round" strokeLinecap="round"/>
-
-        {/* Crosshair + dots on hover */}
-        {hovered !== null && (
-          <g>
-            {/* Vertical line */}
-            <line x1={hovX} y1={PAD_T} x2={hovX} y2={PAD_T + chartH}
-              stroke="#CCCCCC" strokeWidth="1" strokeDasharray="4 3"/>
-            {/* Dots */}
-            {[
-              { y: yRev(visData[hovered].rev),    c: C_REV },
-              { y: yExp(visData[hovered].exp),    c: C_EXP },
-              { y: yMar(visData[hovered].margin), c: C_MAR },
-            ].map(({ y, c }, i) => (
-              <g key={i}>
-                <circle cx={hovX} cy={y} r="5" fill="#FFFFFF" stroke={c} strokeWidth="2"/>
-              </g>
-            ))}
-          </g>
-        )}
+              {/* Revenue */}
+              <rect x={revX} y={PAD_T+chartH-revH} width={barW} height={revH} rx={barR}
+                fill={ip?'transparent':C_REV} stroke={ip?C_REV:'none'}
+                strokeWidth={ip?1.5:0} strokeDasharray={ip?'5 3':undefined}
+                opacity={isHov?1:0.88}/>
+              {/* Expenses */}
+              <rect x={expX} y={PAD_T+chartH-expH} width={barW} height={expH} rx={barR}
+                fill={ip?'transparent':C_EXP} stroke={ip?C_EXP:'none'}
+                strokeWidth={ip?1.5:0} strokeDasharray={ip?'5 3':undefined}
+                opacity={isHov?1:0.75}/>
+              {/* X label */}
+              <text x={cx} y={H-6} fontSize="10" fill={isHov?'#444':'#CCCCCC'}
+                textAnchor="middle" fontFamily="Inter" fontWeight={isHov?'500':'400'}>{d.m}</text>
+            </g>
+          );
+        })}
 
         {/* Tooltip */}
         {hovered !== null && (() => {
-          const d   = visData[hovered];
-          const ttW = 168, ttH = 100;
-          const ttX = Math.min(W - PAD_R - ttW - 4, Math.max(PAD_L, hovX - ttW / 2));
+          const d = visData[hovered];
+          const cx = PAD_L + hovered * slotW + slotW / 2;
+          const ttW = 160, ttH = 90;
+          const ttX = Math.min(W-PAD_R-ttW-4, Math.max(PAD_L, cx-ttW/2));
           const ttY = PAD_T + 4;
           return (
-            <g style={{ pointerEvents: 'none' }}>
-              <rect x={ttX} y={ttY} width={ttW} height={ttH} rx="10"
-                fill="#FFFFFF" filter="url(#tt-shadow)"/>
-              {/* Month + in-progress badge */}
-              <text x={ttX + 12} y={ttY + 18} fontSize="12" fill="var(--ink)"
-                fontFamily="Inter" fontWeight="600">{d.m}{d.inProgress ? ' · now' : ''}</text>
-              {/* Divider */}
-              <line x1={ttX + 12} y1={ttY + 25} x2={ttX + ttW - 12} y2={ttY + 25}
-                stroke="#F0F0F0" strokeWidth="1"/>
-              {/* Revenue */}
-              <circle cx={ttX + 18} cy={ttY + 40} r="4" fill={C_REV}/>
-              <text x={ttX + 28} y={ttY + 44} fontSize="11" fill="var(--ink-3)" fontFamily="Inter">Revenue</text>
-              <text x={ttX + ttW - 12} y={ttY + 44} fontSize="11" fill="var(--ink)"
-                fontFamily="Inter" fontWeight="700" textAnchor="end">{fmtUSD(d.rev)}</text>
-              {/* Expenses */}
-              <circle cx={ttX + 18} cy={ttY + 60} r="4" fill={C_EXP}/>
-              <text x={ttX + 28} y={ttY + 64} fontSize="11" fill="var(--ink-3)" fontFamily="Inter">Expenses</text>
-              <text x={ttX + ttW - 12} y={ttY + 64} fontSize="11" fill={C_EXP}
-                fontFamily="Inter" fontWeight="700" textAnchor="end">{fmtUSD(d.exp)}</text>
-              {/* Margin */}
-              <circle cx={ttX + 18} cy={ttY + 80} r="4" fill={C_MAR}/>
-              <text x={ttX + 28} y={ttY + 84} fontSize="11" fill="var(--ink-3)" fontFamily="Inter">Margin</text>
-              <text x={ttX + ttW - 12} y={ttY + 84} fontSize="11" fill={C_MAR}
-                fontFamily="Inter" fontWeight="700" textAnchor="end">{d.margin}%</text>
+            <g style={{ pointerEvents:'none' }}>
+              <rect x={ttX} y={ttY} width={ttW} height={ttH} rx="10" fill="#FFFFFF" filter="url(#tt-shadow)"/>
+              <text x={ttX+12} y={ttY+17} fontSize="12" fill="var(--ink)" fontFamily="Inter" fontWeight="600">
+                {d.m}{d.inProgress?' · now':''}
+              </text>
+              <line x1={ttX+12} y1={ttY+24} x2={ttX+ttW-12} y2={ttY+24} stroke="#F0F0F0" strokeWidth="1"/>
+              <circle cx={ttX+18} cy={ttY+38} r="4" fill={C_REV}/>
+              <text x={ttX+27} y={ttY+42} fontSize="10.5" fill="var(--ink-3)" fontFamily="Inter">Revenue</text>
+              <text x={ttX+ttW-12} y={ttY+42} fontSize="10.5" fill="var(--ink)" fontFamily="Inter" fontWeight="700" textAnchor="end">{fmtUSD(d.rev)}</text>
+              <circle cx={ttX+18} cy={ttY+57} r="4" fill={C_EXP}/>
+              <text x={ttX+27} y={ttY+61} fontSize="10.5" fill="var(--ink-3)" fontFamily="Inter">Expenses</text>
+              <text x={ttX+ttW-12} y={ttY+61} fontSize="10.5" fill={C_EXP} fontFamily="Inter" fontWeight="700" textAnchor="end">{fmtUSD(d.exp)}</text>
+              <circle cx={ttX+18} cy={ttY+76} r="4" fill="#6366F1"/>
+              <text x={ttX+27} y={ttY+80} fontSize="10.5" fill="var(--ink-3)" fontFamily="Inter">Margin</text>
+              <text x={ttX+ttW-12} y={ttY+80} fontSize="10.5" fill="#6366F1" fontFamily="Inter" fontWeight="700" textAnchor="end">{d.margin}%</text>
+              <defs>
+                <filter id="tt-shadow" x="-10%" y="-10%" width="130%" height="140%">
+                  <feDropShadow dx="0" dy="4" stdDeviation="8" floodColor="rgba(0,0,0,0.1)"/>
+                </filter>
+              </defs>
             </g>
           );
         })()}
@@ -2200,8 +2079,8 @@ const Dashboard = ({ onAddEntry, onDrill, onGoProjects, onViewReceivables, banks
       {/* Middle row: Received invoices (left) + Overdue (right) */}
       <div className="grid grid-cols-2 gap-4 mb-4">
         {/* Received invoices — LEFT */}
-        <div className="ft-card p-5">
-          <div className="flex items-center justify-between mb-4">
+        <div className="ft-card pt-5 pb-0 overflow-hidden">
+          <div className="flex items-center justify-between mb-4 px-5">
             <div className="flex items-center gap-2">
               <span style={{color:'var(--positive)'}}><I.Check2 size={14}/></span>
               <div className="text-[11px] uppercase tracking-[0.12em] font-medium" style={{color:'var(--ink-3)'}}>Received invoices</div>
@@ -2214,7 +2093,7 @@ const Dashboard = ({ onAddEntry, onDrill, onGoProjects, onViewReceivables, banks
           </div>
 
           {!banks.boa && !banks.mono ? (
-            <div className="flex flex-col items-center justify-center py-8 text-center">
+            <div className="flex flex-col items-center justify-center py-8 text-center px-5">
               <div className="text-[36px] mb-3">🏦</div>
               <div className="ft-serif text-[16px] font-medium mb-2" style={{color:'var(--ink)'}}>No bank connected</div>
               <p className="text-[12.5px] mb-5" style={{color:'var(--ink-3)',lineHeight:1.5}}>Connect your bank to see incoming payments synced automatically.</p>
@@ -2226,7 +2105,7 @@ const Dashboard = ({ onAddEntry, onDrill, onGoProjects, onViewReceivables, banks
             <div className="ft-fade">
               {/* No total number — per request */}
               {receivables.filter(r=>r.status==='received').sort((a,b)=>a.issueDate>b.issueDate?-1:1).slice(0,5).map(r=>(
-                <div key={r.id} className="flex items-center gap-3 py-2.5 border-b last:border-0" style={{borderColor:'#EBEBEB'}}>
+                <div key={r.id} className="flex items-center gap-3 py-2.5 border-b last:border-0 px-5" style={{borderColor:'#EBEBEB'}}>
                   <Avatar name={r.client} size={28}/>
                   <div className="flex-1 min-w-0">
                     {/* Click company name → Link Payment modal */}
@@ -2244,8 +2123,8 @@ const Dashboard = ({ onAddEntry, onDrill, onGoProjects, onViewReceivables, banks
         </div>
 
         {/* Overdue — RIGHT */}
-        <div className="ft-card p-5">
-          <div className="flex items-center justify-between mb-3">
+        <div className="ft-card pt-5 pb-0 overflow-hidden">
+          <div className="flex items-center justify-between mb-3 px-5">
             <div className="flex items-center gap-3">
               <span style={{color:'var(--negative)'}}><I.AlertCircle size={14}/></span>
               <div className="text-[11px] uppercase tracking-[0.12em] font-medium" style={{color:'var(--ink-3)'}}>Overdue</div>
@@ -2260,7 +2139,7 @@ const Dashboard = ({ onAddEntry, onDrill, onGoProjects, onViewReceivables, banks
           </div>
           <div>
             {receivables.filter(r=>r.status==='overdue'||r.daysOverdue>0).sort((a,b)=>b.daysOverdue-a.daysOverdue).slice(0,5).map(r=>(
-              <div key={r.id} className="flex items-center gap-3 py-2.5 border-b last:border-0" style={{borderColor:'#EBEBEB'}}>
+              <div key={r.id} className="flex items-center gap-3 py-2.5 border-b last:border-0 px-5" style={{borderColor:'#EBEBEB'}}>
                 <Avatar name={r.client} size={28}/>
                 <div className="flex-1 min-w-0">
                   <div className="text-[13px] font-medium truncate" style={{color:'var(--ink)'}}>{r.client}</div>
@@ -2290,7 +2169,7 @@ const Dashboard = ({ onAddEntry, onDrill, onGoProjects, onViewReceivables, banks
                   fontFamily:'inherit',transition:'all 100ms',
                   background:trendMode===v?'#FFFFFF':'transparent',
                   color:trendMode===v?'var(--ink)':'var(--ink-3)',
-                  boxShadow:trendMode===v?'0 1px 3px rgba(0,0,0,0.1)':'none'}}>
+                  boxShadow:'none'}}>
                 {l}
               </button>
             ))}
@@ -2413,7 +2292,7 @@ const CreateInvoiceModal = ({ project, onClose, onCreated }) => {
                   style={{flex:1,padding:'8px 4px',borderRadius:8,fontSize:12.5,fontWeight:500,border:'none',cursor:'pointer',transition:'all 120ms',
                     background:form.type===t?'#FFFFFF':'transparent',
                     color:form.type===t?'var(--ink)':'var(--ink-3)',
-                    boxShadow:form.type===t?'0 1px 3px rgba(0,0,0,0.1)':'none'}}>
+                    boxShadow:'none'}}>
                   {t}
                 </button>
               ))}
@@ -2508,7 +2387,7 @@ const RoleCard = ({ r, idx, openEdit, fmtUSD }) => {
                 const member = TEAM.find(m => m.name === p.name);
                 const personRate = member ? member.rate : r.rate;
                 return (
-                  <div key={p.name} className="flex items-center gap-1.5 px-2 py-1.5 rounded-md" style={{background:'#FFFFFF',border:'1px solid #E8E8E8'}}>
+                  <div key={p.name} className="flex items-center gap-1.5 px-2 py-1.5 rounded-md" style={{background:'#F5F5F5',border:'none'}}>
                     <Avatar name={p.name} size={18}/>
                     <div>
                       <div className="text-[12px] font-medium leading-tight" style={{color:'var(--ink)'}}>{p.name}</div>
@@ -3016,7 +2895,7 @@ const AddProjectModal = ({ onClose, onCreated }) => {
           <Field label="Project name">
             {!addingClient ? (
               <div className="flex gap-2">
-                <select className="ft-select flex-1" value={projectName} onChange={e=>setProjectName(e.target.value)}>
+                <select className="ft-select flex-1" style={{background:'#EFEFEF',border:'none'}} value={projectName} onChange={e=>setProjectName(e.target.value)}>
                   <option value="">Select project…</option>{CLIENTS.map(c=><option key={c.id}>{c.name}</option>)}
                 </select>
                 <button className="ft-btn-ghost" onClick={()=>setAddingClient(true)}><I.Plus size={13}/> New</button>
@@ -3030,7 +2909,7 @@ const AddProjectModal = ({ onClose, onCreated }) => {
           </Field>
           <div className="grid grid-cols-2 gap-4">
             <Field label="Type">
-              <select className="ft-select w-full" value={type} onChange={e=>setType(e.target.value)}>
+              <select className="ft-select w-full" style={{background:'#EFEFEF',border:'none'}} value={type} onChange={e=>setType(e.target.value)}>
                 <option>Fixed</option><option>T&M</option><option>Subscription</option>
               </select>
             </Field>
@@ -3043,7 +2922,7 @@ const AddProjectModal = ({ onClose, onCreated }) => {
               <input className="ft-input ft-mono" placeholder="0" value={budgetHours} onChange={e=>setBudgetHours(e.target.value)}/>
             </Field>
             <Field label="Sales">
-              <select className="ft-select w-full" value={sales} onChange={e=>setSales(e.target.value)}>
+              <select className="ft-select w-full" style={{background:'#EFEFEF',border:'none'}} value={sales} onChange={e=>setSales(e.target.value)}>
                 <option>Alex L.</option><option>Tanya</option><option value="">+ Add new</option>
               </select>
             </Field>
@@ -3094,7 +2973,7 @@ const AddProjectModal = ({ onClose, onCreated }) => {
             </div>
           </Field>
           <div className="grid grid-cols-2 gap-4">
-            <Field label="Status"><select className="ft-select w-full"><option>Active</option><option>Completed</option><option>Paused</option></select></Field>
+            <Field label="Status"><select className="ft-select w-full" style={{background:'#EFEFEF',border:'none'}}><option>Active</option><option>Completed</option><option>Paused</option></select></Field>
             <Field label="Deadline"><input className="ft-input" type="date"/></Field>
           </div>
           <Field label="Notes">
@@ -3158,14 +3037,14 @@ const Projects = () => {
         <div className="relative flex-1 max-w-md">
           <span className="absolute left-3 top-1/2 -translate-y-1/2" style={{color:'var(--ink-3)'}}><I.Search size={15}/></span>
           <input className="ft-input with-icon" placeholder="Search by project, client, sales" value={search} onChange={e => setSearch(e.target.value)}
-            style={{background:'#FFFFFF',border:'1px solid #E8E8E8'}}/>
+            style={{background:'#FFFFFF',border:'none'}}/>
         </div>
         <select className="ft-select" value={typeFilter} onChange={e => setTypeFilter(e.target.value)}
-          style={{background:"#FFFFFF url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888888' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>\") no-repeat right 10px center",border:'1px solid #E8E8E8'}}>
+          style={{background:"#FFFFFF url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888888' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>\") no-repeat right 10px center",border:'none'}}>
           <option value="all">All types</option><option value="Fixed">Fixed</option><option value="T&M">T&M</option><option value="Subscription">Subscription</option>
         </select>
-        <select className="ft-select" style={{background:"#FFFFFF url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888888' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>\") no-repeat right 10px center",border:'1px solid #E8E8E8'}}><option>All executors</option><option>Tanya</option><option>Andrii</option></select>
-        <select className="ft-select" style={{background:"#FFFFFF url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888888' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>\") no-repeat right 10px center",border:'1px solid #E8E8E8'}}><option>All sales</option><option>Alex L.</option><option>Tanya</option></select>
+        <select className="ft-select" style={{background:"#FFFFFF url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888888' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>\") no-repeat right 10px center",border:'none'}}><option>All executors</option><option>Tanya</option><option>Andrii</option></select>
+        <select className="ft-select" style={{background:"#FFFFFF url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888888' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>\") no-repeat right 10px center",border:'none'}}><option>All sales</option><option>Alex L.</option><option>Tanya</option></select>
       </div>
       <div className="ft-card overflow-hidden">
         <div className="grid gap-3 px-5 py-3.5 text-[10.5px] uppercase tracking-[0.1em] font-medium border-b"
@@ -3680,7 +3559,7 @@ const HRBanner = ({ team, calSettings }) => {
     <div className="rounded-xl p-4 mb-5 flex flex-wrap gap-2 items-start" style={{background:'var(--warn-soft)', border:'1px solid var(--line-2)'}}>
       <div className="text-[11px] uppercase tracking-[0.12em] font-medium w-full mb-1" style={{color:'var(--warn)'}}>Reminders this week</div>
       {alerts.map((a,i)=>(
-        <div key={i} className="text-[13px] px-3 py-1.5 rounded-lg" style={{background:'#EFEFEF',border:'none',color:'var(--ink)'}}>
+        <div key={i} className="text-[13px] px-3 py-1.5 rounded-lg" style={{background:'#FFFFFF',border:'1px solid #EBEBEB',color:'var(--ink)'}}>
           {a.label}
         </div>
       ))}
@@ -3865,7 +3744,7 @@ const HRTab = ({ calSettings, setCalSettings }) => {
         </div>
 
         {showCal && (
-          <div className="mt-5 pt-5" style={{borderTop:'1px solid #EBEBEB'}}>
+          <div className="mt-5 pt-5" style={{borderTop:'1px solid #EBEBEB', background:'#FFFFFF'}}>
             <div style={{display:'flex', gap:40, alignItems:'start'}}>
 
               {/* LEFT: import + nav + calendar + fri hours */}
@@ -3945,7 +3824,7 @@ const HRTab = ({ calSettings, setCalSettings }) => {
                       </span>
                       <input autoFocus className="ft-input"
                         style={{fontSize:12, padding:'3px 8px', flex:1, minWidth:0}}
-                        placeholder="Holiday name…"
+                        style={{background:'#FFFFFF',border:'1px solid #EBEBEB'}} placeholder="Holiday name…"
                         value={pendingLabel} onChange={e=>setPendingLabel(e.target.value)}
                         onKeyDown={e=>{ if(e.key==='Enter') confirmHoliday(); if(e.key==='Escape') cancelPending(); }}/>
                       <button type="button" onClick={confirmHoliday}
@@ -4134,7 +4013,7 @@ const Team = () => {
         }/>
 
       {/* Tab switcher — no icons */}
-      <div className="flex items-center gap-1 p-1 mb-6 rounded-xl w-fit" style={{background:'#FFFFFF', border:'1px solid #E8E8E8'}}>
+      <div className="flex items-center gap-1 p-1 mb-6 rounded-xl w-fit" style={{background:'#FFFFFF', border:'none'}}>
         {[['hr','HR / People'],['payroll','Payroll']].map(([v,l])=>(
           <button key={v} onClick={()=>setTab(v)}
             className="px-4 py-2 rounded-lg text-[13px] font-medium transition"
@@ -4190,7 +4069,7 @@ const Cashflow = () => {
       </div>
       {/* Filters */}
       <div className="flex items-center gap-3 mb-4 flex-wrap">
-        <div className="flex items-center gap-1 p-1 rounded-xl" style={{background:'#FFFFFF',border:'1px solid #E8E8E8'}}>
+        <div className="flex items-center gap-1 p-1 rounded-xl" style={{background:'#FFFFFF',border:'none'}}>
           {[['all','All'],['in','Income'],['out','Expenses']].map(([v,l])=>(
             <button key={v} onClick={()=>setFlowFilter(v)}
               className="px-3 py-1.5 rounded-lg text-[12.5px] font-medium transition"
@@ -4201,7 +4080,7 @@ const Cashflow = () => {
         </div>
         {/* Income sub-filter: pending / overdue / received — only on Income tab */}
         {flowFilter==='in' && (
-          <div className="flex items-center gap-1 p-1 rounded-xl" style={{background:'#FFFFFF',border:'1px solid #E8E8E8'}}>
+          <div className="flex items-center gap-1 p-1 rounded-xl" style={{background:'#FFFFFF',border:'none'}}>
             {[['all','All income'],['pending','Pending'],['overdue','Overdue'],['received','Received']].map(([v,l])=>(
               <button key={v} onClick={()=>setIncFilter(v)}
                 className="px-3 py-1.5 rounded-lg text-[12.5px] font-medium transition"
@@ -4213,7 +4092,7 @@ const Cashflow = () => {
         )}
         {/* Expense sub-filter */}
         {flowFilter === 'out' && (
-          <div className="flex items-center gap-1 p-1 rounded-xl" style={{background:'#FFFFFF',border:'1px solid #E8E8E8'}}>
+          <div className="flex items-center gap-1 p-1 rounded-xl" style={{background:'#FFFFFF',border:'none'}}>
             {[['all','All expenses'],['salary','Salaries'],['subscription','Subscriptions'],['one-time','One-time payments']].map(([v,l])=>(
               <button key={v} onClick={()=>setExpFilter(v)}
                 className="px-3 py-1.5 rounded-lg text-[12.5px] font-medium transition"
@@ -4227,11 +4106,11 @@ const Cashflow = () => {
           </div>
         )}
       </div>
-      <div className="ft-card p-6">
-        <div className="ft-serif text-[20px] font-medium mb-4" style={{color:'var(--ink)'}}>Transactions</div>
+      <div className="ft-card pt-6 pb-0 overflow-hidden">
+        <div className="ft-serif text-[20px] font-medium mb-4 px-6" style={{color:'var(--ink)'}}>Transactions</div>
         <div className="space-y-0">
           {filtered.map(t=>(
-            <div key={t.kind+t.id} className="flex items-center gap-3 py-2.5 border-b last:border-0" style={{borderColor:'#EBEBEB'}}>
+            <div key={t.kind+t.id} className="flex items-center gap-3 py-2.5 border-b last:border-0 px-6" style={{borderColor:'#EBEBEB'}}>
               <div className="w-7 h-7 rounded-md flex items-center justify-center shrink-0"
                 style={{background:t.kind==='in'?'var(--positive-soft)':'var(--negative-soft)',color:t.kind==='in'?'var(--positive)':'var(--negative)'}}>
                 {t.kind==='in' ? <I.ArrowDown size={13}/> : <I.ArrowUp size={13}/>}
@@ -4288,10 +4167,10 @@ const BankSteps = ({ steps, current }) => (
 
 const BankCard = ({ name, sub, logo, accentColor, onClick }) => (
   <button onClick={onClick}
-    className="flex-1 p-5 rounded-[14px] text-left transition-all ft-card ft-clickable"
-    style={{fontFamily:'inherit'}}
-    onMouseEnter={e=>{e.currentTarget.style.borderColor=accentColor;}}
-    onMouseLeave={e=>{e.currentTarget.style.borderColor='var(--line)';}}>
+    className="flex-1 p-5 rounded-[14px] text-left transition-all"
+    style={{fontFamily:'inherit', background:'#F5F5F5', border:'1.5px solid transparent', borderRadius:14}}
+    onMouseEnter={e=>{e.currentTarget.style.borderColor=accentColor; e.currentTarget.style.background='#F0F0F0';}}
+    onMouseLeave={e=>{e.currentTarget.style.borderColor='transparent'; e.currentTarget.style.background='#F5F5F5';}}>
     <div className="text-[28px] mb-2">{logo}</div>
     <div className="text-[14px] font-semibold mb-1" style={{color:'var(--ink)'}}>{name}</div>
     <div className="text-[11.5px] mb-3" style={{color:'var(--ink-3)'}}>{sub}</div>
@@ -4395,7 +4274,7 @@ const ModalMono = ({ onBack, onSuccess, onClose }) => {
           <div className="ft-fade">
             <div className="text-[32px] mb-3">🐱</div>
             <div className="ft-serif text-[20px] font-medium mb-4" style={{color:'var(--ink)'}}>Connect Monobank</div>
-            <div className="rounded-xl p-4 mb-5 space-y-2.5" style={{background:'#FFFFFF',border:'1px solid #E8E8E8'}}>
+            <div className="rounded-xl p-4 mb-5 space-y-2.5" style={{background:'#F5F5F5',border:'none'}}>
               {[['1','Open Monobank app on your phone'],['2','Go to Settings → Other → API'],['3','Tap "Get token" and copy it'],['4','Paste it in the field below']].map(([n,t])=>(
                 <div key={n} className="flex gap-3 items-start">
                   <div className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5" style={{background:'var(--ink)',color:'#fff'}}>{n}</div>
@@ -4513,7 +4392,7 @@ const ClockifyConnectModal = ({ onClose, onConnected }) => {
       <div className="ft-modal-panel ft-card-2 w-full max-w-[500px] p-7" onClick={e=>e.stopPropagation()} style={{borderRadius:16}}>
         <div className="flex items-start justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center text-[20px]" style={{background:'#FFFFFF',border:'1px solid #E8E8E8'}}>⏱</div>
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center text-[20px]" style={{background:'#F5F5F5',border:'none'}}>⏱</div>
             <div>
               <div className="ft-serif text-[20px] font-medium" style={{color:'var(--ink)'}}>Connect Clockify</div>
               <div className="text-[12px] mt-0.5" style={{color:'var(--ink-3)'}}>via API key</div>
@@ -4524,7 +4403,7 @@ const ClockifyConnectModal = ({ onClose, onConnected }) => {
 
         {(step === 'input' || step === 'error') && (<>
           {/* How to find API key */}
-          <div className="rounded-xl p-4 mb-5 space-y-2.5" style={{background:'#FFFFFF',border:'1px solid #E8E8E8'}}>
+          <div className="rounded-xl p-4 mb-5 space-y-2.5" style={{background:'#F5F5F5',border:'none'}}>
             <div className="text-[11.5px] font-semibold mb-1" style={{color:'var(--ink-2)'}}>How to get your API key</div>
             {[
               ['1', 'Open Clockify in your browser'],
@@ -4608,108 +4487,93 @@ const ClockifyConnectModal = ({ onClose, onConnected }) => {
 // Custom select for data mapping — truncates displayed value with CSS, full text in dropdown
 const MappingSelect = ({ value, onChange, projects }) => {
   const [open, setOpen] = React.useState(false);
-  const [dropUp, setDropUp] = React.useState(false);
-  const ref = React.useRef();
   const btnRef = React.useRef();
+  const dropRef = React.useRef();
+  const [pos, setPos] = React.useState({top:0, left:0, width:0, up:false});
 
   React.useEffect(() => {
     if (!open) return;
-    const handler = (e) => {
-      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+    const h = e => {
+      if (dropRef.current && !dropRef.current.contains(e.target)
+        && btnRef.current && !btnRef.current.contains(e.target))
+        setOpen(false);
     };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
+    document.addEventListener('mousedown', h);
+    return () => document.removeEventListener('mousedown', h);
   }, [open]);
 
   const handleOpen = () => {
     if (btnRef.current) {
-      const rect = btnRef.current.getBoundingClientRect();
-      const spaceBelow = window.innerHeight - rect.bottom;
-      setDropUp(spaceBelow < 240);
+      const r = btnRef.current.getBoundingClientRect();
+      const spaceBelow = window.innerHeight - r.bottom;
+      setPos({ top: spaceBelow < 220 ? r.top - 4 : r.bottom + 4, left: r.left, width: r.width, up: spaceBelow < 220 });
     }
     setOpen(o => !o);
   };
 
   const activeProjects = projects.filter(p => p.status === 'Active');
 
-  const getLabel = (v) => {
-    if (v === 'create') return 'Create as new';
+  const getLabel = v => {
+    if (v === 'create') return '+ Create as new';
     if (v === 'ignore') return 'Ignore';
-    const pid = +v.replace('link:', '');
-    const p = activeProjects.find(p => p.id === pid);
+    const p = activeProjects.find(p => `link:${p.id}` === v);
     return p ? p.name : v;
   };
 
   const isIgnore = value === 'ignore';
-  const select = (v) => { onChange(v); setOpen(false); };
+  const isCreate = value === 'create';
+  const labelColor = isIgnore ? 'var(--ink-3)' : isCreate ? 'var(--positive)' : 'var(--ink)';
+
+  const options = [
+    { value: 'create', label: '+ Create as new', color: 'var(--positive)' },
+    { value: 'ignore', label: 'Ignore', color: 'var(--ink-3)' },
+    ...activeProjects.map(p => ({ value: `link:${p.id}`, label: p.name, color: 'var(--ink)' })),
+  ];
 
   return (
-    <div ref={ref} style={{position:'relative', width:'100%'}}>
-      <button
-        ref={btnRef}
-        type="button"
-        onClick={handleOpen}
-        style={{
-          width:'100%', height:32, display:'flex', alignItems:'center', justifyContent:'space-between',
-          padding:'0 8px 0 10px', borderRadius:8, fontSize:12, cursor:'pointer', gap:4,
-          background:'#EFEFEF', border:'none',
-          color: isIgnore ? 'var(--ink-3)' : 'var(--ink)',
-        }}>
-        <span style={{overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', flex:1, textAlign:'left'}}>
+    <div style={{position:'relative', width:'100%'}}>
+      <button ref={btnRef} type="button" onClick={handleOpen}
+        style={{ width:'100%', height:34, display:'flex', alignItems:'center', justifyContent:'space-between',
+          padding:'0 10px', borderRadius:8, fontSize:12.5, cursor:'pointer', gap:4,
+          background:'#FFFFFF', border:'1px solid #E8E8E8', fontFamily:'inherit',
+          color: labelColor }}>
+        <span style={{overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', flex:1, textAlign:'left', fontWeight: isCreate ? 500 : 400}}>
           {getLabel(value)}
         </span>
         <I.ChevronDown size={12} style={{flexShrink:0, color:'var(--ink-3)', transform: open ? 'rotate(180deg)' : 'none', transition:'transform 150ms'}}/>
       </button>
 
       {open && (
-        <div style={{
+        <div ref={dropRef} style={{
           position:'fixed',
-          ...(dropUp
-            ? { bottom: window.innerHeight - btnRef.current.getBoundingClientRect().top + 4 }
-            : { top: btnRef.current.getBoundingClientRect().bottom + 4 }),
-          left: btnRef.current.getBoundingClientRect().left,
-          width: btnRef.current.getBoundingClientRect().width,
-          zIndex:9999,
-          background:'#EFEFEF', border:'none',
-          borderRadius:10, boxShadow:'0 8px 24px rgba(28,24,20,0.14)',
-          display:'flex', flexDirection:'column', maxHeight:220,
+          top: pos.up ? undefined : pos.top,
+          bottom: pos.up ? window.innerHeight - pos.top : undefined,
+          left: pos.left,
+          width: pos.width,
+          zIndex: 9999,
+          background:'#FFFFFF',
+          border:'1px solid #E8E8E8',
+          borderRadius:10,
+          boxShadow:'0 8px 24px rgba(0,0,0,0.12)',
+          overflow:'hidden',
+          maxHeight:220,
         }}>
-          <div style={{overflowY:'auto', flex:1}}>
-            <div style={{padding:'5px 10px 3px', fontSize:10, textTransform:'uppercase', letterSpacing:'0.1em', color:'var(--ink-3)', fontWeight:500, position:'sticky', top:0, background:'var(--surface)', borderBottom:'1px solid var(--line)'}}>
-              Existing projects
-            </div>
-            {activeProjects.map(p => {
-              const v = `link:${p.id}`;
-              const active = value === v;
+          <div style={{overflowY:'auto', maxHeight:220}}>
+            {options.map(opt => {
+              const active = value === opt.value;
               return (
-                <button key={p.id} type="button"
-                  onMouseDown={e=>{ e.preventDefault(); select(v); }}
-                  style={{
-                    width:'100%', padding:'6px 10px', fontSize:12, textAlign:'left', display:'flex', alignItems:'center', justifyContent:'space-between',
-                    background: active ? 'var(--ink)' : 'transparent',
-                    color: active ? '#ffffff' : 'var(--ink-2)',
-                    border:'none', cursor:'pointer', gap:6,
-                  }}>
-                  <span style={{overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap'}}>{p.name}</span>
-                  {active && <I.Check2 size={12} style={{flexShrink:0}}/>}
-                </button>
-              );
-            })}
-          </div>
-          <div style={{borderTop:'1px solid var(--line)', flexShrink:0}}>
-            {[{v:'create',l:'Create as new'},{v:'ignore',l:'Ignore'}].map(({v,l})=>{
-              const active = value === v;
-              return (
-                <button key={v} type="button"
-                  onMouseDown={e=>{ e.preventDefault(); select(v); }}
-                  style={{
-                    width:'100%', padding:'6px 10px', fontSize:12, textAlign:'left', display:'flex', alignItems:'center', justifyContent:'space-between',
-                    background: active ? 'var(--ink)' : 'transparent',
-                    color: active ? '#ffffff' : 'var(--ink-2)',
-                    border:'none', cursor:'pointer',
-                  }}>
-                  {l}
-                  {active && <I.Check2 size={12}/>}
+                <button key={opt.value} type="button"
+                  onMouseDown={e => { e.preventDefault(); onChange(opt.value); setOpen(false); }}
+                  style={{ width:'100%', display:'flex', alignItems:'center', justifyContent:'space-between',
+                    padding:'9px 12px', border:'none', cursor:'pointer', fontFamily:'inherit',
+                    fontSize:12.5, textAlign:'left', gap:8,
+                    background: active ? '#F5F5F5' : 'transparent',
+                    color: opt.color }}
+                  onMouseEnter={e => { if (!active) e.currentTarget.style.background='#F8F8F8'; }}
+                  onMouseLeave={e => { if (!active) e.currentTarget.style.background='transparent'; }}>
+                  <span style={{flex:1, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap',
+                    fontWeight: active ? 600 : 400}}>{opt.label}</span>
+                  {active && <I.Check2 size={13} style={{color:'var(--accent)', flexShrink:0}}/>}
                 </button>
               );
             })}
@@ -4719,6 +4583,7 @@ const MappingSelect = ({ value, onChange, projects }) => {
     </div>
   );
 };
+
 
 const ClockifyConfigModal = ({ onClose, onSaved }) => {
   const [step, setStep] = React.useState('config'); // config | syncing | done
@@ -4803,7 +4668,7 @@ const ClockifyConfigModal = ({ onClose, onSaved }) => {
         {/* Header */}
         <div className="flex items-center justify-between px-7 py-5 border-b" style={{borderColor:'#EBEBEB'}}>
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center text-[18px]" style={{background:'#FFFFFF',border:'1px solid #E8E8E8'}}>⏱</div>
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center text-[18px]" style={{background:'#F5F5F5',border:'none'}}>⏱</div>
             <div>
               <div className="flex items-center gap-2">
                 <span className="ft-serif text-[18px] font-medium" style={{color:'var(--ink)'}}>Clockify Configuration</span>
@@ -4821,21 +4686,23 @@ const ClockifyConfigModal = ({ onClose, onSaved }) => {
               {/* General */}
               <section>
                 <div className="text-[11px] uppercase tracking-[0.12em] font-medium mb-3" style={{color:'var(--ink-3)'}}>General</div>
-                <div className="ft-card p-4 space-y-0">
-                  <div className="pb-3.5 border-b" style={{borderColor:'#EBEBEB'}}>
+                <div style={{border:'1px solid #E8E8E8', borderRadius:12, overflow:'hidden'}}>
+                  <div className="p-4 border-b" style={{borderColor:'#E8E8E8'}}>
                     <label className="text-[11px] uppercase tracking-[0.1em] font-medium block mb-2" style={{color:'var(--ink-3)'}}>Workspace</label>
-                    <select className="ft-select w-full" value={workspace} onChange={e=>setWorkspace(e.target.value)}>
+                    <select className="ft-select w-full" style={{background:'#FFFFFF',border:'1px solid #EBEBEB'}} value={workspace} onChange={e=>setWorkspace(e.target.value)}>
                       <option value="main">Main Workspace</option>
                       <option value="agency">Design Agency</option>
                       <option value="freelance">Freelance Projects</option>
                     </select>
                   </div>
-                  <Toggle value={syncTime} onChange={setSyncTime}
-                    label="Sync Time Entries"
-                    sub="Automatically import user hours based on email matching"/>
-                  <Toggle value={syncProjects} onChange={setSyncProjects}
-                    label="Sync Projects"
-                    sub="Import and map Clockify projects to Monira"/>
+                  <div style={{padding:'0 16px'}}>
+                    <Toggle value={syncTime} onChange={setSyncTime}
+                      label="Sync Time Entries"
+                      sub="Automatically import user hours based on email matching"/>
+                    <Toggle value={syncProjects} onChange={setSyncProjects}
+                      label="Sync Projects"
+                      sub="Import and map Clockify projects to Monira"/>
+                  </div>
                 </div>
               </section>
 
@@ -4863,7 +4730,7 @@ const ClockifyConfigModal = ({ onClose, onSaved }) => {
                         placeholder="Search Clockify projects…"
                         value={mapSearch} onChange={e=>setMapSearch(e.target.value)}/>
                     </div>
-                    <select className="ft-select" style={{height:34,fontSize:12.5,minWidth:148}}
+                    <select className="ft-select" style={{height:34,fontSize:12.5,minWidth:148,background:'#F5F5F5',border:'none'}}
                       value={mapFilter} onChange={e=>setMapFilter(e.target.value)}>
                       <option value="all">All projects</option>
                       <option value="unmatched">Needs review</option>
@@ -4885,10 +4752,9 @@ const ClockifyConfigModal = ({ onClose, onSaved }) => {
                       </div>
                     ) : paginatedMappings.map(m=>(
                       <div key={m.id} className="grid px-4 py-3 border-b last:border-0 items-center gap-3"
-                        style={{borderColor:'#EBEBEB',gridTemplateColumns:'minmax(0,1fr) 210px',
-                          opacity: m.action==='ignore' ? 0.5 : 1}}>
+                        style={{borderColor:'#EBEBEB',gridTemplateColumns:'minmax(0,1fr) 210px', background:'#FAFAFA'}}>
                         <div className="flex items-center gap-2 min-w-0">
-                          <span className="text-[13px] font-medium truncate" style={{color:'var(--ink)'}}>{m.name}</span>
+                          <span className="text-[13px] font-medium truncate" style={{color: m.action==='ignore' ? 'var(--ink-3)' : 'var(--ink)'}}>{m.name}</span>
                           {m.autoMatch && (
                             <span className="shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded-full" style={{background:'#eff6ff',color:'#2563eb'}}>Auto</span>
                           )}
@@ -4949,7 +4815,7 @@ const ClockifyConfigModal = ({ onClose, onSaved }) => {
 
         {step === 'syncing' && (
           <div className="px-7 py-12 flex flex-col items-center gap-5">
-            <div className="w-12 h-12 rounded-full flex items-center justify-center text-[24px]" style={{background:'#FFFFFF',border:'1px solid #E8E8E8'}}>⏱</div>
+            <div className="w-12 h-12 rounded-full flex items-center justify-center text-[24px]" style={{background:'#F5F5F5',border:'none'}}>⏱</div>
             <div className="text-center">
               <div className="ft-serif text-[18px] font-medium mb-1" style={{color:'var(--ink)'}}>Syncing with Clockify…</div>
               <div className="text-[13px]" style={{color:'var(--ink-3)'}}>Importing time entries and mapping projects</div>
@@ -4990,9 +4856,9 @@ const ClockifyConfigModal = ({ onClose, onSaved }) => {
                 {mappings.filter(m=>m.action!=='ignore').length} projects synced · {syncTime ? 'Time entries imported' : 'Time sync disabled'}
               </div>
             </div>
-            <div className="ft-card p-4 w-full max-w-sm space-y-2">
+            <div className="p-4 w-full max-w-sm space-y-2 rounded-xl" style={{background:'#F5F5F5'}}>
               {mappings.filter(m=>m.action!=='ignore').map(m=>(
-                <div key={m.id} className="flex items-center justify-between text-[12.5px]">
+                <div key={m.id} className="flex items-center justify-between text-[12.5px] py-1">
                   <span style={{color:'var(--ink-2)'}}>{m.name}</span>
                   <span className="ft-mono text-[11.5px]" style={{color:'var(--ink-3)'}}>{actionLabel(m.action)}</span>
                 </div>
@@ -5105,7 +4971,7 @@ const SettingsView = ({ banks, onConnect, onDisconnectStart, setView }) => {
         {integrations.map(intg=>(
           <div key={intg.id} className="flex items-center gap-4 px-5 py-4 border-b last:border-0" style={{borderColor:'#EBEBEB'}}>
             <div className="w-10 h-10 rounded-xl flex items-center justify-center text-[22px] shrink-0"
-              style={{background:'#FFFFFF',border:'1px solid #E8E8E8'}}>{intg.logo}</div>
+              style={{background:'#F5F5F5',border:'none'}}>{intg.logo}</div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
                 <span className="text-[13.5px] font-semibold" style={{color:'var(--ink)'}}>{intg.name}</span>
@@ -5140,7 +5006,7 @@ const SettingsView = ({ banks, onConnect, onDisconnectStart, setView }) => {
         {[{logo:'📊',name:'Google Sheets'},{logo:'🔔',name:'Slack Notifications'},{logo:'📧',name:'Email Reports'}].map(c=>(
           <div key={c.name} className="flex items-center gap-4 px-5 py-3.5 border-b last:border-0" style={{borderColor:'#EBEBEB',opacity:0.45}}>
             <div className="w-10 h-10 rounded-xl flex items-center justify-center text-[20px] shrink-0"
-              style={{background:'#FFFFFF',border:'1px solid #E8E8E8'}}>{c.logo}</div>
+              style={{background:'#F5F5F5',border:'none'}}>{c.logo}</div>
             <div className="flex-1">
               <span className="text-[13px] font-medium" style={{color:'var(--ink)'}}>{c.name}</span>
               <span className="ml-2 text-[10.5px] px-1.5 py-0.5 rounded-full font-medium" style={{background:'#EEEEEE',border:'none',color:'#888888'}}>Coming soon</span>
