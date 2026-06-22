@@ -21,19 +21,19 @@
 
 <style>
   :root {
-    --bg:           #F5F5F5;
-    --bg-grain:     #EBEBEB;
+    --bg:           #F5F4F8;
+    --bg-grain:     #EEEDF2;
     --surface:      #FFFFFF;
     --surface-2:    #FFFFFF;
-    --ink:          #111111;
-    --ink-2:        #444444;
-    --ink-3:        #888888;
-    --ink-4:        #BBBBBB;
-    --line:         #E8E8E8;
-    --line-2:       #D8D8D8;
-    --accent:       #3B5BDB;
-    --accent-2:     #2B47B8;
-    --accent-soft:  #E8EDFC;
+    --ink:          #1C1814;
+    --ink-2:        #4A4138;
+    --ink-3:        #8B8175;
+    --ink-4:        #B5AC9E;
+    --line:         #E5DCC7;
+    --line-2:       #D9CFB6;
+    --accent:       #5B4FCF;
+    --accent-2:     #4A3FBF;
+    --accent-soft:  #EDEAFC;
     --positive:     #2D5A3F;
     --positive-2:   #1F4530;
     --positive-soft:#DEE8D7;
@@ -42,9 +42,10 @@
     --warn-soft:    #F4E5BB;
     --warn:         #856611;
   }
-  html { background: #F5F5F5; }
-  body { margin: 0; padding: 0; background: #F5F5F5; min-height: 100vh; }
-  #root { background: #F5F5F5; }
+  html { background: #F5F4F8; }
+  body { margin: 0; padding: 0; background: #F5F4F8; min-height: 100vh; }
+  #root { background: #F5F4F8; }
+
   #root { display: block; }
   .ft-root {
     font-family: 'Inter', system-ui, sans-serif;
@@ -71,9 +72,9 @@
   ::-webkit-scrollbar { width: 8px; height: 8px; }
   ::-webkit-scrollbar-thumb { background: var(--line-2); border-radius: 4px; }
   ::-webkit-scrollbar-track { background: transparent; }
-  .ft-btn-primary { background: #1C1C1C; color: #ffffff; padding: 0 16px; height: 38px; border-radius: 9px; font-weight: 500; font-size: 13.5px; display: inline-flex; align-items: center; gap: 6px; transition: background 120ms ease; border: none; cursor: pointer; font-family: inherit; white-space: nowrap; }
-  .ft-btn-primary:hover { background: var(--accent); }
-  .ft-btn-ghost { background: #FFFFFF; color: var(--ink-2); padding: 0 12px; height: 38px; border-radius: 9px; font-weight: 500; font-size: 13px; display: inline-flex; align-items: center; gap: 6px; transition: all 120ms ease; border: 1px solid #E0E0E0; cursor: pointer; font-family: inherit; }
+  .ft-btn-primary { background: linear-gradient(135deg, #8B6FE8 0%, #4A2DB8 100%); color: #FFFFFF; padding: 0 16px; height: 38px; border-radius: 9px; font-weight: 500; font-size: 13.5px; display: inline-flex; align-items: center; gap: 6px; transition: background 120ms ease, opacity 120ms ease; border: none; cursor: pointer; font-family: inherit; white-space: nowrap; }
+  .ft-btn-primary:hover { background: #111111; }
+  .ft-btn-ghost { background: #EFEFEF; color: var(--ink-2); padding: 0 12px; height: 38px; border-radius: 9px; font-weight: 500; font-size: 13px; display: inline-flex; align-items: center; gap: 6px; transition: all 120ms ease; border: none; cursor: pointer; font-family: inherit; }
   .ft-btn-ghost:hover { background: #EFEFEF; color: var(--ink); }
   .ft-input { background: #EFEFEF; border: none; border-radius: 9px; padding: 9px 12px; font-size: 13.5px; width: 100%; color: var(--ink); outline: none; font-family: inherit; transition: box-shadow 120ms ease; }
   .ft-input.with-icon { padding-left: 36px; }
@@ -82,7 +83,8 @@
   .ft-select { background: #FFFFFF; border: none; border: none; border-radius: 9px; padding: 9px 30px 9px 12px; font-size: 13.5px; color: var(--ink-2); outline: none; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238B8175' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>"); background-repeat: no-repeat; background-position: right 10px center; font-family: inherit; transition: border-color 120ms ease; }
   .ft-select:focus { box-shadow: 0 0 0 2px var(--accent); outline: none; }
   /* Nav item hover */
-  .ft-nav-item:hover { background: rgba(0,0,0,0.06) !important; color: var(--ink) !important; }
+  .ft-nav-item { color: #FFFFFF !important; }
+  .ft-nav-item:hover { background: rgba(255,255,255,0.12) !important; color: #FFFFFF !important; }
   /* Text hover links */
   .ft-hover-underline { transition: color 100ms ease; cursor: pointer; }
   .ft-hover-underline:hover { color: var(--accent) !important; text-decoration: underline; text-underline-offset: 2px; }
@@ -96,13 +98,13 @@
   /* Shared border-only hover button — used by StatCard sub-link AND View all */
   .ft-border-btn {
     display: inline-flex; align-items: center; gap: 4px;
-    background: transparent; border: 1px solid #E0E0E0; border-radius: 8px;
+    background: transparent; border: 1px solid var(--line-2); border-radius: 8px;
     cursor: pointer; font-size: 12px; font-weight: 500;
     color: var(--ink-2); padding: 5px 10px;
-    font-family: inherit; transition: background 100ms ease, color 100ms ease, border-color 100ms ease;
+    font-family: inherit; transition: background 100ms ease, color 100ms ease;
     text-decoration: none;
   }
-  .ft-border-btn:hover { background: #EFEFEF; border-color: #CCCCCC; color: var(--ink); }
+  .ft-border-btn:hover { background: var(--line); color: var(--ink); }
 
   /* StatCard sub-label reuses the same border-btn look */
   .ft-stat-sub {
@@ -271,11 +273,11 @@ const Input = ({ type='text', value, onChange, placeholder, prefix, mono=false, 
       )}
       <input type={type} value={value} onChange={onChange} placeholder={placeholder} disabled={disabled}
         onFocus={()=>setFocused(true)} onBlur={()=>setFocused(false)}
-        style={{ width:'100%', background:'#EFEFEF', border: error ? '1.5px solid var(--negative)' : focused ? '1.5px solid var(--accent)' : 'none',
+        style={{ width:'100%', background:'#EFEFEF', border: error ? '1.5px solid var(--negative)' : 'none',
           borderRadius:10, padding: prefix?'9px 12px 9px 26px':'9px 12px',
           fontSize:13.5, color:'var(--ink)', outline:'none', fontFamily:'inherit',
           letterSpacing:mono?'-0.02em':'inherit', transition:'border-color 120ms ease, box-shadow 120ms ease',
-          boxShadow: focused ? '0 0 0 3px rgba(59,91,219,0.1)' : 'none',
+          boxShadow: focused ? '0 0 0 3px rgba(91,79,207,0.1)' : 'none',
           opacity:disabled?0.55:1, cursor:disabled?'not-allowed':'text', ...style }}
         {...rest}/>
       {error && <div style={{fontSize:11,color:'var(--negative)',marginTop:4}}>{error}</div>}
@@ -321,7 +323,7 @@ const Textarea = ({ value, onChange, rows=3, placeholder, style={} }) => {
       style={{ width:'100%', background:'#EFEFEF', border: focused ? '1.5px solid var(--accent)' : 'none',
         borderRadius:10, padding:'9px 12px', fontSize:13.5, color:'var(--ink)', outline:'none',
         fontFamily:'inherit', resize:'vertical', transition:'border-color 120ms ease, box-shadow 120ms ease',
-        boxShadow: focused ? '0 0 0 3px rgba(59,91,219,0.1)' : 'none', ...style }}/>
+        boxShadow: focused ? '0 0 0 3px rgba(91,79,207,0.1)' : 'none', ...style }}/>
   );
 };
 
@@ -625,7 +627,7 @@ const StatCard = ({ label, value, sub, mom, momInverse, accent=false, tone, onCl
   return (
     <div onClick={onClick}
       style={{ padding:'16px 20px', borderRadius:14, cursor:onClick?'pointer':'default',
-        background: accent?'var(--ink)':'var(--surface)',
+        background: accent?'#1A1A1A':'var(--surface)',
         border: 'none',
         boxShadow: 'none',
         position:'relative', overflow:'hidden' }}>
@@ -689,7 +691,7 @@ const TopBar = ({ title, subtitle, period, onPrev, onNext, action }) => (
     </div>
     <div style={{display:'flex',alignItems:'center',gap:8}}>
       {period && (
-        <div style={{display:'flex',alignItems:'center',height:38,background:'#FFFFFF',border:'1px solid #EBEBEB',borderRadius:10,padding:'0 2px'}}>
+        <div style={{display:'flex',alignItems:'center',height:38,background:'#FFFFFF',border:'none',borderRadius:10,padding:'0 2px'}}>
           <Button variant="ghost" size="sm" icon={<I.ChevronLeft size={14}/>} onClick={onPrev} style={{padding:'0 9px',height:'100%',border:'none',background:'transparent'}}/>
           <span style={{padding:'0 6px',fontSize:13,fontWeight:500,fontFamily:'Inter,system-ui,sans-serif',color:'var(--ink)',whiteSpace:'nowrap'}}>{period}</span>
           <Button variant="ghost" size="sm" icon={<I.ChevronRight size={14}/>} onClick={onNext} style={{padding:'0 9px',height:'100%',border:'none',background:'transparent'}}/>
@@ -778,13 +780,13 @@ const NAV_ITEMS = [
 /** Main navigation sidebar */
 const Sidebar = ({ view, setView, showSettingsBadge=false }) => (
   <aside style={{width:230,flexShrink:0,display:'flex',flexDirection:'column',
-    background:'#FFFFFF',borderRight:'none',
+    background:'#111111',borderRight:'none',
     position:'fixed',top:0,left:0,height:'100vh',zIndex:10,overflowY:'auto'}}>
     <div style={{padding:'20px',display:'flex',alignItems:'center',gap:10}}>
       <div style={{width:32,height:32,borderRadius:9,background:'var(--accent)',display:'flex',alignItems:'center',justifyContent:'center',color:'#fff'}}>
         <I.Logo size={18}/>
       </div>
-      <span style={{fontFamily:'Inter,system-ui,sans-serif',fontSize:19,fontWeight:500,letterSpacing:'-0.02em',color:'var(--ink)'}}>Monira</span>
+      <span style={{fontFamily:'Inter,system-ui,sans-serif',fontSize:19,fontWeight:500,letterSpacing:'-0.02em',color:'#FFFFFF'}}>Monira</span>
     </div>
     <nav style={{flex:1,padding:'12px',display:'flex',flexDirection:'column',gap:2,overflowY:'auto'}}>
       {NAV_ITEMS.map(item=>{
@@ -795,9 +797,9 @@ const Sidebar = ({ view, setView, showSettingsBadge=false }) => (
             style={{ width:'100%',display:'flex',alignItems:'center',gap:12,padding:'9px 12px',
               borderRadius:9,fontSize:13.5,fontWeight:500,border:'none',cursor:'pointer',
               fontFamily:'inherit',letterSpacing:'-0.005em',textAlign:'left',position:'relative',
-              background:active?'rgba(59,91,219,0.1)':'transparent',
+              background:active?'rgba(91,79,207,0.1)':'transparent',
               color:active?'var(--accent)':'var(--ink-2)',transition:'all 100ms ease' }}>
-            {active && <span style={{position:'absolute',left:0,top:'50%',transform:'translateY(-50%)',height:'60%',width:3,borderRadius:99,background:'var(--accent)'}}/>}
+            {active && <span style={{position:'absolute',left:0,top:'50%',transform:'translateY(-50%)',height:'60%',width:3,borderRadius:99,background:'#FFFFFF'}}/>}
             <IconC size={17}/>{item.label}
           </button>
         );
@@ -809,17 +811,17 @@ const Sidebar = ({ view, setView, showSettingsBadge=false }) => (
         style={{ width:'100%',display:'flex',alignItems:'center',gap:12,padding:'9px 12px',
           borderRadius:9,fontSize:13.5,fontWeight:500,border:'none',cursor:'pointer',
           fontFamily:'inherit',letterSpacing:'-0.005em',textAlign:'left',position:'relative',
-          background:view==='settings'?'rgba(59,91,219,0.1)':'transparent',
+          background:view==='settings'?'rgba(91,79,207,0.1)':'transparent',
           color:view==='settings'?'var(--accent)':'var(--ink-2)',transition:'all 100ms ease' }}>
-        {view==='settings' && <span style={{position:'absolute',left:0,top:'50%',transform:'translateY(-50%)',height:'60%',width:3,borderRadius:99,background:'var(--accent)'}}/>}
+        {view==='settings' && <span style={{position:'absolute',left:0,top:'50%',transform:'translateY(-50%)',height:'60%',width:3,borderRadius:99,background:'#FFFFFF'}}/>}
         <I.Settings size={17}/>Settings
         {showSettingsBadge && <span style={{marginLeft:'auto',background:'var(--accent)',color:'#fff',borderRadius:99,fontSize:10,fontWeight:600,padding:'1px 6px'}}>1</span>}
       </button>
       <div style={{display:'flex',alignItems:'center',gap:8,padding:'8px 8px'}}>
         <Avatar name="Admin" size={26}/>
         <div style={{flex:1,minWidth:0}}>
-          <div style={{fontSize:12.5,fontWeight:500,color:'var(--ink)',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>admin@monira.com</div>
-          <div style={{fontSize:11,color:'var(--ink-3)'}}>Owner</div>
+          <div style={{fontSize:12.5,fontWeight:500,color:'rgba(255,255,255,0.9)',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>admin@monira.com</div>
+          <div style={{fontSize:11,color:'rgba(255,255,255,0.5)'}}>Owner</div>
         </div>
         <Button variant="ghost" size="sm" icon={<I.LogOut size={14}/>} style={{padding:'6px 7px'}}/>
       </div>
@@ -1743,8 +1745,9 @@ const DynamicsChart = ({ trendData, trendMode = 'months' }) => {
   const fmtK = v => v >= 1000 ? `$${Math.round(v/1000)}k` : `$${v}`;
   const data = trendData;
 
-  const C_REV = '#2D5A3F';
+  const C_REV = '#10B981';
   const C_EXP = '#C0392B';
+  const C_MAR = '#6366F1';
 
   const [hovered, setHovered] = React.useState(null);
   const [rangeFrom, setRangeFrom] = React.useState(0);
@@ -1787,15 +1790,19 @@ const DynamicsChart = ({ trendData, trendMode = 'months' }) => {
   const valMax = Math.max(revMax, expMax);
   const valMin = Math.min(...visData.map(d => Math.min(d.rev, d.exp))) * 0.82;
   const valRange = valMax - valMin || 1;
+  const marMax = Math.max(...visData.map(d => d.margin), 10) * 1.12;
+
   const yV = v => PAD_T + chartH - ((v - valMin) / valRange) * chartH;
+  const yM = v => PAD_T + chartH - (Math.max(0, v) / marMax) * chartH;
+
   // Bar layout: tight group per month, visible gap between months
   // Group width = chartW / visN
   // Each group: [REV bar | gap | EXP bar | gap | MAR bar] + inter-month gap
   const slotW = chartW / Math.max(visN, 1);
   const interGap = Math.max(8, slotW * 0.18);       // gap between month groups
   const innerW   = slotW - interGap;                  // usable width per group
-  const barGap   = Math.max(3, innerW * 0.08);        // gap between bars within group
-  const barW     = Math.max(10, (innerW - barGap) / 2); // each bar width — 2 bars now
+  const barGap   = Math.max(2, innerW * 0.06);        // gap between bars within group
+  const barW     = Math.max(8, (innerW - barGap * 2) / 3); // each bar width
 
   // Y ticks
   const yTicks = [0, 0.33, 0.66, 1].map(f => ({
@@ -1817,7 +1824,7 @@ const DynamicsChart = ({ trendData, trendMode = 'months' }) => {
         <div ref={pickerRef} className="ft-card ft-fade" style={{
           position:'fixed', left: Math.min(rect.left, window.innerWidth - 200),
           top: rect.bottom + 6, zIndex: 500, padding: '16px', minWidth: 180,
-          boxShadow: '0 8px 28px rgba(0,0,0,0.12)' }}>
+          boxShadow: 'none' }}>
           <div style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 600, color: 'var(--ink-3)', marginBottom: 10 }}>
             {isFrom ? 'From' : 'To'}
           </div>
@@ -1946,10 +1953,12 @@ const DynamicsChart = ({ trendData, trendMode = 'months' }) => {
           const groupStart = slotStart + interGap / 2;
           const revX = groupStart;
           const expX = groupStart + barW + barGap;
+          const marX = groupStart + (barW + barGap) * 2;
           const cx   = slotStart + slotW / 2;
 
           const revH = Math.max(2, ((d.rev - valMin) / valRange) * chartH);
           const expH = Math.max(2, ((d.exp - valMin) / valRange) * chartH);
+          const marH = Math.max(2, (Math.max(0, d.margin) / marMax) * chartH);
           const ip = d.inProgress;
           const isHov = hovered === i;
           return (
@@ -1969,6 +1978,7 @@ const DynamicsChart = ({ trendData, trendMode = 'months' }) => {
                 fill={ip?'transparent':C_EXP} stroke={ip?C_EXP:'none'}
                 strokeWidth={ip?1.5:0} strokeDasharray={ip?'5 3':undefined}
                 opacity={isHov?1:0.75}/>
+
               {/* X label */}
               <text x={cx} y={H-6} fontSize="10" fill={isHov?'#444':'#CCCCCC'}
                 textAnchor="middle" fontFamily="Inter" fontWeight={isHov?'500':'400'}>{d.m}</text>
@@ -1996,9 +2006,9 @@ const DynamicsChart = ({ trendData, trendMode = 'months' }) => {
               <circle cx={ttX+18} cy={ttY+57} r="4" fill={C_EXP}/>
               <text x={ttX+27} y={ttY+61} fontSize="10.5" fill="var(--ink-3)" fontFamily="Inter">Expenses</text>
               <text x={ttX+ttW-12} y={ttY+61} fontSize="10.5" fill={C_EXP} fontFamily="Inter" fontWeight="700" textAnchor="end">{fmtUSD(d.exp)}</text>
-              <circle cx={ttX+18} cy={ttY+76} r="4" fill="#6366F1"/>
+              <circle cx={ttX+18} cy={ttY+76} r="4" fill={C_MAR}/>
               <text x={ttX+27} y={ttY+80} fontSize="10.5" fill="var(--ink-3)" fontFamily="Inter">Margin</text>
-              <text x={ttX+ttW-12} y={ttY+80} fontSize="10.5" fill="#6366F1" fontFamily="Inter" fontWeight="700" textAnchor="end">{d.margin}%</text>
+              <text x={ttX+ttW-12} y={ttY+80} fontSize="10.5" fill={C_MAR} fontFamily="Inter" fontWeight="700" textAnchor="end">{d.margin}%</text>
               <defs>
                 <filter id="tt-shadow" x="-10%" y="-10%" width="130%" height="140%">
                   <feDropShadow dx="0" dy="4" stdDeviation="8" floodColor="rgba(0,0,0,0.1)"/>
@@ -2062,7 +2072,7 @@ const Dashboard = ({ onAddEntry, onDrill, onGoProjects, onViewReceivables, banks
 
   return (
     <div className="ft-fade">
-      <TopBar title="Dashboard" subtitle={`${MONTHS[periodMonth]} snapshot.`} period={periodLabel}
+      <TopBar title="Dashboard" subtitle={`Your ${MONTHS[periodMonth]} at a glance.`} period={periodLabel}
         onPrev={prevMonth} onNext={nextMonth}
         action={<button className="ft-btn-primary" onClick={onAddEntry}><I.Plus size={14}/> <span className="ft-btn-text">Add income / expense</span></button>}/>
 
@@ -2079,8 +2089,8 @@ const Dashboard = ({ onAddEntry, onDrill, onGoProjects, onViewReceivables, banks
       {/* Middle row: Received invoices (left) + Overdue (right) */}
       <div className="grid grid-cols-2 gap-4 mb-4">
         {/* Received invoices — LEFT */}
-        <div className="ft-card pt-5 pb-0 overflow-hidden">
-          <div className="flex items-center justify-between mb-4 px-5">
+        <div className="ft-card p-5">
+          <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <span style={{color:'var(--positive)'}}><I.Check2 size={14}/></span>
               <div className="text-[11px] uppercase tracking-[0.12em] font-medium" style={{color:'var(--ink-3)'}}>Received invoices</div>
@@ -2093,7 +2103,7 @@ const Dashboard = ({ onAddEntry, onDrill, onGoProjects, onViewReceivables, banks
           </div>
 
           {!banks.boa && !banks.mono ? (
-            <div className="flex flex-col items-center justify-center py-8 text-center px-5">
+            <div className="flex flex-col items-center justify-center py-8 text-center">
               <div className="text-[36px] mb-3">🏦</div>
               <div className="ft-serif text-[16px] font-medium mb-2" style={{color:'var(--ink)'}}>No bank connected</div>
               <p className="text-[12.5px] mb-5" style={{color:'var(--ink-3)',lineHeight:1.5}}>Connect your bank to see incoming payments synced automatically.</p>
@@ -2105,7 +2115,7 @@ const Dashboard = ({ onAddEntry, onDrill, onGoProjects, onViewReceivables, banks
             <div className="ft-fade">
               {/* No total number — per request */}
               {receivables.filter(r=>r.status==='received').sort((a,b)=>a.issueDate>b.issueDate?-1:1).slice(0,5).map(r=>(
-                <div key={r.id} className="flex items-center gap-3 py-2.5 border-b last:border-0 px-5" style={{borderColor:'#EBEBEB'}}>
+                <div key={r.id} className="flex items-center gap-3 py-2.5 border-b last:border-0" style={{borderColor:'#EBEBEB'}}>
                   <Avatar name={r.client} size={28}/>
                   <div className="flex-1 min-w-0">
                     {/* Click company name → Link Payment modal */}
@@ -2123,8 +2133,8 @@ const Dashboard = ({ onAddEntry, onDrill, onGoProjects, onViewReceivables, banks
         </div>
 
         {/* Overdue — RIGHT */}
-        <div className="ft-card pt-5 pb-0 overflow-hidden">
-          <div className="flex items-center justify-between mb-3 px-5">
+        <div className="ft-card p-5">
+          <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-3">
               <span style={{color:'var(--negative)'}}><I.AlertCircle size={14}/></span>
               <div className="text-[11px] uppercase tracking-[0.12em] font-medium" style={{color:'var(--ink-3)'}}>Overdue</div>
@@ -2139,7 +2149,7 @@ const Dashboard = ({ onAddEntry, onDrill, onGoProjects, onViewReceivables, banks
           </div>
           <div>
             {receivables.filter(r=>r.status==='overdue'||r.daysOverdue>0).sort((a,b)=>b.daysOverdue-a.daysOverdue).slice(0,5).map(r=>(
-              <div key={r.id} className="flex items-center gap-3 py-2.5 border-b last:border-0 px-5" style={{borderColor:'#EBEBEB'}}>
+              <div key={r.id} className="flex items-center gap-3 py-2.5 border-b last:border-0" style={{borderColor:'#EBEBEB'}}>
                 <Avatar name={r.client} size={28}/>
                 <div className="flex-1 min-w-0">
                   <div className="text-[13px] font-medium truncate" style={{color:'var(--ink)'}}>{r.client}</div>
@@ -2159,7 +2169,7 @@ const Dashboard = ({ onAddEntry, onDrill, onGoProjects, onViewReceivables, banks
         <div className="flex items-start justify-between mb-1">
           <div>
             <div className="text-[11px] uppercase tracking-[0.12em] mb-1" style={{color:'var(--ink-3)'}}>Dynamics</div>
-            <div style={{fontSize:20,fontWeight:600,letterSpacing:'-0.02em',color:'var(--ink)'}}>Revenue · Expenses · Margin</div>
+            <div style={{fontSize:20,fontWeight:600,letterSpacing:'-0.02em',color:'var(--ink)'}}>Revenue · Expenses</div>
           </div>
           {/* Monthly / Yearly switcher */}
           <div style={{display:'flex',gap:2,padding:3,borderRadius:10,background:'#F0F0F0',alignSelf:'flex-start'}}>
@@ -4106,11 +4116,11 @@ const Cashflow = () => {
           </div>
         )}
       </div>
-      <div className="ft-card pt-6 pb-0 overflow-hidden">
-        <div className="ft-serif text-[20px] font-medium mb-4 px-6" style={{color:'var(--ink)'}}>Transactions</div>
+      <div className="ft-card p-6">
+        <div className="ft-serif text-[20px] font-medium mb-4" style={{color:'var(--ink)'}}>Transactions</div>
         <div className="space-y-0">
           {filtered.map(t=>(
-            <div key={t.kind+t.id} className="flex items-center gap-3 py-2.5 border-b last:border-0 px-6" style={{borderColor:'#EBEBEB'}}>
+            <div key={t.kind+t.id} className="flex items-center gap-3 py-2.5 border-b last:border-0" style={{borderColor:'#EBEBEB'}}>
               <div className="w-7 h-7 rounded-md flex items-center justify-center shrink-0"
                 style={{background:t.kind==='in'?'var(--positive-soft)':'var(--negative-soft)',color:t.kind==='in'?'var(--positive)':'var(--negative)'}}>
                 {t.kind==='in' ? <I.ArrowDown size={13}/> : <I.ArrowUp size={13}/>}
@@ -4167,10 +4177,10 @@ const BankSteps = ({ steps, current }) => (
 
 const BankCard = ({ name, sub, logo, accentColor, onClick }) => (
   <button onClick={onClick}
-    className="flex-1 p-5 rounded-[14px] text-left transition-all"
-    style={{fontFamily:'inherit', background:'#F5F5F5', border:'1.5px solid transparent', borderRadius:14}}
-    onMouseEnter={e=>{e.currentTarget.style.borderColor=accentColor; e.currentTarget.style.background='#F0F0F0';}}
-    onMouseLeave={e=>{e.currentTarget.style.borderColor='transparent'; e.currentTarget.style.background='#F5F5F5';}}>
+    className="flex-1 p-5 rounded-[14px] text-left transition-all ft-card ft-clickable"
+    style={{fontFamily:'inherit'}}
+    onMouseEnter={e=>{e.currentTarget.style.borderColor=accentColor;}}
+    onMouseLeave={e=>{e.currentTarget.style.borderColor='var(--line)';}}>
     <div className="text-[28px] mb-2">{logo}</div>
     <div className="text-[14px] font-semibold mb-1" style={{color:'var(--ink)'}}>{name}</div>
     <div className="text-[11.5px] mb-3" style={{color:'var(--ink-3)'}}>{sub}</div>
@@ -4487,93 +4497,108 @@ const ClockifyConnectModal = ({ onClose, onConnected }) => {
 // Custom select for data mapping — truncates displayed value with CSS, full text in dropdown
 const MappingSelect = ({ value, onChange, projects }) => {
   const [open, setOpen] = React.useState(false);
+  const [dropUp, setDropUp] = React.useState(false);
+  const ref = React.useRef();
   const btnRef = React.useRef();
-  const dropRef = React.useRef();
-  const [pos, setPos] = React.useState({top:0, left:0, width:0, up:false});
 
   React.useEffect(() => {
     if (!open) return;
-    const h = e => {
-      if (dropRef.current && !dropRef.current.contains(e.target)
-        && btnRef.current && !btnRef.current.contains(e.target))
-        setOpen(false);
+    const handler = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
     };
-    document.addEventListener('mousedown', h);
-    return () => document.removeEventListener('mousedown', h);
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
   }, [open]);
 
   const handleOpen = () => {
     if (btnRef.current) {
-      const r = btnRef.current.getBoundingClientRect();
-      const spaceBelow = window.innerHeight - r.bottom;
-      setPos({ top: spaceBelow < 220 ? r.top - 4 : r.bottom + 4, left: r.left, width: r.width, up: spaceBelow < 220 });
+      const rect = btnRef.current.getBoundingClientRect();
+      const spaceBelow = window.innerHeight - rect.bottom;
+      setDropUp(spaceBelow < 240);
     }
     setOpen(o => !o);
   };
 
   const activeProjects = projects.filter(p => p.status === 'Active');
 
-  const getLabel = v => {
-    if (v === 'create') return '+ Create as new';
+  const getLabel = (v) => {
+    if (v === 'create') return 'Create as new';
     if (v === 'ignore') return 'Ignore';
-    const p = activeProjects.find(p => `link:${p.id}` === v);
+    const pid = +v.replace('link:', '');
+    const p = activeProjects.find(p => p.id === pid);
     return p ? p.name : v;
   };
 
   const isIgnore = value === 'ignore';
-  const isCreate = value === 'create';
-  const labelColor = isIgnore ? 'var(--ink-3)' : isCreate ? 'var(--positive)' : 'var(--ink)';
-
-  const options = [
-    { value: 'create', label: '+ Create as new', color: 'var(--positive)' },
-    { value: 'ignore', label: 'Ignore', color: 'var(--ink-3)' },
-    ...activeProjects.map(p => ({ value: `link:${p.id}`, label: p.name, color: 'var(--ink)' })),
-  ];
+  const select = (v) => { onChange(v); setOpen(false); };
 
   return (
-    <div style={{position:'relative', width:'100%'}}>
-      <button ref={btnRef} type="button" onClick={handleOpen}
-        style={{ width:'100%', height:34, display:'flex', alignItems:'center', justifyContent:'space-between',
-          padding:'0 10px', borderRadius:8, fontSize:12.5, cursor:'pointer', gap:4,
-          background:'#FFFFFF', border:'1px solid #E8E8E8', fontFamily:'inherit',
-          color: labelColor }}>
-        <span style={{overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', flex:1, textAlign:'left', fontWeight: isCreate ? 500 : 400}}>
+    <div ref={ref} style={{position:'relative', width:'100%'}}>
+      <button
+        ref={btnRef}
+        type="button"
+        onClick={handleOpen}
+        style={{
+          width:'100%', height:32, display:'flex', alignItems:'center', justifyContent:'space-between',
+          padding:'0 8px 0 10px', borderRadius:8, fontSize:12, cursor:'pointer', gap:4,
+          background:'#EFEFEF', border:'none',
+          color: isIgnore ? 'var(--ink-3)' : 'var(--ink)',
+        }}>
+        <span style={{overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', flex:1, textAlign:'left'}}>
           {getLabel(value)}
         </span>
         <I.ChevronDown size={12} style={{flexShrink:0, color:'var(--ink-3)', transform: open ? 'rotate(180deg)' : 'none', transition:'transform 150ms'}}/>
       </button>
 
       {open && (
-        <div ref={dropRef} style={{
+        <div style={{
           position:'fixed',
-          top: pos.up ? undefined : pos.top,
-          bottom: pos.up ? window.innerHeight - pos.top : undefined,
-          left: pos.left,
-          width: pos.width,
-          zIndex: 9999,
-          background:'#FFFFFF',
-          border:'1px solid #E8E8E8',
-          borderRadius:10,
-          boxShadow:'0 8px 24px rgba(0,0,0,0.12)',
-          overflow:'hidden',
-          maxHeight:220,
+          ...(dropUp
+            ? { bottom: window.innerHeight - btnRef.current.getBoundingClientRect().top + 4 }
+            : { top: btnRef.current.getBoundingClientRect().bottom + 4 }),
+          left: btnRef.current.getBoundingClientRect().left,
+          width: btnRef.current.getBoundingClientRect().width,
+          zIndex:9999,
+          background:'#EFEFEF', border:'none',
+          borderRadius:10, boxShadow:'0 8px 24px rgba(28,24,20,0.14)',
+          display:'flex', flexDirection:'column', maxHeight:220,
         }}>
-          <div style={{overflowY:'auto', maxHeight:220}}>
-            {options.map(opt => {
-              const active = value === opt.value;
+          <div style={{overflowY:'auto', flex:1}}>
+            <div style={{padding:'5px 10px 3px', fontSize:10, textTransform:'uppercase', letterSpacing:'0.1em', color:'var(--ink-3)', fontWeight:500, position:'sticky', top:0, background:'var(--surface)', borderBottom:'1px solid var(--line)'}}>
+              Existing projects
+            </div>
+            {activeProjects.map(p => {
+              const v = `link:${p.id}`;
+              const active = value === v;
               return (
-                <button key={opt.value} type="button"
-                  onMouseDown={e => { e.preventDefault(); onChange(opt.value); setOpen(false); }}
-                  style={{ width:'100%', display:'flex', alignItems:'center', justifyContent:'space-between',
-                    padding:'9px 12px', border:'none', cursor:'pointer', fontFamily:'inherit',
-                    fontSize:12.5, textAlign:'left', gap:8,
-                    background: active ? '#F5F5F5' : 'transparent',
-                    color: opt.color }}
-                  onMouseEnter={e => { if (!active) e.currentTarget.style.background='#F8F8F8'; }}
-                  onMouseLeave={e => { if (!active) e.currentTarget.style.background='transparent'; }}>
-                  <span style={{flex:1, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap',
-                    fontWeight: active ? 600 : 400}}>{opt.label}</span>
-                  {active && <I.Check2 size={13} style={{color:'var(--accent)', flexShrink:0}}/>}
+                <button key={p.id} type="button"
+                  onMouseDown={e=>{ e.preventDefault(); select(v); }}
+                  style={{
+                    width:'100%', padding:'6px 10px', fontSize:12, textAlign:'left', display:'flex', alignItems:'center', justifyContent:'space-between',
+                    background: active ? 'var(--ink)' : 'transparent',
+                    color: active ? '#ffffff' : 'var(--ink-2)',
+                    border:'none', cursor:'pointer', gap:6,
+                  }}>
+                  <span style={{overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap'}}>{p.name}</span>
+                  {active && <I.Check2 size={12} style={{flexShrink:0}}/>}
+                </button>
+              );
+            })}
+          </div>
+          <div style={{borderTop:'1px solid var(--line)', flexShrink:0}}>
+            {[{v:'create',l:'Create as new'},{v:'ignore',l:'Ignore'}].map(({v,l})=>{
+              const active = value === v;
+              return (
+                <button key={v} type="button"
+                  onMouseDown={e=>{ e.preventDefault(); select(v); }}
+                  style={{
+                    width:'100%', padding:'6px 10px', fontSize:12, textAlign:'left', display:'flex', alignItems:'center', justifyContent:'space-between',
+                    background: active ? 'var(--ink)' : 'transparent',
+                    color: active ? '#ffffff' : 'var(--ink-2)',
+                    border:'none', cursor:'pointer',
+                  }}>
+                  {l}
+                  {active && <I.Check2 size={12}/>}
                 </button>
               );
             })}
@@ -4583,7 +4608,6 @@ const MappingSelect = ({ value, onChange, projects }) => {
     </div>
   );
 };
-
 
 const ClockifyConfigModal = ({ onClose, onSaved }) => {
   const [step, setStep] = React.useState('config'); // config | syncing | done
@@ -4686,23 +4710,21 @@ const ClockifyConfigModal = ({ onClose, onSaved }) => {
               {/* General */}
               <section>
                 <div className="text-[11px] uppercase tracking-[0.12em] font-medium mb-3" style={{color:'var(--ink-3)'}}>General</div>
-                <div style={{border:'1px solid #E8E8E8', borderRadius:12, overflow:'hidden'}}>
-                  <div className="p-4 border-b" style={{borderColor:'#E8E8E8'}}>
+                <div className="ft-card p-4 space-y-0">
+                  <div className="pb-3.5 border-b" style={{borderColor:'#EBEBEB'}}>
                     <label className="text-[11px] uppercase tracking-[0.1em] font-medium block mb-2" style={{color:'var(--ink-3)'}}>Workspace</label>
-                    <select className="ft-select w-full" style={{background:'#FFFFFF',border:'1px solid #EBEBEB'}} value={workspace} onChange={e=>setWorkspace(e.target.value)}>
+                    <select className="ft-select w-full" value={workspace} onChange={e=>setWorkspace(e.target.value)}>
                       <option value="main">Main Workspace</option>
                       <option value="agency">Design Agency</option>
                       <option value="freelance">Freelance Projects</option>
                     </select>
                   </div>
-                  <div style={{padding:'0 16px'}}>
-                    <Toggle value={syncTime} onChange={setSyncTime}
-                      label="Sync Time Entries"
-                      sub="Automatically import user hours based on email matching"/>
-                    <Toggle value={syncProjects} onChange={setSyncProjects}
-                      label="Sync Projects"
-                      sub="Import and map Clockify projects to Monira"/>
-                  </div>
+                  <Toggle value={syncTime} onChange={setSyncTime}
+                    label="Sync Time Entries"
+                    sub="Automatically import user hours based on email matching"/>
+                  <Toggle value={syncProjects} onChange={setSyncProjects}
+                    label="Sync Projects"
+                    sub="Import and map Clockify projects to Monira"/>
                 </div>
               </section>
 
@@ -4730,7 +4752,7 @@ const ClockifyConfigModal = ({ onClose, onSaved }) => {
                         placeholder="Search Clockify projects…"
                         value={mapSearch} onChange={e=>setMapSearch(e.target.value)}/>
                     </div>
-                    <select className="ft-select" style={{height:34,fontSize:12.5,minWidth:148,background:'#F5F5F5',border:'none'}}
+                    <select className="ft-select" style={{height:34,fontSize:12.5,minWidth:148}}
                       value={mapFilter} onChange={e=>setMapFilter(e.target.value)}>
                       <option value="all">All projects</option>
                       <option value="unmatched">Needs review</option>
@@ -4752,9 +4774,10 @@ const ClockifyConfigModal = ({ onClose, onSaved }) => {
                       </div>
                     ) : paginatedMappings.map(m=>(
                       <div key={m.id} className="grid px-4 py-3 border-b last:border-0 items-center gap-3"
-                        style={{borderColor:'#EBEBEB',gridTemplateColumns:'minmax(0,1fr) 210px', background:'#FAFAFA'}}>
+                        style={{borderColor:'#EBEBEB',gridTemplateColumns:'minmax(0,1fr) 210px',
+                          opacity: m.action==='ignore' ? 0.5 : 1}}>
                         <div className="flex items-center gap-2 min-w-0">
-                          <span className="text-[13px] font-medium truncate" style={{color: m.action==='ignore' ? 'var(--ink-3)' : 'var(--ink)'}}>{m.name}</span>
+                          <span className="text-[13px] font-medium truncate" style={{color:'var(--ink)'}}>{m.name}</span>
                           {m.autoMatch && (
                             <span className="shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded-full" style={{background:'#eff6ff',color:'#2563eb'}}>Auto</span>
                           )}
@@ -4856,9 +4879,9 @@ const ClockifyConfigModal = ({ onClose, onSaved }) => {
                 {mappings.filter(m=>m.action!=='ignore').length} projects synced · {syncTime ? 'Time entries imported' : 'Time sync disabled'}
               </div>
             </div>
-            <div className="p-4 w-full max-w-sm space-y-2 rounded-xl" style={{background:'#F5F5F5'}}>
+            <div className="ft-card p-4 w-full max-w-sm space-y-2">
               {mappings.filter(m=>m.action!=='ignore').map(m=>(
-                <div key={m.id} className="flex items-center justify-between text-[12.5px] py-1">
+                <div key={m.id} className="flex items-center justify-between text-[12.5px]">
                   <span style={{color:'var(--ink-2)'}}>{m.name}</span>
                   <span className="ft-mono text-[11.5px]" style={{color:'var(--ink-3)'}}>{actionLabel(m.action)}</span>
                 </div>
@@ -5051,13 +5074,13 @@ function App() {
   const anyBankConnected = Object.values(banks).some(Boolean);
 
   return (
-    <div className="ft-root" style={{background:'#F5F5F5', minHeight:'100vh'}}>
+    <div className="ft-root" style={{background:'var(--bg)', minHeight:'100vh'}}>
       <Sidebar
         view={view}
         setView={(v)=>{ setView(v); setDrill(null); setReceivablesView(false); }}
         showSettingsBadge={!anyBankConnected}
       />
-      <main className="px-10 py-8" style={{marginLeft:230, minHeight:'100vh', background:'#F5F5F5', position:'relative', zIndex:1, boxSizing:'border-box'}}>
+      <main className="px-10 py-8" style={{marginLeft:230, minHeight:'100vh', background:'var(--bg)', position:'relative', zIndex:1, boxSizing:'border-box'}}>
         <div className="max-w-[1400px] mx-auto">
           {modal && <AddEntryModal onClose={()=>setModal(false)} onSuccess={(msg)=>{ setModal(false); setToast(msg); }}/>}
           {toast && <Toast msg={toast} onDone={()=>setToast(null)}/>}
